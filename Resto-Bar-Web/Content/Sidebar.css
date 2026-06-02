@@ -1,0 +1,45 @@
+﻿body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+
+.sidebar {
+    width: 250px;
+    min-height: 100vh;
+    background-color: #212529;
+}
+
+.sidebar .nav-link {
+     color: white;
+     padding: 12px 20px;
+}
+
+.sidebar .nav-link:hover {
+      background-color: #343a40;
+      color: white;
+}
+
+.main-content {
+    flex: 1;
+    padding: 25px;
+}
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.logo {
+    color: white;
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid #495057;
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+footer {
+    margin-top: 40px;
+    color: gray;
+}
