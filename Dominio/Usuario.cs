@@ -8,8 +8,10 @@ namespace Dominio
 {
     public class Usuario
     {
-        public int MyProperty { get; set; }
-        public int MyProperty1 { get; set; }
+        public string NombreUsuario { get; set; }
+        public string Contraseña { get; set; }
+        public int IdRol { get; set; }
+        public int IdUsuario { get; set; }
 
     }
 }
