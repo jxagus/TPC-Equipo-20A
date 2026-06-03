@@ -11,7 +11,7 @@ namespace Resto_Bar_Web
 {
 
 
-    public partial class _Default
+    public partial class WebForm2
     {
     }
 }

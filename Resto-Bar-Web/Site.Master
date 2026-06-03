@@ -82,6 +82,12 @@
                         📊 Reportes
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" runat="server" href="~/Usuarios.aspx">
+                        👤 Usuarios
+                    </a>
+                </li>
+
 
             </ul>
 
