@@ -4,7 +4,8 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Configuration;
+ 
 namespace Negocio
 {
     public class AccesoDatos
@@ -19,7 +20,6 @@ namespace Negocio
         }
         public AccesoDatos()
         {
-            //conexion = new SqlConnection("server=(local)\\SQLEXPRESS; database=CATALOGO_WEB_DB; integrated security=true");
             conexion = new SqlConnection(ConfigurationManager.AppSettings["cadenaConexion"]); //desde webconfig
             comando = new SqlCommand();
             comando.Connection = conexion;
@@ -37,12 +37,12 @@ namespace Negocio
         }
         public void ejecutarAccion()
         {
-            comando.Connection = conexion; // Asegurar que el comando esté vinculado a la conexión
+            comando.Connection = conexion; 
 
             try
             {
                 conexion.Open();
-                comando.ExecuteNonQuery(); // ejecutar acciones que no devuelven datos (INSERT, UPDATE, DELETE)
+                comando.ExecuteNonQuery(); 
             }
             catch (Exception ex)
             {
@@ -55,12 +55,12 @@ namespace Negocio
         }
         public void ejecutarLectura()
         {
-            comando.Connection = conexion; // Vincular la conexión antes de ejecutar el lector
+            comando.Connection = conexion; 
 
             try
             {
                 conexion.Open();
-                lector = comando.ExecuteReader(); // Ejecutar la lectura
+                lector = comando.ExecuteReader();
             }
             catch (Exception ex)
             {
@@ -90,7 +90,7 @@ namespace Negocio
         }
         public int ejecutarAccionEscalar()
         {
-            comando.Connection = conexion; // Asegurar que el comando este vinculado a la conexión
+            comando.Connection = conexion; 
             try
             {
                 conexion.Open();
