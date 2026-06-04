@@ -49,11 +49,5 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Usuario.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Resto-Bar-Web\Resto-Bar-Web.csproj">
-      <Project>{454ffadd-cd9e-48bb-8a89-4ef57c028c68}</Project>
-      <Name>Resto-Bar-Web</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

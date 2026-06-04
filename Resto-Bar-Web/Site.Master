@@ -20,6 +20,9 @@
 
 <link href="~/Content/Sidebar.css" rel="stylesheet" />
 
+<asp:ContentPlaceHolder ID="Stylesheets" runat="server"></asp:ContentPlaceHolder> <%--Para el css de mesas--%> 
+
+
 </head>
 
 <body>
