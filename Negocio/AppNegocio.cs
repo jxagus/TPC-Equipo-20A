@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Negocio
 {
-    internal class AppNegocio
+    public class AppNegocio
     {
     }
 }
