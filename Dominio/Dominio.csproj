@@ -41,7 +41,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DetallePedido.cs" />
     <Compile Include="Mesa.cs" />
+    <Compile Include="MetodoPago.cs" />
     <Compile Include="Mozo.cs" />
     <Compile Include="Pedido.cs" />
     <Compile Include="Productos.cs" />
