@@ -22,5 +22,10 @@ namespace Resto_Bar_Web
             }
 
         }
+
+        protected void btnAdministrarMesa_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
