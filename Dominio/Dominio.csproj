@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DetallePedido.cs" />
+    <Compile Include="EstadoPedido.cs" />
     <Compile Include="Mesa.cs" />
     <Compile Include="MetodoPago.cs" />
     <Compile Include="Mozo.cs" />

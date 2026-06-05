@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Dominio
 {
-    public class MetodoPago
+    public class EstadoPedido
     {
-        public int IdMetodo { get; set; }
-        public string NombreMetodo { get; set; }
+        public int IdEstadoPedido { get; set; }
+        public string DetalleEstado { get; set; }
     }
 }
