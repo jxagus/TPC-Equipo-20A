@@ -15,12 +15,48 @@ namespace Resto_Bar_Web
     {
 
         /// <summary>
-        /// btnAdministrarMesa control.
+        /// repeaterMesas control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAdministrarMesa;
+        protected global::System.Web.UI.WebControls.Repeater repeaterMesas;
+
+        /// <summary>
+        /// tituloModalMesa control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl tituloModalMesa;
+
+        /// <summary>
+        /// chkEstadoMesa control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlInputCheckBox chkEstadoMesa;
+
+        /// <summary>
+        /// btnVerPedido control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnVerPedido;
+
+        /// <summary>
+        /// btnGuardarEstado control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnGuardarEstado;
     }
 }

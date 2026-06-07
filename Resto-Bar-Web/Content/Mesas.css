@@ -3,11 +3,40 @@
 }
 
 
-.card{
+.card {
     transition: all 0.3s ease;
+
 }
-.card:hover{
+.card:hover {
     transform: translateY(-8px);
     box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
     cursor: pointer;
 }
+
+.btnZoom {
+    transition: all 0.3s ease;
+}
+
+.btnZoom:hover {
+    transform: scale(1.03);
+}
+
+@keyframes fadeAparicion {
+    0% {
+        opacity: 0.7;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.7;
+    }
+}
+
+.alertaFade{
+    animation: fadeAparicion 1s ease-in-out infinite;
+}
+
+

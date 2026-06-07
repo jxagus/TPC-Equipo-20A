@@ -67,18 +67,7 @@ namespace Negocio
                 throw ex;
             }
         }
-        public void ejecutarLector()
-        {
-            try
-            {
-                conexion.Open();
-                lector = comando.ExecuteReader();
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+
         public void setearParametros(string nombre, object valor)
         {
             comando.Parameters.AddWithValue(nombre, valor);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Configuration;
 using System.Linq;
 using System.Text;
@@ -43,6 +44,55 @@ namespace Negocio
                 datos.cerrarConexion();
             }
             
+        }
+
+        public void inhabilitarHabilitarMesa(int estado, int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+
+                datos.setearConsulta("update Mesas SET Estado = @Estado WHERE NroMesa = @idMesa");
+                datos.setearParametros("@Estado", estado);
+                datos.setearParametros("@idMesa", id);
+                datos.ejecutarAccion();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally { 
+                datos.cerrarConexion(); 
+            }
+        }
+
+        public bool obtenerEstadoPorId(int idMesa)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT Estado FROM Mesas WHERE NroMesa = @idMesa");
+                datos.setearParametros("@idMesa", idMesa);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return (bool)datos.Lector["Estado"];
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
         }
     }
 }
