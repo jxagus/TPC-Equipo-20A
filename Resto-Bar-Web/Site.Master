@@ -3,115 +3,127 @@
 <!DOCTYPE html>
 <html lang="es">
 <head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<title><%: Page.Title %> - Resto Bar</title>
+    <title><%: Page.Title %> - Resto Bar</title>
 
-<asp:PlaceHolder runat="server">
-    <%: Scripts.Render("~/bundles/modernizr") %>
-</asp:PlaceHolder>
+    <asp:PlaceHolder runat="server">
+        <%: Scripts.Render("~/bundles/modernizr") %>
+    </asp:PlaceHolder>
 
-<webopt:BundleReference runat="server" Path="~/Content/css" />
+    <webopt:BundleReference runat="server" Path="~/Content/css" />
 
-<link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
 
-<link href="~/Content/Sidebar.css" rel="stylesheet" />
+    <link href="~/Content/Sidebar.css" rel="stylesheet" />
 
-<asp:ContentPlaceHolder ID="Stylesheets" runat="server"></asp:ContentPlaceHolder> <%--Para el css de mesas--%> 
-
-
+    <asp:ContentPlaceHolder ID="Stylesheets" runat="server"></asp:ContentPlaceHolder>
+    <%--Para el css de mesas--%>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
 </head>
 
 <body>
 
-<form runat="server">
+    <form runat="server">
 
-    <asp:ScriptManager runat="server">
-        <Scripts>
-            <asp:ScriptReference Name="MsAjaxBundle" />
-            <asp:ScriptReference Name="jquery" />
-            <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
-            <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
-            <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
-            <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
-            <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
-            <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
-            <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
-            <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
-            <asp:ScriptReference Name="WebFormsBundle" />
-        </Scripts>
-    </asp:ScriptManager>
+        <asp:ScriptManager runat="server">
+            <Scripts>
+                <asp:ScriptReference Name="MsAjaxBundle" />
+                <asp:ScriptReference Name="jquery" />
+                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
+                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
+                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
+                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
+                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
+                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
+                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
+                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
+                <asp:ScriptReference Name="WebFormsBundle" />
+            </Scripts>
+        </asp:ScriptManager>
 
-    <div class="app-container">
+        <div class="app-container">
 
-        <!-- SIDEBAR -->
-        <div class="sidebar">
+            <!-- SIDEBAR -->
+            <div class="sidebar">
 
-            <div class="logo">
-                RESTO BAR
+                <div class="logo">
+                    RESTO BAR
+                </div>
+
+                <ul class="nav flex-column">
+
+                    <li class="nav-item">
+                        <a class="nav-link" runat="server" href="~/">🏠 Inicio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link w-100 text-start border-0 bg-transparent d-flex align-items-center gap-2"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#menuGestion"
+                            aria-expanded="false">
+                            🗂️ Gestión <i class="bi bi-chevron-down ms-auto flecha"></i>
+                        </button>
+                        <div class="collapse" id="menuGestion">
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" runat="server" href="~/AsignacionMesa">✍️ Asignar Mezas (Admin)
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" runat="server" href="~/Mesas.aspx">🍽️ Mesas
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" runat="server" href="~/Pedidos.aspx">📋 Pedidos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" runat="server" href="~/Insumos.aspx">🥤 Insumos
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" runat="server" href="~/Reportes.aspx">📊 Reportes
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" runat="server" href="~/Usuarios.aspx">👤 Usuarios
+                        </a>
+                    </li>
+
+
+                </ul>
+
             </div>
 
-            <ul class="nav flex-column">
+            <!-- CONTENIDO -->
+            <div class="main-content">
 
-                <li class="nav-item">
-                    <a class="nav-link" runat="server" href="~/">
-                        🏠 Inicio
-                    </a>
-                </li>
+                <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                </asp:ContentPlaceHolder>
 
-                <li class="nav-item">
-                    <a class="nav-link" runat="server" href="~/Mesas.aspx">
-                        🍽️ Mesas
-                    </a>
-                </li>
+                <footer>
+                    <hr />
+                    <p>&copy; <%: DateTime.Now.Year %> - Sistema de Gestión Resto Bar</p>
+                </footer>
 
-                <li class="nav-item">
-                    <a class="nav-link" runat="server" href="~/Pedidos.aspx">
-                        📋 Pedidos
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" runat="server" href="~/Insumos.aspx">
-                        🥤 Insumos
-                    </a>
-                </li>
-
-                <li class="nav-item">
-                    <a class="nav-link" runat="server" href="~/Reportes.aspx">
-                        📊 Reportes
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" runat="server" href="~/Usuarios.aspx">
-                        👤 Usuarios
-                    </a>
-                </li>
-
-
-            </ul>
+            </div>
 
         </div>
 
-        <!-- CONTENIDO -->
-        <div class="main-content">
 
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
+        <script src='<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>'></script>
 
-            <footer>
-                <hr />
-                <p>&copy; <%: DateTime.Now.Year %> - Sistema de Gestión Resto Bar</p>
-            </footer>
-
-        </div>
-
-    </div>
-    
-<script src='<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>'></script>
-</form>
+    </form>
 
 <asp:PlaceHolder runat="server">
     <%: Scripts.Render("~/Scripts/bootstrap.js") %>

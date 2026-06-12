@@ -11,13 +11,13 @@
 }
 
 .sidebar .nav-link {
-     color: white;
-     padding: 12px 20px;
+    color: white;
+    padding: 12px 20px;
 }
 
 .sidebar .nav-link:hover {
-      background-color: #343a40;
-      color: white;
+    background-color: #343a40;
+    color: white;
 }
 
 .main-content {
@@ -42,4 +42,12 @@
 footer {
     margin-top: 40px;
     color: gray;
+}
+
+.flecha {
+    transition: transform 0.3s;
+}
+
+button.nav-link[aria-expanded="true"] .flecha {
+    transform: rotate(180deg);
 }
