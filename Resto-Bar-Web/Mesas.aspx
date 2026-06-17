@@ -23,7 +23,7 @@
                       <img src="https://www.shutterstock.com/image-vector/business-meeting-icon-three-people-600nw-2765189057.jpg" class="card-img-top rounded-circle w-75 mx-auto mt-3 shadow-lg user-select-none" alt="img generica">
                       <div class="card-body">
                         <h5 class="card-title text-center user-select-none">Mesa Numero: <%# Eval("IdMesa") %></h5>
-                        <h5 class="card-title text-center user-select-none">Mesero asignado: <%# Eval("Idusuario") %></h5>
+                        <h5 class="card-title text-center user-select-none"><%# Convert.ToInt32(Eval("Idusuario")) !=0 ? "Mesero asignado: " + Eval("Idusuario") : "Mesero sin Asignar"%></h5>
                           <div class="d-grid gap-3 col-auto ">
                          <asp:Button ID="btnAdministrarMesa" CssClass="btn btn-primary" runat="server" Text="Administrar mesa"  CommandName="AbrirModal" CommandArgument='<%# Eval("IdMesa") %>' CausesValidation="false"/>
                           </div>
