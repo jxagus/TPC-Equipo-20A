@@ -123,6 +123,7 @@
     <Content Include="Content\Pedidos.css" />
     <Content Include="Content\Sidebar.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\toast.css" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -158,6 +159,7 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="Mesas.aspx" />
+    <Content Include="Scripts\toast.js" />
     <Content Include="Usuarios.aspx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />

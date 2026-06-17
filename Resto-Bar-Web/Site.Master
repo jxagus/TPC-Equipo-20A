@@ -22,6 +22,7 @@
     <asp:ContentPlaceHolder ID="Stylesheets" runat="server"></asp:ContentPlaceHolder>
     <%--Para el css de mesas--%>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
+
 </head>
 
 <body>
@@ -56,7 +57,7 @@
                 <ul class="nav flex-column">
 
                     <li class="nav-item">
-                        <a class="nav-link" runat="server" href="~/">🏠 Inicio
+                        <a class="nav-link" runat="server" href="~/">🏠 Dashboard
                         </a>
                     </li>
                     <li class="nav-item">
@@ -125,6 +126,7 @@
 
     </form>
 
+ 
 <asp:PlaceHolder runat="server">
     <%: Scripts.Render("~/Scripts/bootstrap.js") %>
 </asp:PlaceHolder>
