@@ -18,7 +18,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT NroMesa, IdUsuario, MesaUrlImagen, Estado FROM Mesas");
+                datos.setearConsulta("SELECT NroMesa, ISNULL(IdUsuario, 0) AS IdUsuario, MesaUrlImagen, Estado FROM Mesas");
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
@@ -87,6 +87,27 @@ namespace Negocio
             catch (Exception ex)
             {
 
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+        public void asignarMozo(int nroMesa, int idUsuarioMozo)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                // Impactamos el mozo directo en la fila de la mesa
+                datos.setearConsulta("UPDATE Mesas SET IdUsuario = @idUsuario WHERE NroMesa = @idMesa");
+                datos.setearParametros("@idUsuario", idUsuarioMozo);
+                datos.setearParametros("@idMesa", nroMesa);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
                 throw ex;
             }
             finally
