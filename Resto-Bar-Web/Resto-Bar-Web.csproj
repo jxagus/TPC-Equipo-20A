@@ -124,6 +124,7 @@
     <Content Include="Content\Sidebar.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\toast.css" />
+    <Content Include="Db\restobarbdd.sql" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
