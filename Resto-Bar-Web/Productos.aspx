@@ -7,6 +7,11 @@
 
             <div class="col-md-4 pe-md-4 border-end">
                 <h2 class="mb-4">Carga de Producto</h2>
+                <asp:HiddenField ID="hfIdProducto" runat="server"/>
+                <div class="mb-3" id="IdOculto" visible="false" runat="server" >
+                    <label class="form-label fw-bold">ID Del Producto</label>
+                    <asp:TextBox ID="txtId" CssClass="form-control" placeholder="" runat="server" disabled></asp:TextBox>
+                </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Nombre del producto</label>
@@ -33,7 +38,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <asp:Button ID="btnAgregarProducto" CssClass="btn btn-primary w-100" OnClick="btnAgregarProducto_Click" runat="server" Text="Agregar Producto" />
+                    <asp:Button ID="btnAgregarProducto" CssClass="btn btn-primary" OnClick="btnAgregarProducto_Click" runat="server" Text="Agregar Producto" />
+                    <asp:Button ID="btnCancelar" CssClass="btn btn-danger " OnClick="btnCancelar_Click" runat="server" Text="Cancelar" Visible="false" />
                 </div>
             </div>
 
@@ -50,6 +56,11 @@
                             <asp:BoundField DataField="Precio" HeaderText="Precio" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
 
                             <asp:BoundField DataField="Stock" HeaderText="Stock" ItemStyle-HorizontalAlign="Center" />
+                            <asp:TemplateField>
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="lbtnEditar" runat="server" OnClick="lbtnEditar_Click" CommandArgument='<%# Eval("IdProducto") %>' CssClass="text-decoration-none" ToolTip="Modificar">🖊</asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
                         </Columns>
                     </asp:GridView>
                 </div>

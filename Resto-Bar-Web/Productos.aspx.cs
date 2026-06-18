@@ -1,4 +1,5 @@
-﻿using Negocio;
+﻿using Dominio;
+using Negocio;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,13 +57,23 @@ namespace Resto_Bar_Web
         {
             try
             {
+                
                 string nombre = txtNombreProducto.Text;
                 string descripcion = txtDescripcion.Text;
                 decimal precio = Convert.ToDecimal(txtPrecio.Text);
                 int stock = Convert.ToInt32(txtStock.Text);
 
                 ProductoNegocio negocio = new ProductoNegocio();
-                negocio.agregarProducto(nombre, descripcion, precio, stock);
+                if (btnAgregarProducto.Text == "Modificar")
+                {
+                    int id = Convert.ToInt32(hfIdProducto.Value);
+                    negocio.modificarProducto(id, nombre, descripcion, precio, stock);
+                    hfIdProducto.Value = "";
+                }
+                else
+                {
+                    negocio.agregarProducto(nombre, descripcion, precio, stock);
+                }
 
                 txtDescripcion.Text = null;
                 txtNombreProducto.Text = null;
@@ -77,6 +88,43 @@ namespace Resto_Bar_Web
                 ////validaciones a desarrollar
                 throw ex; 
             }
+        }
+
+        protected void lbtnEditar_Click(object sender, EventArgs e)
+        {
+            LinkButton btn = (LinkButton)sender;
+            int idSeleccionado = Convert.ToInt32(btn.CommandArgument);
+
+            txtId.Text = idSeleccionado.ToString();
+            hfIdProducto.Value = idSeleccionado.ToString();
+            IdOculto.Visible = true;
+            btnCancelar.Visible = true;
+            btnAgregarProducto.Text = "Modificar";
+            cargarFormulario(idSeleccionado);
+        }
+
+        protected void btnCancelar_Click(object sender, EventArgs e)
+        {
+            txtNombreProducto.Text = null;
+            txtDescripcion.Text = null;
+            txtPrecio.Text = null;
+            txtStock.Text = null;
+            IdOculto.Visible = false;
+            btnCancelar.Visible = false;
+            btnAgregarProducto.Text = "Agregar Producto";
+        }
+        
+        void cargarFormulario(int id)
+        {
+            Productos producto = new Productos();
+            ProductoNegocio negocio = new ProductoNegocio();
+            producto = negocio.cargarProductoPorId(id);
+            
+            txtNombreProducto.Text = producto.NombreProducto;
+            txtDescripcion.Text = producto.DescripcionProducto;
+            txtPrecio.Text = producto.Precio.ToString();
+            txtStock.Text = producto.Stock.ToString();
+        
         }
     }
 }
