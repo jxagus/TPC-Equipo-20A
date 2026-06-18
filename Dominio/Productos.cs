@@ -10,6 +10,7 @@ namespace Dominio
     {
         public int IdProducto { get; set; }
         public string NombreProducto { get; set; }
+        public string DescripcionProducto { get; set; }
         public decimal Precio { get; set; }
         public int Stock { get; set; }
     }

@@ -24,7 +24,10 @@ namespace Resto_Bar_Web
                 int rol = negocio.traerRol(idUsuario);
                 if (rol == 0 || rol == 1)
                 {
-
+                    if (!IsPostBack)
+                    {
+                        CargarProductos();
+                    }
                 }
                 else
                 {
@@ -34,7 +37,21 @@ namespace Resto_Bar_Web
             }
 
         }
+        private void CargarProductos()
+        {
+            try
+            {
+                ProductoNegocio negocio = new ProductoNegocio();
 
+                dgvProductos.DataSource = negocio.listar();
+
+                dgvProductos.DataBind();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error al cargar productos: {ex.Message}');", true);
+            }
+        }
         protected void btnAgregarProducto_Click(object sender, EventArgs e)
         {
             try
@@ -53,6 +70,7 @@ namespace Resto_Bar_Web
                 txtStock.Text = null;
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Producto agregado exitosamente!');", true);
 
+                CargarProductos();
             }
             catch (Exception ex)
             {
