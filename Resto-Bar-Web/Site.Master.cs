@@ -11,6 +11,19 @@ namespace Resto_Bar_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["idRol"] != null)
+            {
+                int rol = (int)Session["idRol"];
+
+                if (rol == 0)
+                    TipoUsuario.InnerText = "👤 Admin";
+
+                else if (rol == 1)
+                    TipoUsuario.InnerText = "👤 Gerente";
+
+                else if (rol == 2)
+                    TipoUsuario.InnerText = "👤 Mesero";
+            }
 
         }
     }

@@ -26,10 +26,14 @@ namespace Resto_Bar_Web
             string contrasena = txtContrasena.Text;
 
             LoginNegocio negocio = new LoginNegocio();
+
             int idUsuario = negocio.existeUsuario(usuario, contrasena);
             if (idUsuario != 0)
             {
                 Session.Add("idUsuario", idUsuario);
+                Session.Add("idRol", negocio.traerRol(idUsuario));
+                Response.Redirect("~/Mesas.aspx");
+
             }
             else
             {
