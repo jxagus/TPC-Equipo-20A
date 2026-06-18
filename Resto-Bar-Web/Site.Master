@@ -88,7 +88,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" runat="server" href="~/Insumos.aspx">🥤 Insumos
+                        <a class="nav-link" runat="server" href="~/Productos.aspx">🥤 Platos
                         </a>
                     </li>
 

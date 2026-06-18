@@ -101,6 +101,7 @@
   <ItemGroup>
     <Content Include="About.aspx" />
     <Content Include="AsignacionMesa.aspx" />
+    <Content Include="CargarPedido.aspx" />
     <Content Include="Contact.aspx" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -128,7 +129,7 @@
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Insumos.aspx" />
+    <Content Include="Productos.aspx" />
     <Content Include="Pedidos.aspx" />
     <Content Include="Reportes.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -212,6 +213,13 @@
     <Compile Include="AsignacionMesa.aspx.designer.cs">
       <DependentUpon>AsignacionMesa.aspx</DependentUpon>
     </Compile>
+    <Compile Include="CargarPedido.aspx.cs">
+      <DependentUpon>CargarPedido.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CargarPedido.aspx.designer.cs">
+      <DependentUpon>CargarPedido.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Contact.aspx.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -229,12 +237,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Insumos.aspx.cs">
-      <DependentUpon>Insumos.aspx</DependentUpon>
+    <Compile Include="Productos.aspx.cs">
+      <DependentUpon>Productos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Insumos.aspx.designer.cs">
-      <DependentUpon>Insumos.aspx</DependentUpon>
+    <Compile Include="Productos.aspx.designer.cs">
+      <DependentUpon>Productos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pedidos.aspx.cs">
       <DependentUpon>Pedidos.aspx</DependentUpon>

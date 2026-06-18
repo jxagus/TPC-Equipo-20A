@@ -11,7 +11,11 @@
     display: flex;
     flex-direction: column;
 }
-
+.bg-degrade-pasos {
+    background-color: transparent !important;
+    background: linear-gradient(90deg, #343a40 0%, #001a1a 45%, #002d2d 80%, #004d4d 100%) !important;
+    color: #ffffff !important;
+}
 .sidebar .nav {
     flex: 1;
     display: flex;
