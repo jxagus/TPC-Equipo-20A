@@ -7,14 +7,25 @@
 .sidebar {
     width: 250px;
     min-height: 100vh;
-    background-color: #212529;
+    background: linear-gradient(180deg, #343a40 0%, #001a1a 45%, #002d2d 80%, #004d4d 100%) !important; 
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar .nav {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .sidebar .nav-link {
     color: white;
     padding: 12px 20px;
 }
-
+.sidebar .nav-item.mt-auto {
+    border-top: 1px solid #495057;
+    padding-top: 10px;
+}
 .sidebar .nav-link:hover {
     background-color: #343a40;
     color: white;
@@ -23,6 +34,9 @@
 .main-content {
     flex: 1;
     padding: 25px;
+    display:flex;
+    flex-direction:column;
+    min-height: 100vh;
 }
 
 .app-container {
@@ -40,8 +54,9 @@
 }
 
 footer {
-    margin-top: 40px;
+    margin-top: auto;
     color: gray;
+    padding-top: 20px;
 }
 
 .flecha {
@@ -50,4 +65,7 @@ footer {
 
 button.nav-link[aria-expanded="true"] .flecha {
     transform: rotate(180deg);
+}
+.usuario-bottom {
+    margin-top: auto;
 }
