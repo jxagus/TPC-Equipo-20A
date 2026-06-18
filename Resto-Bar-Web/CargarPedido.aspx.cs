@@ -29,8 +29,60 @@ namespace Resto_Bar_Web
                 ActualizarInterfazCarrito();
             }
         }
+        protected void btnConfirmarPedido_Click(object sender, EventArgs e)
+        {
+            List<DetallePedido> carrito = (List<DetallePedido>)Session["Carrito"];
 
-        //DropDownList recorriendo la tabla con un bucle while directo
+            // Validacion básica por las dudas
+            if (carrito == null || carrito.Count == 0)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('El pedido esta vacio.');", true);
+                return;
+            }
+
+            try
+            {
+                //Calculamos el total recorriendo el carrito
+                decimal precioTotal = 0;
+                foreach (DetallePedido item in carrito)
+                {
+                    precioTotal += item.Subtotal;
+                }
+
+                //Creamos el objeto Pedido para la base de datos
+                Pedido nuevoPedido = new Pedido();
+                nuevoPedido.NroMesa = Convert.ToInt32(ddlMesas.SelectedValue);
+                nuevoPedido.IdUsuario = Convert.ToInt32(Session["idUsuario"]);
+                nuevoPedido.FechayHoraPedido = DateTime.Now;
+                nuevoPedido.PrecioTotal = precioTotal;
+                nuevoPedido.IdEstadoPedido = 1; //1 = Pendiente / Recibido
+                //Guardamos el pedido principal
+                PedidoNegocio pedidoNegocio = new PedidoNegocio();
+                int idPedidoGenerado = pedidoNegocio.agregarPedido(nuevoPedido);
+
+                foreach (DetallePedido item in carrito)
+                {
+                    item.IdPedido = idPedidoGenerado; 
+
+                    pedidoNegocio.agregarDetalle(item);
+                    pedidoNegocio.restarStock(item.IdProducto, item.Cantidad);
+                }
+                //Vaciamos el carrito y actualizamos la interfaz
+                Session["Carrito"] = new List<DetallePedido>();
+
+                ActualizarInterfazCarrito();
+                CargarCardsProductos(); //Volvemos a listar las cards para que reflejen el nuevo stock restado
+
+                string script = "alert('¡Pedido enviado a cocina con exito!'); window.location='CargarPedido.aspx';";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "Redirect", script, true);
+            }
+            catch (Exception ex)
+            {
+                //Response.Write("<h1 style='color:red; background:white; position:fixed; top:0; left:0; z-index:99999;'>ERROR REAL: " + ex.Message + "</h1>");
+                //Response.End(); 
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error critico al procesar la orden: " + ex.Message.Replace("'", "\"") + "');", true);
+            }
+        }
         private void CargarComboMesas()
         {
             AccesoDatos datos = new AccesoDatos();
@@ -55,7 +107,6 @@ namespace Resto_Bar_Web
                 datos.cerrarConexion();
             }
         }
-
         private void CargarCardsProductos()
         {
             try
@@ -69,7 +120,6 @@ namespace Resto_Bar_Web
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error al cargar catalogo: " + ex.Message + "');", true);
             }
         }
-
         //Se ejecuta al apretar "Añadir" en cualquier Card de producto
         protected void repProductos_ItemCommand(object sender, RepeaterCommandEventArgs e)
         {
@@ -152,7 +202,6 @@ namespace Resto_Bar_Web
             //Script de Bootstrap para volver a abrir el modal automaticamente tras el PostBack
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "var myModal = new bootstrap.Modal(document.getElementById('modalRevision')); myModal.show();", true);
         }
-
         private void ActualizarInterfazCarrito()
         {
             List<DetallePedido> carrito = (List<DetallePedido>)Session["Carrito"];
@@ -176,55 +225,5 @@ namespace Resto_Bar_Web
             dgvPedidoActual.DataBind();
         }
 
-        //Guarda el Pedido definitivo y sus detalles utilizando la nueva clase PedidoNegocio
-        protected void btnConfirmarPedido_Click(object sender, EventArgs e)
-        {
-            List<DetallePedido> carrito = (List<DetallePedido>)Session["Carrito"];
-
-            if (carrito == null || carrito.Count == 0)
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('El pedido esta vacio.');", true);
-                return;
-            }
-
-            try
-            {
-                //Calculamos el total de la orden de forma explícita
-                decimal precioTotal = 0;
-                foreach (DetallePedido item in carrito)
-                {
-                    precioTotal += item.Subtotal;
-                }
-
-                //Creamos y poblamos el objeto Pedido de la capa Dominio
-                Pedido nuevoPedido = new Pedido();
-                nuevoPedido.NroMesa = Convert.ToInt32(ddlMesas.SelectedValue);
-                nuevoPedido.IdUsuario = Convert.ToInt32(Session["idUsuario"]);
-                nuevoPedido.FechayHoraPedido = DateTime.Now;
-                nuevoPedido.PrecioTotal = precioTotal;
-                nuevoPedido.IdEstadoPedido = 1; //Asumimos 1 para el estado 'Pendiente/Recibido'
-
-                //Enviamos el pedido principal a la base de datos y capturamos el ID generado
-                PedidoNegocio pedidoNegocio = new PedidoNegocio();
-                int idPedidoGenerado = pedidoNegocio.agregarPedido(nuevoPedido);
-
-                //Recorremos el carrito guardando cada detalle y descontando el stock correspondiente
-                foreach (DetallePedido item in carrito)
-                {
-                    item.IdPedido = idPedidoGenerado;
-                    pedidoNegocio.agregarDetalle(item);
-                    pedidoNegocio.restarStock(item.IdProducto, item.Cantidad);
-                }
-                //clear
-                Session["Carrito"] = new List<DetallePedido>();
-
-                string script = "alert('¡Pedido enviado a cocina con exito!'); window.location='Pedidos.aspx';";
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "Redirect", script, true);
-            }
-            catch (Exception ex)
-            {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error al guardar pedido: " + ex.Message + "');", true);
-            }
-        }
     }
 }

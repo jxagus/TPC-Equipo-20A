@@ -73,7 +73,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-degrade-pasos text-white">
-                        <h5 class="modal-title fw-bold" id="modalRevisionLabel">🛒 Paso 3: Revisar Detalle del Pedido</h5>
+                        <h5 class="modal-title fw-bold" id="modalRevisionLabel">🛒 Revisar Detalle del Pedido</h5>
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -95,9 +95,11 @@
                         </div>
                     </div>
                     <div class="modal-footer bg-light">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Seguir Agregando</button>
-                        <asp:Button ID="btnConfirmarPedido" runat="server" Text="🚀 Paso 4: Confirmar y Enviar a Cocina"
-                            CssClass="btn btn-success fw-bold px-4" OnClick="btnConfirmarPedido_Click" />
+                        <asp:Button ID="btnConfirmarPedido" runat="server"
+                            Text="Confirmar y Enviar a Cocina" 
+                            CssClass="btn btn-success fw-bold px-4" 
+                            UseSubmitBehavior="false"
+                            OnClick="btnConfirmarPedido_Click" />
                     </div>
                 </div>
             </div>

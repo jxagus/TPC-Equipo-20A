@@ -9,7 +9,6 @@ namespace Negocio
 {
     public class PedidoNegocio
     {
-        // Método para guardar el pedido principal y obtener el ID autoincremental generado
         public int agregarPedido(Pedido nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -39,7 +38,7 @@ namespace Negocio
             }
         }
 
-        // Método para guardar un renglón del detalle del pedido
+        // Metodo para guardar un renglon del detalle del pedido
         public void agregarDetalle(DetallePedido detalle)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -68,7 +67,8 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Productos SET Stock = Stock - @cantidad WHERE id = @idProducto");
+                datos.setearConsulta("UPDATE Productos SET Stock = Stock - @cantidad WHERE IdProducto = @idProducto");
+
                 datos.setearParametros("@cantidad", cantidadRestar);
                 datos.setearParametros("@idProducto", idProducto);
 
