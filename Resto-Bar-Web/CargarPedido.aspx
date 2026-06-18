@@ -29,6 +29,7 @@
                 </div>
             </div>
         </div>
+        </div>
         <div class="card mb-4 shadow-sm">
             <div class="card-header bg-degrade-pasos fw-bold">
                 Paso 2: Seleccionar Productos

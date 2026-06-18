@@ -127,6 +127,7 @@
     <Content Include="Content\toast.css" />
     <Content Include="Db\restobarbdd.sql" />
     <Content Include="Db\RESTOBAR_DB.sql" />
+    <Content Include="Db\script.sql" />
     <Content Include="Default.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />

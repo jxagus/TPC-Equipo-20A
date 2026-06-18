@@ -26,14 +26,15 @@ namespace Resto_Bar_Web
 
                 CargarComboMesas();
                 CargarCardsProductos();
-                ActualizarInterfazCarrito();
+                ActualizarInterfazCarrito(); 
             }
         }
         protected void btnConfirmarPedido_Click(object sender, EventArgs e)
         {
+            //agarra el carrito desde la sesion
             List<DetallePedido> carrito = (List<DetallePedido>)Session["Carrito"];
 
-            // Validacion básica por las dudas
+            //Validacion basica por las dudas
             if (carrito == null || carrito.Count == 0)
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('El pedido esta vacio.');", true);
@@ -46,16 +47,16 @@ namespace Resto_Bar_Web
                 decimal precioTotal = 0;
                 foreach (DetallePedido item in carrito)
                 {
-                    precioTotal += item.Subtotal;
+                    precioTotal = precioTotal + item.Subtotal;
                 }
 
                 //Creamos el objeto Pedido para la base de datos
                 Pedido nuevoPedido = new Pedido();
                 nuevoPedido.NroMesa = Convert.ToInt32(ddlMesas.SelectedValue);
                 nuevoPedido.IdUsuario = Convert.ToInt32(Session["idUsuario"]);
-                nuevoPedido.FechayHoraPedido = DateTime.Now;
+                nuevoPedido.FechayHoraPedido = DateTime.Now; //fechita actual
                 nuevoPedido.PrecioTotal = precioTotal;
-                nuevoPedido.IdEstadoPedido = 1; //1 = Pendiente / Recibido
+                nuevoPedido.IdEstadoPedido = 1; //1 Pendiente / 2 finalizado
                 //Guardamos el pedido principal
                 PedidoNegocio pedidoNegocio = new PedidoNegocio();
                 int idPedidoGenerado = pedidoNegocio.agregarPedido(nuevoPedido);
