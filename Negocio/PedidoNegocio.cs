@@ -168,5 +168,45 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public List<DetallePedido> listarDetallesPorId(int idPedido)
+        {
+            List<DetallePedido> lista = new List<DetallePedido>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT D.IdPedido, D.IdProducto, P.NombreProducto, D.Cantidad, D.PrecioUnitario " +
+                                     "FROM DetallePedido D " +
+                                     "INNER JOIN Productos P ON D.IdProducto = P.IdProducto " +
+                                     "WHERE D.IdPedido = @idPedido");
+
+                datos.setearParametros("@idPedido", idPedido);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    DetallePedido aux = new DetallePedido();
+
+                    aux.IdPedido = (int)datos.Lector["IdPedido"];
+                    aux.IdProducto = (int)datos.Lector["IdProducto"];
+                    aux.Cantidad = (int)datos.Lector["Cantidad"];
+                    aux.PrecioUnitario = (decimal)datos.Lector["PrecioUnitario"];
+
+                    aux.NombreProducto = datos.Lector["NombreProducto"].ToString();
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

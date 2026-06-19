@@ -13,7 +13,7 @@ namespace Resto_Bar_Web
         {
             if (Session["idUsuario"] == null)
             {
-                Response.Redirect("Login.aspx");
+                Response.Redirect("Usuarios.aspx");
                 return;
             }
 
@@ -51,22 +51,57 @@ namespace Resto_Bar_Web
 
         protected void repPedidos_ItemCommand(object sender, RepeaterCommandEventArgs e)
         {
+            int idPedido = Convert.ToInt32(e.CommandArgument);
+
             if (e.CommandName == "FinalizarPedido")
             {
                 try
                 {
-                    int idPedido = Convert.ToInt32(e.CommandArgument);
                     PedidoNegocio negocio = new PedidoNegocio();
                     negocio.finalizarPedido(idPedido);
-
                     CargarColaPedidos();
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('🛎️ Pedido #" + idPedido + " marcado como entregado con éxito.');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('📦 Pedido #" + idPedido + " entregado.');", true);
                 }
                 catch (Exception ex)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error al finalizar el pedido: " + ex.Message + "');", true);
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error: " + ex.Message + "');", true);
+                }
+            }
+            else if (e.CommandName == "VerDetalle")
+            {
+                try
+                {
+                    lblModalIdPedido.Text = idPedido.ToString();
+
+                    PedidoNegocio negocio = new PedidoNegocio();
+                    List<DetallePedido> detalles = negocio.listarDetallesPorId(idPedido);
+
+                    dgvDetallePedido.DataSource = detalles;
+                    dgvDetallePedido.DataBind();
+
+                    string script = "var miModal = new bootstrap.Modal(document.getElementById('modalDetallePedido')); miModal.show();";
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "PopDetalle", script, true);
+                }
+                catch (Exception ex)
+                {
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error al cargar el detalle: " + ex.Message + "');", true);
                 }
             }
         }
+        public bool DeterminarVisibilidadMonto()
+        {
+            if (Session["idRol"] != null)
+            {
+                int rolUsuario = Convert.ToInt32(Session["idRol"]);
+
+                //Admin (0) o Gerente (1)
+                if (rolUsuario == 0 || rolUsuario == 1)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
+
 }
