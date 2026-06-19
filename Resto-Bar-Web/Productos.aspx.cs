@@ -15,7 +15,9 @@ namespace Resto_Bar_Web
         {
             if (Session["idUsuario"] == null)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: no esta iniciado sesion');", true);
+                //ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: no esta iniciado sesion');", true);
+                Response.Redirect("Usuarios.aspx");
+
                 ///redirigir a una pagian de error, el mensaje es temporal
             }
             else
