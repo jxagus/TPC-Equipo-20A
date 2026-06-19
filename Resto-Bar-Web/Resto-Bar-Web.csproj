@@ -119,6 +119,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\bootstrap.rtl.css" />
     <Content Include="Content\bootstrap.rtl.min.css" />
+    <Content Include="Content\dashboard.css" />
     <Content Include="Content\Insumos.css" />
     <Content Include="Content\Mesas.css" />
     <Content Include="Content\Pedidos.css" />

@@ -1,0 +1,33 @@
+﻿.bg-gradient-diario {
+    background: linear-gradient(135deg, #202b36 0%, #3d4e5d 100%) !important;
+    border: none !important;
+}
+
+.bg-gradient-mensual {
+    background: linear-gradient(135deg, #16222f 0%, #2c3e50 100%) !important;
+    border: none !important;
+}
+
+.bg-gradient-anual {
+    background: linear-gradient(135deg, #1f1c2c 0%, #36304a 100%) !important;
+    border: none !important;
+}
+
+.bg-gradient-pedidos {
+    background: linear-gradient(135deg, #2c1a1d 0%, #4a312c 100%) !important;
+    border: none !important;
+}
+
+.text-monto-exito {
+    color: #2ecc71 !important; 
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3); 
+}
+
+.card-dashboard-hover {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card-dashboard-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.25) !important;
+}
