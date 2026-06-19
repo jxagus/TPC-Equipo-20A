@@ -9,12 +9,53 @@ namespace Negocio
 {
     public class PedidoNegocio
     {
+        public List<Pedido> listarPedidosActivos()
+        {
+            List<Pedido> lista = new List<Pedido>();
+            AccesoDatos datos = new AccesoDatos();
+
+            try
+            {
+                datos.setearConsulta("SELECT IdPedido, NroMesa, IdUsuario, FechayHoraPedido, PrecioTotal, IdMetodo, IdEstadoPedido FROM Pedidos WHERE IdEstadoPedido = 1 ORDER BY FechayHoraPedido ASC");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Pedido aux = new Pedido();
+
+                    aux.IdPedido = (int)datos.Lector["IdPedido"];
+                    aux.NroMesa = (int)datos.Lector["NroMesa"];
+                    aux.IdUsuario = (int)datos.Lector["IdUsuario"];
+                    aux.FechayHoraPedido = (DateTime)datos.Lector["FechayHoraPedido"];
+                    aux.PrecioTotal = (decimal)datos.Lector["PrecioTotal"];
+
+                    if (!(datos.Lector["IdMetodo"] is DBNull))
+                    {
+                        aux.IdMetodo = (int)datos.Lector["IdMetodo"];
+                    }
+
+                    aux.IdEstadoPedido = (int)datos.Lector["IdEstadoPedido"];
+
+                    lista.Add(aux);
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
         public int agregarPedido(Pedido nuevo)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                // Registramos el pedido. Usamos SCOPE_IDENTITY() para que SQL nos devuelva el ID que se acaba de crear.
+                //Registramos el pedido. Usamos SCOPE_IDENTITY() para que SQL nos devuelva el ID que se acaba de crear.
                 datos.setearConsulta(@"INSERT INTO Pedidos (NroMesa, IdUsuario, FechayHoraPedido, PrecioTotal, IdMetodo, IdEstadoPedido) 
                                       VALUES (@nroMesa, @idUsuario, @fecha, @precioTotal, NULL, @idEstadoPedido);
                                       SELECT SCOPE_IDENTITY();");
@@ -37,8 +78,33 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public List<string> listarNumeroMesas()
+        {
+            List<string> lista = new List<string>();
+            AccesoDatos datos = new AccesoDatos();
 
-        // Metodo para guardar un renglon del detalle del pedido
+            try
+            {
+                datos.setearConsulta("SELECT NroMesa FROM Mesas");
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    //Extraemos el numero de la mesa y lo añadimos a la lista
+                    lista.Add(datos.Lector["NroMesa"].ToString());
+                }
+
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
         public void agregarDetalle(DetallePedido detalle)
         {
             AccesoDatos datos = new AccesoDatos();
@@ -61,7 +127,26 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public void finalizarPedido(int idPedido)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                //Cambiamos el estado al ID 2 (Finalizado)
+                datos.setearConsulta("UPDATE Pedidos SET IdEstadoPedido = 2 WHERE IdPedido = @idPedido");
+                datos.setearParametros("@idPedido", idPedido);
 
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
         public void restarStock(int idProducto, int cantidadRestar)
         {
             AccesoDatos datos = new AccesoDatos();

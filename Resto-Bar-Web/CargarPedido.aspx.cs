@@ -86,26 +86,21 @@ namespace Resto_Bar_Web
         }
         private void CargarComboMesas()
         {
-            AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT NroMesa FROM Mesas");
-                datos.ejecutarLectura();
+                PedidoNegocio pedidoNegocio = new PedidoNegocio();
+                List<string> listaMesas = pedidoNegocio.listarNumeroMesas();
 
                 ddlMesas.Items.Clear();
-                while (datos.Lector.Read())
+
+                foreach (string nroMesa in listaMesas)
                 {
-                    string nroMesa = datos.Lector["NroMesa"].ToString();
                     ddlMesas.Items.Add(new ListItem("Mesa Nro " + nroMesa, nroMesa));
                 }
             }
             catch (Exception ex)
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error al cargar mesas: " + ex.Message + "');", true);
-            }
-            finally
-            {
-                datos.cerrarConexion();
             }
         }
         private void CargarCardsProductos()
