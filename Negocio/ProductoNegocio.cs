@@ -97,6 +97,50 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public void desactivarProducto(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Productos SET Activo = 0 WHERE IdProducto = @id");
+                datos.setearParametros("@id", id);
+                datos.ejecutarAccion();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void activarProducto(int id)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE Productos SET Activo = 1 WHERE IdProducto = @id");
+                datos.setearParametros("@id", id);
+                datos.ejecutarAccion();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
         public List<Productos> listar()
         {
             List<Productos> lista = new List<Productos>();
@@ -104,7 +148,7 @@ namespace Negocio
 
             try
             {
-                datos.setearConsulta("SELECT IdProducto, NombreProducto, DescripcionProducto, Precio, Stock FROM Productos");
+                datos.setearConsulta("SELECT IdProducto, NombreProducto, DescripcionProducto, Precio, Stock FROM Productos WHERE Activo = 1");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())

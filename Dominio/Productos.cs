@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Dominio
 {
+    public enum EstadoProducto
+    {
+        Activo = 1,
+        Inactivo = 0
+    }
     public class Productos
     {
         public int IdProducto { get; set; }
@@ -13,5 +18,7 @@ namespace Dominio
         public string DescripcionProducto { get; set; }
         public decimal Precio { get; set; }
         public int Stock { get; set; }
+
+        public EstadoProducto Activo { get; set; }
     }
 }

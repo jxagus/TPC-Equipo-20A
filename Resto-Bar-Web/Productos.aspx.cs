@@ -1,6 +1,7 @@
 ﻿using Dominio;
 using Negocio;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -127,6 +128,46 @@ namespace Resto_Bar_Web
             txtPrecio.Text = producto.Precio.ToString();
             txtStock.Text = producto.Stock.ToString();
         
+        }
+
+        protected void lbtnEliminar_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnAplicarEliminarProducto_Click(object sender, EventArgs e)
+        {
+            ProductoNegocio negocio = new ProductoNegocio();
+            int id = Convert.ToInt32(hfIdProducto.Value);
+            negocio.desactivarProducto(id);
+            hfIdProducto.Value = "";
+            CargarProductos();
+
+        }
+
+        protected void dgvProductos_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "AbrirModalProducto")
+            {
+
+                string idProducto = e.CommandArgument.ToString();
+                Session["IdProductoAEliminar"] = idProducto;
+                hfIdProducto.Value = idProducto;
+
+                ProductoNegocio negocio = new ProductoNegocio();
+                Productos seleccionado = negocio.cargarProductoPorId(int.Parse(idProducto));
+                
+                lblEliminarId.Text = idProducto;
+                lblEliminarNombre.Text = seleccionado.NombreProducto;
+                lblEliminarDescripcion.Text = seleccionado.DescripcionProducto.ToString();
+                lblEliminarPrecio.Text = "$" + seleccionado.Precio.ToString("0.00");
+                lblEliminarStock.Text = seleccionado.Stock.ToString();
+
+
+
+                string script = "var miModal = new bootstrap.Modal(document.getElementById('modalEliminarProducto')); miModal.show();";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "PopProducto", script, true);
+            }
         }
     }
 }
