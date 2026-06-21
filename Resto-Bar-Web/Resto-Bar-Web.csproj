@@ -99,7 +99,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="About.aspx" />
     <Content Include="AsignacionMesa.aspx" />
     <Content Include="CargarPedido.aspx" />
     <Content Include="Contact.aspx" />
@@ -126,16 +125,13 @@
     <Content Include="Content\Sidebar.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\toast.css" />
-    <Content Include="Db\restobarbdd.sql" />
-    <Content Include="Db\RESTOBAR_DB.sql" />
-    <Content Include="Db\script.sql" />
+    <Content Include="CrearPersonal.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Productos.aspx" />
     <Content Include="Pedidos.aspx" />
-    <Content Include="Reportes.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.esm.js" />
@@ -167,6 +163,7 @@
     <Content Include="Mesas.aspx" />
     <Content Include="Scripts\toast.js" />
     <Content Include="Usuarios.aspx" />
+    <Content Include="Db\RESTOBAR_DB.ipynb" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -202,13 +199,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
-    <Compile Include="About.aspx.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="About.aspx.designer.cs">
-      <DependentUpon>About.aspx</DependentUpon>
-    </Compile>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="AsignacionMesa.aspx.cs">
       <DependentUpon>AsignacionMesa.aspx</DependentUpon>
@@ -230,6 +220,13 @@
     </Compile>
     <Compile Include="Contact.aspx.designer.cs">
       <DependentUpon>Contact.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CrearPersonal.aspx.cs">
+      <DependentUpon>CrearPersonal.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="CrearPersonal.aspx.designer.cs">
+      <DependentUpon>CrearPersonal.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -263,13 +260,6 @@
       <DependentUpon>Pedidos.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reportes.aspx.cs">
-      <DependentUpon>Reportes.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Reportes.aspx.designer.cs">
-      <DependentUpon>Reportes.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Site.Master.cs">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

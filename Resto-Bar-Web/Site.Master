@@ -16,17 +16,13 @@
     <webopt:BundleReference runat="server" Path="~/Content/css" />
 
     <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-
     <link href="~/Content/Sidebar.css" rel="stylesheet" />
 
     <asp:ContentPlaceHolder ID="Stylesheets" runat="server"></asp:ContentPlaceHolder>
-    <%--Para el css de mesas--%>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet" />
-
 </head>
 
 <body>
-
     <form runat="server">
 
         <asp:ScriptManager runat="server">
@@ -47,7 +43,6 @@
 
         <div class="app-container">
 
-            <!-- SIDEBAR -->
             <div class="sidebar">
 
                 <div class="logo">
@@ -57,57 +52,51 @@
                 <ul class="nav flex-column">
 
                     <li class="nav-item">
-                        <a class="nav-link" runat="server" href="~/">🏠 Dashboard
-                        </a>
+                        <a class="nav-link" runat="server" href="~/">🏠 Dashboard</a>
                     </li>
+                    
                     <li class="nav-item">
                         <button class="nav-link w-100 text-start border-0 bg-transparent d-flex align-items-center gap-2"
                             type="button"
                             data-bs-toggle="collapse"
                             data-bs-target="#menuGestion"
-                            aria-expanded="false">
+                            aria-expanded="false"
+                            aria-controls="menuGestion">
                             🗂️ Gestión <i class="bi bi-chevron-down ms-auto flecha"></i>
                         </button>
+                        
                         <div class="collapse" id="menuGestion">
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
-                                    <a class="nav-link" runat="server" href="~/AsignacionMesa">✍️ Asignar Mezas (Admin)
-                                    </a>
+                                    <a class="nav-link" runat="server" href="~/AsignacionMesa">✍️ Asignar Mesas (Admin)</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" runat="server" href="~/CrearPersonal.aspx">🧑‍ Crear Personal</a>
                                 </li>
                             </ul>
                         </div>
                     </li>
+
                     <li class="nav-item">
-                        <a class="nav-link" runat="server" href="~/Mesas.aspx">🍽️ Mesas
-                        </a>
+                        <a class="nav-link" runat="server" href="~/Mesas.aspx">🍽️ Mesas</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" runat="server" href="~/Pedidos.aspx">📋 Pedidos
-                        </a>
+                        <a class="nav-link" runat="server" href="~/Pedidos.aspx">📋 Pedidos</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link" runat="server" href="~/Productos.aspx">🥤 Platos
-                        </a>
+                        <a class="nav-link" runat="server" href="~/Productos.aspx">🥤 Platos</a>
                     </li>
 
-                    <!-- <li class="nav-item">
-                        <a class="nav-link" runat="server" href="~/Reportes.aspx">📊 Reportes
-                        </a>
-                    </li>
-                        -->
                     <li class="nav-item mt-auto">
-                        <a id="TipoUsuario" class="nav-link" runat="server" href="~/Usuarios.aspx">👤 Usuarios
-                        </a>
+                        <a id="TipoUsuario" class="nav-link" runat="server" href="~/Usuarios.aspx">👤 Usuarios</a>
                     </li>
-
 
                 </ul>
 
             </div>
 
-            <!-- CONTENIDO -->
             <div class="main-content">
 
                 <asp:ContentPlaceHolder ID="MainContent" runat="server">
@@ -122,14 +111,8 @@
 
         </div>
 
-
         <script src='<%= ResolveUrl("~/Scripts/bootstrap.bundle.min.js") %>'></script>
 
     </form>
-
-
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
-    </asp:PlaceHolder>
 </body>
 </html>
