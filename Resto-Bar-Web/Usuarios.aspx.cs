@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Services.Description;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Dominio;
@@ -14,34 +13,66 @@ namespace Resto_Bar_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["idUsuario"] != null)
+            if (!IsPostBack)
             {
-                //// a desarrollar
+                if (Session["idUsuario"] != null)
+                {
+                    pnlLogin.Visible = false;
+                    pnlPerfil.Visible = true;
+                }
+                else
+                {
+                    pnlLogin.Visible = true;
+                    pnlPerfil.Visible = false;
+                }
             }
         }
 
         protected void btnIniciarSesion_Click(object sender, EventArgs e)
         {
-            string usuario = txtUsuario.Text;
+            lblError.Visible = false;
+            lblError.Text = "";
+
+            string usuario = txtUsuario.Text.Trim();
             string contrasena = txtContrasena.Text;
 
             LoginNegocio negocio = new LoginNegocio();
 
-            int idUsuario = negocio.existeUsuario(usuario, contrasena);
-            if (idUsuario != 0)
+            try
             {
-                Session.Add("idUsuario", idUsuario);
-                Session.Add("idRol", negocio.traerRol(idUsuario));
-                Response.Redirect("~/Mesas.aspx");
+                int idUsuario = negocio.existeUsuario(usuario, contrasena);
 
+                if (idUsuario != 0)
+                {
+                    Session.Add("idUsuario", idUsuario);
+                    Session.Add("idRol", negocio.traerRol(idUsuario));
+
+                    Response.Redirect("~/");
+                }
+                else
+                {
+                    lblError.Text = "⚠️ Usuario y/o Contraseña incorrectos.";
+                    lblError.Visible = true;
+                    txtContrasena.Text = null;
+                }
             }
-            else
+            catch (Exception ex)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Usuario y/o Contrasena Incorrectos');", true);
+                //por si la db tira error
+                lblError.Text = "Error de conexión con el servidor.";
+                lblError.Visible = true;
             }
+        }
 
-            txtContrasena.Text = null;
-            txtUsuario.Text = null;
+        protected void btnCerrarSesion_Click(object sender, EventArgs e)
+        {
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect("~/Usuarios.aspx");
+        }
+        protected void btnIrDashboard_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/");
         }
     }
 }
