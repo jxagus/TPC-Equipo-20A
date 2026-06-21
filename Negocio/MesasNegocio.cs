@@ -115,5 +115,24 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public void finalizarAsignacion(int nroMesa)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE mesas SET IdUsuario = NULL WHERE NroMesa = @nroMesa");
+                datos.setearParametros("@nroMesa", nroMesa);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

@@ -40,6 +40,8 @@ namespace Resto_Bar_Web
             {
                 CargarMozos();
                 CargarMesas();
+                CargarMesasPost();
+                CargarAccion();
             }
         }
 
@@ -80,6 +82,7 @@ namespace Resto_Bar_Web
             ddlMesa.Items.Clear();
             ddlMesa.Items.Add(new ListItem("-- Seleccioná una mesa --", "0"));
 
+
             List<Mesa> mesas = negocio.listarTodas();
 
             foreach (Mesa mesa in mesas)
@@ -87,10 +90,7 @@ namespace Resto_Bar_Web
                 if (mesa.EstadoMesa == EstadoMesa.Habilitada && mesa.IdUsuario == 0)
                 {
                     ddlMesa.Items.Add(
-                        new ListItem(
-                            "Mesa " + mesa.IdMesa,
-                            mesa.IdMesa.ToString()
-                        )
+                        new ListItem("Mesa " + mesa.IdMesa, mesa.IdMesa.ToString())
                     );
                 }
             }
@@ -137,6 +137,46 @@ namespace Resto_Bar_Web
                 // Muestra un cartelito nativo con el error si algo falla
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: {ex.Message}');", true);
             }
+        }
+        protected void btnAceptar_Click(object sender, EventArgs e)
+        {
+            MesasNegocio negocio = new MesasNegocio();
+            negocio.inhabilitarHabilitarMesa(int.Parse(ddlAccion.SelectedValue), int.Parse(ddlMesas.SelectedValue));
+        }
+        private void CargarAccion()
+        {
+            ddlAccion.Items.Clear();
+            ddlAccion.Items.Add(new ListItem("Habilitar", "1"));
+            ddlAccion.Items.Add(new ListItem("Inhabilitar", "0"));
+        }
+        public void CargarMesasPost()
+        {
+            ddlMesas.Items.Clear();
+            ddlMesas.Items.Add(new ListItem("-- Seleccioná una mesa --", "0"));
+            MesasNegocio negocio = new MesasNegocio();
+            List<Mesa> mesas = negocio.listarTodas();
+
+            string seleccion = ddlAccion.SelectedValue;
+
+            foreach (Mesa mesa in mesas)
+            {
+                if (seleccion == "0" &&  mesa.EstadoMesa == EstadoMesa.Habilitada)
+                {
+                    ddlMesas.Items.Add(
+                        new ListItem("Mesa " + mesa.IdMesa, mesa.IdMesa.ToString())
+                    );
+                }
+                else if (seleccion == "1" && mesa.EstadoMesa == EstadoMesa.Inhabilitada)
+                {
+                    ddlMesas.Items.Add(
+                        new ListItem("Mesa " + mesa.IdMesa, mesa.IdMesa.ToString())
+                    );
+                }
+            }
+        }
+        protected void ddlAccion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CargarMesasPost();
         }
     }
 }

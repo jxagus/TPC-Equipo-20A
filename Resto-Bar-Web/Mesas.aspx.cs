@@ -55,18 +55,60 @@ namespace Resto_Bar_Web
                 Session["MesaSeleccionada"] = idMesa;
                 tituloModalMesa.InnerText = "Mesa Numero " + idMesa;
 
-                MesasNegocio negocio = new MesasNegocio();
-                chkEstadoMesa.Checked = negocio.obtenerEstadoPorId(int.Parse(idMesa));
-
-
                 string script = "var miModal = new bootstrap.Modal(document.getElementById('modalAdministrarMesa')); miModal.show();";
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", script, true);
+            }
+            if (e.CommandName == "AbrirPedido")
+            {
+                string idMesa = e.CommandArgument.ToString();
+                Session["MesaSeleccionada"] = idMesa; 
+                AccesoDatos datos = new AccesoDatos();
+
+                try
+                {
+                    datos.setearConsulta(@"SELECT 
+                        COUNT(CASE WHEN CAST(FechayHoraPedido AS DATE) = CAST(GETDATE() AS DATE) AND IdEstadoPedido = 2 THEN 1 END) AS PedidosCerradosHoy,
+                        CASE WHEN EXISTS (SELECT 1 FROM dbo.Pedidos 
+                        WHERE NroMesa = @NroMesa AND IdEstadoPedido = 1) THEN 'Sí' ELSE 'No' END AS PedidoActual
+                        FROM dbo.Pedidos
+                        WHERE NroMesa = @NroMesa");
+                    datos.setearParametros("@NroMesa", idMesa);
+                    datos.ejecutarLectura();
+
+                    if (datos.Lector.Read())
+                    {
+                        lblCerradosHoy.Text = datos.Lector["PedidosCerradosHoy"].ToString();
+                        lblPedidoActual.Text = datos.Lector["PedidoActual"].ToString();
+                    }
+                    else
+                    {
+                        lblCerradosHoy.Text = "0";
+                        lblPedidoActual.Text = "No";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw ex;
+                }
+                finally
+                {
+                    datos.cerrarConexion();
+                }
+
+                tituloModalPedido.InnerText = "Mesa " + idMesa;
+                string script = "var miModalPedido = new bootstrap.Modal(document.getElementById('modalPedido')); miModalPedido.show();";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "PopPedido", script, true);
             }
         }
 
         protected void btnVerPedido_Click(object sender, EventArgs e)
-        {
+        { 
+            //falta logica para ver carrito al pedido actual con el nro de mesa seleccionado
+        }
 
+        protected void btnAgregarPedido_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("cargarpedido.aspx", false); //falta logica para setear mesa en el pedido y poder avanzar de paso
         }
 
         protected void btnGuardarEstado_Click(object sender, EventArgs e)
@@ -75,9 +117,8 @@ namespace Resto_Bar_Web
             {
                 MesasNegocio negocio = new MesasNegocio();
 
-                int idMesa = Convert.ToInt32(Session["MesaSeleccionada"]);
-                int nuevoEstado = chkEstadoMesa.Checked ? 1 : 0;
-                negocio.inhabilitarHabilitarMesa(nuevoEstado, idMesa);
+                int nroMesa = Convert.ToInt32(Session["MesaSeleccionada"]);
+                negocio.finalizarAsignacion(nroMesa);
                 Response.Redirect("Mesas.aspx");
             }
         }

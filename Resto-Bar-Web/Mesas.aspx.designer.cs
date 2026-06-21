@@ -33,22 +33,13 @@ namespace Resto_Bar_Web
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl tituloModalMesa;
 
         /// <summary>
-        /// Control chkEstadoMesa.
+        /// Control divFinalizarAsignacion.
         /// </summary>
         /// <remarks>
         /// Campo generado automáticamente.
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlInputCheckBox chkEstadoMesa;
-
-        /// <summary>
-        /// Control btnVerPedido.
-        /// </summary>
-        /// <remarks>
-        /// Campo generado automáticamente.
-        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnVerPedido;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl divFinalizarAsignacion;
 
         /// <summary>
         /// Control btnGuardarEstado.
@@ -58,5 +49,55 @@ namespace Resto_Bar_Web
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnGuardarEstado;
+
+        /// <summary>
+        /// Control tituloModalPedido.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl tituloModalPedido;
+
+        /// <summary>
+        /// Control lblCerradosHoy.
+        /// Control chkEstadoMesa.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblCerradosHoy;
+
+        /// <summary>
+        /// Control lblPedidoActual.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblPedidoActual;
+
+        /// <summary>
+        /// Control btnAgregarPedido.
+        /// Control btnVerPedido.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnAgregarPedido;
+
+        /// <summary>
+        /// Control btnVerPedido.
+        /// Control btnGuardarEstado.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnVerPedido;
     }
 }

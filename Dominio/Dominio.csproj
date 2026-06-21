@@ -46,7 +46,6 @@
     <Compile Include="EstadoPedido.cs" />
     <Compile Include="Mesa.cs" />
     <Compile Include="MetodoPago.cs" />
-    <Compile Include="Mozo.cs" />
     <Compile Include="Pedido.cs" />
     <Compile Include="Productos.cs" />
     <Compile Include="ProductosImagenes.cs" />

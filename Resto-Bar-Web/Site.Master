@@ -54,7 +54,7 @@
                     <li class="nav-item">
                         <a class="nav-link" runat="server" href="~/">🏠 Dashboard</a>
                     </li>
-                    
+
                     <li class="nav-item">
                         <button class="nav-link w-100 text-start border-0 bg-transparent d-flex align-items-center gap-2"
                             type="button"
@@ -62,42 +62,49 @@
                             data-bs-target="#menuGestion"
                             aria-expanded="false"
                             aria-controls="menuGestion">
-                            🗂️ Gestión <i class="bi bi-chevron-down ms-auto flecha"></i>
+                            🗂️ Gestión
+           
+                            <i class="bi bi-chevron-down ms-auto flecha"></i>
                         </button>
-                        
+
                         <div class="collapse" id="menuGestion">
+
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
-                                    <a class="nav-link" runat="server" href="~/AsignacionMesa">✍️ Asignar Mesas (Admin)</a>
+                                    <a class="nav-link" runat="server" href="~/AsignacionMesa">✍️ Mesas (Admin)</a>
                                 </li>
+                            </ul>
+
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" runat="server" href="~/Mesas.aspx">🍽️ Mis Mesas (Mozo)</a>
+                                </li>
+                            </ul>
+
+                            <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
                                     <a class="nav-link" runat="server" href="~/CrearPersonal.aspx">🧑‍ Crear Personal</a>
                                 </li>
                             </ul>
-                            <ul class="nav flex-column ps-3">
-                                <li class="nav-item">
-                                    <a class="nav-link" runat="server" href="~/Categorias.aspx">🏷️ Categorias
-                                    </a>
-                                </li>
-                            </ul>
-                    
-                            <ul class="nav flex-column ps-3">
-                                <li class="nav-item">
-                                    <a class="nav-link" runat="server" href="~/Productos.aspx">🥤 Platos
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" runat="server" href="~/Mesas.aspx">🍽️ Mesas</a>
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" runat="server" href="~/Categorias.aspx">🏷️ Categorías</a>
+                                </li>
+                            </ul>
+
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" runat="server" href="~/Productos.aspx">🥤 Platos</a>
+                                </li>
+                            </ul>
+
+                        </div>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" runat="server" href="~/Pedidos.aspx">📋 Pedidos</a>
                     </li>
-
 
                     <li class="nav-item mt-auto">
                         <a id="TipoUsuario" class="nav-link" runat="server" href="~/Usuarios.aspx">👤 Usuarios</a>
