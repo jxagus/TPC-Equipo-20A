@@ -169,5 +169,15 @@ namespace Resto_Bar_Web
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "PopProducto", script, true);
             }
         }
+
+        protected void btnAgregarCategoria_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void btnCrearCategoria_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

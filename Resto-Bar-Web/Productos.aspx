@@ -14,13 +14,19 @@
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label fw-bold">Nombre del producto</label>
+                    <label class="form-label fw-bold">Nombre del Producto</label>
                     <asp:TextBox ID="txtNombreProducto" CssClass="form-control" runat="server"></asp:TextBox>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Descripción del Producto</label>
                     <asp:TextBox ID="txtDescripcion" CssClass="form-control" TextMode="MultiLine" Rows="3" runat="server"></asp:TextBox>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Categoria del Producto</label>
+                    <asp:DropDownList ID="DropDownList1" runat="server"></asp:DropDownList>
+                    <asp:Button ID="btnCrearCategoria" CssClass="btn btn-secondary btn-sm" runat="server" OnClick="btnCrearCategoria_Click" Text="Crear Categoria" />
                 </div>
 
                 <div class="mb-3">
@@ -136,5 +142,32 @@
           </div>
         </div>
 
+
+
+     <div class="modal fade" id="ModalCargarCategoria" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="H1" runat="server">Cargar Nueva Categoria</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body text-center">
+
+            <div class="aler alert-secondary text-start mx-auto" style="max-width: 400px;">
+                    <%-- contenido para cargar la categoria nueva --%>
+            </div>
+
+          </div>
+
+            <div class="d-flex flex-column align-items-center my-3 p-3 bg-light rounded-3">
+        <div class="modal-footer">
+            <asp:Button ID="btbCancelarCategoria" runat="server" Text="Cancelar" CssClass="btn btn-secondary" data-bs-dismiss="modal" OnClientClick="return false;" />
+            <asp:Button ID="btnAgregarCategoria" runat="server" Text="Eliminar" CssClass="btn btn-danger"  OnClick="btnAgregarCategoria_Click" />
+        </div>
+
+    </div>
+        </div>
+      </div>
+    </div>
      
 </asp:Content>

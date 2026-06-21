@@ -74,6 +74,19 @@
                                     <a class="nav-link" runat="server" href="~/CrearPersonal.aspx">🧑‍ Crear Personal</a>
                                 </li>
                             </ul>
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" runat="server" href="~/Categorias.aspx">🏷️ Categorias
+                                    </a>
+                                </li>
+                            </ul>
+                    
+                            <ul class="nav flex-column ps-3">
+                                <li class="nav-item">
+                                    <a class="nav-link" runat="server" href="~/Productos.aspx">🥤 Platos
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </li>
 
@@ -85,9 +98,6 @@
                         <a class="nav-link" runat="server" href="~/Pedidos.aspx">📋 Pedidos</a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" runat="server" href="~/Productos.aspx">🥤 Platos</a>
-                    </li>
 
                     <li class="nav-item mt-auto">
                         <a id="TipoUsuario" class="nav-link" runat="server" href="~/Usuarios.aspx">👤 Usuarios</a>
