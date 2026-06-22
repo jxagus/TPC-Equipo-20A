@@ -42,10 +42,10 @@ namespace Resto_Bar_Web
                 CargarMesas();
                 CargarMesasPost();
                 CargarAccion();
+                ActualizarModuloMesas();
             }
         }
 
-        //Usamos el acceso a datos, ademas marcamos que el rol 2 es para lo mozos(a definir)
         private void CargarMozos()
         {
             AccesoDatos ad = new AccesoDatos();
@@ -114,7 +114,6 @@ namespace Resto_Bar_Web
             }
         }
 
-        // metodo funcionalidad del evento click en el btnAsignar
         protected void btnAsignar_Click(object sender, EventArgs e)
         {
             if (ddlMozo.SelectedValue == "0" || ddlMesa.SelectedValue == "0") return;
@@ -134,7 +133,6 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                // Muestra un cartelito nativo con el error si algo falla
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: {ex.Message}');", true);
             }
         }
@@ -142,6 +140,8 @@ namespace Resto_Bar_Web
         {
             MesasNegocio negocio = new MesasNegocio();
             negocio.inhabilitarHabilitarMesa(int.Parse(ddlAccion.SelectedValue), int.Parse(ddlMesas.SelectedValue));
+            CargarMesas();
+            CargarMesasPost();
         }
         private void CargarAccion()
         {
@@ -178,5 +178,46 @@ namespace Resto_Bar_Web
         {
             CargarMesasPost();
         }
+        private void ActualizarModuloMesas()
+        {
+            try
+            {
+                MesasNegocio negocio = new MesasNegocio();
+
+                int proximoNumero = negocio.obtenerProximoNumeroMesa();
+                litProximaMesa.Text = proximoNumero.ToString();
+            }
+            catch (Exception ex)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error al cargar panel de control: {ex.Message}');", true);
+            }
+        }
+        protected void btnCrearMesa_Click(object sender, EventArgs e)
+        {
+            lblMensaje.Visible = false;
+
+            try
+            {
+                MesasNegocio negocio = new MesasNegocio();
+
+
+                negocio.agregarNuevaMesaAutomatica();
+
+                lblMensaje.Text = "✔️ Mesa creada correctamente desde la base de datos.";
+                lblMensaje.CssClass = "alert alert-success d-block mb-3";
+                lblMensaje.Visible = true;
+
+                ActualizarModuloMesas();
+                CargarMesas();     
+                CargarMesasPost();
+            }
+            catch (Exception ex)
+            {
+                lblMensaje.Text = "Error al intentar dar de alta la mesa.";
+                lblMensaje.CssClass = "alert alert-danger d-block mb-3";
+                lblMensaje.Visible = true;
+            }
+        }
+        
     }
 }

@@ -27,11 +27,11 @@ namespace Negocio
                     aux.IdUsuario = (int)datos.Lector["IdUsuario"];
                     aux.MesaUrlImagen = (string)datos.Lector["MesaUrlImagen"];
                     bool estadobdd = (bool)datos.Lector["Estado"];
-                    aux.EstadoMesa = estadobdd ? EstadoMesa.Habilitada : EstadoMesa.Inhabilitada ;
+                    aux.EstadoMesa = estadobdd ? EstadoMesa.Habilitada : EstadoMesa.Inhabilitada;
 
                     lista.Add(aux);
                 }
-                
+
                 return lista;
             }
             catch (Exception ex)
@@ -43,7 +43,7 @@ namespace Negocio
             {
                 datos.cerrarConexion();
             }
-            
+
         }
 
         public void inhabilitarHabilitarMesa(int estado, int id)
@@ -64,8 +64,9 @@ namespace Negocio
 
                 throw ex;
             }
-            finally { 
-                datos.cerrarConexion(); 
+            finally
+            {
+                datos.cerrarConexion();
             }
         }
 
@@ -134,5 +135,49 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-    }
+
+        public int obtenerProximoNumeroMesa()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT CAST(IDENT_CURRENT('Mesas') + 1 AS INT) AS Proximo");
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return (int)datos.Lector["Proximo"];
+                }
+                return 1;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void agregarNuevaMesaAutomatica()
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO Mesas (IdUsuario, Estado, MesaUrlImagen) VALUES (NULL, 1, '')");
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+    }  
+    
 }
