@@ -77,12 +77,6 @@
 
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
-                                    <a class="nav-link" runat="server" href="~/Mesas.aspx">🍽️ Mis Mesas (Mozo)</a>
-                                </li>
-                            </ul>
-
-                            <ul class="nav flex-column ps-3">
-                                <li class="nav-item">
                                     <a class="nav-link" runat="server" href="~/CrearPersonal.aspx">🧑‍ Crear Personal</a>
                                 </li>
                             </ul>
@@ -101,13 +95,15 @@
 
                         </div>
                     </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" runat="server" href="~/Mesas.aspx">🍽️ Mis Mesas  </a>
+                        </li>
                     <li class="nav-item">
                         <a class="nav-link" runat="server" href="~/Pedidos.aspx">📋 Pedidos</a>
                     </li>
 
                     <li class="nav-item mt-auto">
-                        <a id="TipoUsuario" class="nav-link" runat="server" href="~/Usuarios.aspx">👤 Usuarios</a>
+                        <a id="TipoUsuario" class="nav-link" runat="server" href="~/Login.aspx">👤 Login</a>
                     </li>
 
                 </ul>

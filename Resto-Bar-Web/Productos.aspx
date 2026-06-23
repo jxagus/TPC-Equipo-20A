@@ -81,10 +81,6 @@
     </div>
 
 
-
-
-
-
          <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -142,8 +138,6 @@
           </div>
         </div>
 
-
-
      <div class="modal fade" id="ModalCargarCategoria" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
@@ -154,7 +148,7 @@
           <div class="modal-body text-center">
 
             <div class="aler alert-secondary text-start mx-auto" style="max-width: 400px;">
-                    <%-- contenido para cargar la categoria nueva --%>
+                    <%--contenido para cargar la categoria nueva --%>
             </div>
 
           </div>

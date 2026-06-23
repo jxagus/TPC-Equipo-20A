@@ -13,9 +13,9 @@ namespace Resto_Bar_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["idUsuario"] == null)
+            if (Session["idUsuario"] != null)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: no esta iniciado sesion');", true);
+                //ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: no esta iniciado sesion');", true);
 
                 ///redirigir a una pagian de error, el mensaje es temporal
             }
@@ -30,9 +30,11 @@ namespace Resto_Bar_Web
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Permisos insuficientes');", true);
+                    //ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Permisos insuficientes');", true);
 
                     ///redirigir a pagina de error, el mensaje es temporal
+                    Response.Redirect("~/Login.aspx");
+
                 }
             }
 

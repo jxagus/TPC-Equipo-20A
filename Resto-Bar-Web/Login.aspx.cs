@@ -68,7 +68,7 @@ namespace Resto_Bar_Web
         {
             Session.Clear();
             Session.Abandon();
-            Response.Redirect("~/Usuarios.aspx");
+            Response.Redirect("~/Login.aspx");
         }
         protected void btnIrDashboard_Click(object sender, EventArgs e)
         {

@@ -13,7 +13,7 @@ namespace Resto_Bar_Web
         {
             if (Session["idUsuario"] == null)
             {
-                Response.Redirect("Usuarios.aspx");
+                Response.Redirect("Login.aspx");
                 return;
             }
 
