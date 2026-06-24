@@ -19,8 +19,6 @@ namespace Dominio
         {
             get { return Cantidad * PrecioUnitario; }
         }
-
-        // Constructor vacío necesario
         public DetallePedido() { }
     }
 }

@@ -128,6 +128,7 @@
     <Content Include="Content\toast.css" />
     <Content Include="CrearPersonal.aspx" />
     <Content Include="Db\RESTOBAR_DB.sql" />
+    <Content Include="Dashboard.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="favicon.ico" />
@@ -235,6 +236,13 @@
     </Compile>
     <Compile Include="CrearPersonal.aspx.designer.cs">
       <DependentUpon>CrearPersonal.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Dashboard.aspx.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Dashboard.aspx.designer.cs">
+      <DependentUpon>Dashboard.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>

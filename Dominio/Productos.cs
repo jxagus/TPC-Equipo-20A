@@ -18,7 +18,10 @@ namespace Dominio
         public string DescripcionProducto { get; set; }
         public decimal Precio { get; set; }
         public int Stock { get; set; }
-
         public EstadoProducto Activo { get; set; }
+
+        // PROPIEDADES AGREGADAS PARA ESTADISTICAS DEL DASHBOARD
+        public int CantidadVendida { get; set; }
+        public int Porcentaje { get; set; }
     }
 }
