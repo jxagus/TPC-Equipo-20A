@@ -16,6 +16,10 @@
     background: linear-gradient(90deg, #343a40 0%, #001a1a 45%, #002d2d 80%, #004d4d 100%) !important;
     color: #ffffff !important;
 }
+.bg-gradient-mozo {
+    background: linear-gradient(135deg, #004d4a 0%, #12755f 100%) !important;
+}
+}
 .sidebar .nav {
     flex: 1;
     display: flex;

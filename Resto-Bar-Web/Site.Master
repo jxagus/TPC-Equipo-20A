@@ -43,14 +43,13 @@
 
         <div class="app-container">
 
-            <div class="sidebar">
+            <div id="sidebarMenu" runat="server" class="sidebar">
 
                 <div class="logo">
                     RESTO BAR
                 </div>
 
-                <ul class="nav flex-column">
-
+                <ul class="nav flex-column h-100">
                     <li class="nav-item">
                         <a class="nav-link" runat="server" href="~/Dashboard">🏠 Dashboard</a>
                     </li>
@@ -63,41 +62,32 @@
                             aria-expanded="false"
                             aria-controls="menuGestion">
                             🗂️ Gestión
-           
-                            <i class="bi bi-chevron-down ms-auto flecha"></i>
+               
+                <i class="bi bi-chevron-down ms-auto flecha"></i>
                         </button>
 
                         <div class="collapse" id="menuGestion">
-
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
                                     <a class="nav-link" runat="server" href="~/AsignacionMesa">✍️ Mesas (Admin)</a>
                                 </li>
-                            </ul>
-
-                            <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
                                     <a class="nav-link" runat="server" href="~/CrearPersonal.aspx">🧑‍ Crear Personal</a>
                                 </li>
-                            </ul>
-
-                            <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
                                     <a class="nav-link" runat="server" href="~/Categorias.aspx">🏷️ Categorías</a>
                                 </li>
-                            </ul>
-
-                            <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
                                     <a class="nav-link" runat="server" href="~/Productos.aspx">🥤 Platos</a>
                                 </li>
                             </ul>
-
                         </div>
                     </li>
-                        <li class="nav-item">
-                            <a class="nav-link" runat="server" href="~/Mesas.aspx">🍽️ Mis Mesas  </a>
-                        </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" runat="server" href="~/Mesas.aspx">🍽️ Mis Mesas</a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" runat="server" href="~/Pedidos.aspx">📋 Pedidos</a>
                     </li>
@@ -109,7 +99,6 @@
                 </ul>
 
             </div>
-
             <div class="main-content">
 
                 <asp:ContentPlaceHolder ID="MainContent" runat="server">
@@ -128,4 +117,3 @@
 
     </form>
 </body>
-</html>

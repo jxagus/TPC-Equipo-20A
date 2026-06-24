@@ -134,7 +134,7 @@ namespace Negocio
                     {
                         maxCantidad = aux.CantidadVendida;
                     }
-
+                    //el plato mas vendido (es el 100%) divide la multiplicacion de la cantidad de otros platos * 100
                     aux.Porcentaje = maxCantidad > 0 ? (aux.CantidadVendida * 100) / maxCantidad : 0;
 
                     lista.Add(aux);

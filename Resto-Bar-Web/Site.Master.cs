@@ -4,6 +4,8 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Dominio;
+using Negocio;
 
 namespace Resto_Bar_Web
 {
@@ -11,6 +13,12 @@ namespace Resto_Bar_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!IsPostBack)
+            {
+                VerificarEstiloNavbarPorRol();
+            }
+
+            // Control del texto del Login según el Rol en sesión
             if (Session["idRol"] != null)
             {
                 int rol = (int)Session["idRol"];
@@ -24,7 +32,20 @@ namespace Resto_Bar_Web
                 else if (rol == 2)
                     TipoUsuario.InnerText = "👤 Mesero";
             }
+        }
 
+        private void VerificarEstiloNavbarPorRol()
+        {
+            if (Session["idRol"] != null)
+            {
+                int rol = (int)Session["idRol"];
+
+                //Si el rol es 2 (Mesero / Mozo)
+                if (rol == 2)
+                {
+                    sidebarMenu.Attributes["class"] += " bg-gradient-mozo";
+                }
+            }
         }
     }
 }

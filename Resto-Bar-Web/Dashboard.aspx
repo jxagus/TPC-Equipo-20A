@@ -62,6 +62,7 @@
                                     <span class="fw-semibold text-secondary"><%# Eval("NombreProducto") %></span>
                                     <span class="badge bg-primary rounded-pill"><%# Eval("CantidadVendida") %> porciones</span>
                                 </div>
+                                <!-- Bootstrap para la barra verde-->
                                 <div class="progress" style="height: 8px;">
                                     <div class="progress-bar bg-success" role="progressbar" 
                                          style='width: <%# Eval("Porcentaje") %>%;' 
