@@ -36,7 +36,50 @@
                 </div>
 
 
+
+            <div class="col-md-8 ps-md-4">
+              <h2 class="mb-4">Categorias Existentes</h2>
+
+                <div class="accordion" id="accorditionCategorias">
+                    <asp:Repeater Id="repCategorias" runat="server" OnItemCommand="repCategorias_ItemCommand" OnItemDataBound="repCategorias_ItemDataBound">
+                    <ItemTemplate>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header d-flex" id='heading<%# Eval("IdCategoria") %>'>
+                              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target='#collapse<%# Eval("IdCategoria") %>' aria-expanded="false" aria-controls='collapse<%# Eval("IdCategoria") %>'>
+                                <%# Eval("NombreCategoria") %>
+                              </button>
+                              <div class="d-flex align-items-center p-2 bg-light border-start">
+                                  <asp:LinkButton ID="btnEditarCategoria" CommandName="EditarCategoria" CommandArgument='<%# Eval("IdCategoria") %>' CssClass="btn btn-sm btn-outline-secondary" runat="server" ToolTip="Editar">🖊</asp:LinkButton>
+                              </div>
+                            </h2>
+
+                            <div id='collapse<%# Eval("IdCategoria") %>' class="accordion-collapse collapse" aria-labelledby='heading<%# Eval("IdCategoria") %>' data-bs-parent="#accorditionCategorias">
+                            <div class="accordion-body">
+                                <ul class="list-group list-group-flush">
+                                    <asp:Repeater ID="repSubcategorias" OnItemCommand="repSubcategorias_ItemCommand" runat="server">
+                                        <ItemTemplate>
+                                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                                <%# Eval("NombreCategoria") %>
+                                                <asp:LinkButton ID="btnEditarSubcategoria" CommandName="EditarSubcategoria" CommandArgument='<%# Eval("IdCategoria") %>' CssClass="btn btn-sm btn-outline-secondary" runat="server" ToolTip="Editar">🖊</asp:LinkButton>
+                                            </li>
+                                        </ItemTemplate>
+                                    </asp:Repeater>
+                                </ul>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </ItemTemplate>
+                    </asp:Repeater>
+                </div>
+
+
             </div>
+            </div>
+
         </div>
 
 
