@@ -15,15 +15,13 @@ namespace Resto_Bar_Web
         {
             if (!IsPostBack)
             {
-                if(!(Page is Error))
+                if (Session["idUsuario"] == null)
                 {
-                    if (Session["idUsuario"] == null)
-                    {
-                        Response.Redirect("~/Login.aspx");
-                    }
+                    //Response.Redirect("~/Login.aspx");
                 }
+
             }
-                VerificarEstiloNavbarPorRol();
+            VerificarEstiloNavbarPorRol();
 
             if (Session["idRol"] != null)
             {

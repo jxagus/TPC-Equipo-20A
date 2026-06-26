@@ -47,7 +47,7 @@ namespace Resto_Bar_Web
                     Session.Add("idUsuario", idUsuario);
                     Session.Add("idRol", negocio.traerRol(idUsuario));
 
-                    Response.Redirect("~/");
+                    Response.Redirect("Dashboard.aspx", false);
                 }
                 else
                 {
@@ -58,9 +58,6 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                //por si la db tira error
-                //lblError.Text = "Error de conexión con el servidor.";
-                //lblError.Visible = true;
                 Session.Add("error", ex.ToString());
                 Response.Redirect("error.aspx", false);
             }
@@ -70,11 +67,13 @@ namespace Resto_Bar_Web
         {
             Session.Clear();
             Session.Abandon();
-            Response.Redirect("~/Login.aspx");
+
+            Response.Redirect("Login.aspx", false);
         }
+
         protected void btnIrDashboard_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/");
+            Response.Redirect("Dashboard.aspx", false);
         }
     }
 }
