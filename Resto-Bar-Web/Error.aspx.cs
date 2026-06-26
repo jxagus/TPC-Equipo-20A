@@ -11,7 +11,14 @@ namespace Resto_Bar_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["error"] != null)
+            {
+                lblError.Text = Session["error"].ToString();
+            }
+            else
+            {
+                lblError.Text = "Ha ocurrido un error inesperado.";
+            }
         }
     }
 }

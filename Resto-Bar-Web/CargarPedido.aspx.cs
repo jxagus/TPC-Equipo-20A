@@ -81,7 +81,8 @@ namespace Resto_Bar_Web
             {
                 //Response.Write("<h1 style='color:red; background:white; position:fixed; top:0; left:0; z-index:99999;'>ERROR REAL: " + ex.Message + "</h1>");
                 //Response.End(); 
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error critico al procesar la orden: " + ex.Message.Replace("'", "\"") + "');", true);
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
         private void CargarComboMesas()
@@ -100,7 +101,8 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error al cargar mesas: " + ex.Message + "');", true);
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
         private void CargarCardsProductos()
@@ -113,7 +115,8 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error al cargar catalogo: " + ex.Message + "');", true);
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
         //Se ejecuta al apretar "Añadir" en cualquier Card de producto
@@ -216,7 +219,6 @@ namespace Resto_Bar_Web
             lblCantidadItems.Text = totalUnidades.ToString();
             lblTotalPedido.Text = string.Format("{0:C}", montoTotal);
 
-            //Refrescamos el GridView del modal
             dgvPedidoActual.DataSource = carrito;
             dgvPedidoActual.DataBind();
         }

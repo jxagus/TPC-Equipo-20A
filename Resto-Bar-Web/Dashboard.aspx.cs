@@ -50,7 +50,8 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine("Error en Dashboard: " + ex.Message);
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
     }

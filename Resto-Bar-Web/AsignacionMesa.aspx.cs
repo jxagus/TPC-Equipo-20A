@@ -112,7 +112,8 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                throw ex;
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false); throw ex;
             }
         }
 
@@ -135,7 +136,8 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: {ex.Message}');", true);
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
         protected void btnAceptar_Click(object sender, EventArgs e)
@@ -215,9 +217,11 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                lblMensaje.Text = "Error al intentar dar de alta la mesa.";
-                lblMensaje.CssClass = "alert alert-danger d-block mb-3";
-                lblMensaje.Visible = true;
+                //lblMensaje.Text = "Error al intentar dar de alta la mesa.";
+                //lblMensaje.CssClass = "alert alert-danger d-block mb-3";
+                //lblMensaje.Visible = true;
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
         

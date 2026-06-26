@@ -15,10 +15,16 @@ namespace Resto_Bar_Web
         {
             if (!IsPostBack)
             {
-                VerificarEstiloNavbarPorRol();
+                if(!(Page is Error))
+                {
+                    if (Session["idUsuario"] == null)
+                    {
+                        Response.Redirect("~/Login.aspx");
+                    }
+                }
             }
+                VerificarEstiloNavbarPorRol();
 
-            // Control del texto del Login según el Rol en sesión
             if (Session["idRol"] != null)
             {
                 int rol = (int)Session["idRol"];

@@ -14,18 +14,18 @@ namespace Resto_Bar_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["idUsuario"] == null)
+            try
             {
-                //ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: no esta iniciado sesion');", true);
-                Response.Redirect("Login.aspx");
+                if (Session["idUsuario"] == null)
+                {
+                    Response.Redirect("Login.aspx", false);
+                    return;
+                }
 
-                ///redirigir a una pagian de error, el mensaje es temporal
-            }
-            else
-            {
                 LoginNegocio negocio = new LoginNegocio();
                 int idUsuario = Convert.ToInt32(Session["idUsuario"]);
                 int rol = negocio.traerRol(idUsuario);
+
                 if (rol == 0 || rol == 1)
                 {
                     if (!IsPostBack)
@@ -35,11 +35,15 @@ namespace Resto_Bar_Web
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Permisos insuficientes');", true);
-                    ///redirigir a pagina de error, el mensaje es temporal
+
+                    throw new Exception("Permisos insuficientes: Su nivel de usuario no está autorizado para acceder a la gestión de productos.");
                 }
             }
-
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
+            }
         }
         private void CargarProductos()
         {
@@ -53,7 +57,8 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error al cargar productos: {ex.Message}');", true);
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
         protected void btnAgregarProducto_Click(object sender, EventArgs e)
@@ -88,8 +93,8 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                ////validaciones a desarrollar
-                throw ex; 
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
 

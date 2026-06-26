@@ -42,10 +42,11 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                // Si hay un error de conexión o sintaxis SQL, rompemos la pantalla para verlo al toque
-                Response.Write("<h2 style='color:red;'>Error al guardar personal:</h2>");
-                Response.Write("<pre>" + ex.Message + "</pre>");
-                Response.End();
+                //Response.Write("<h2 style='color:red;'>Error al guardar personal:</h2>");
+               // Response.Write("<pre>" + ex.Message + "</pre>");
+                //Response.End();
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
     }

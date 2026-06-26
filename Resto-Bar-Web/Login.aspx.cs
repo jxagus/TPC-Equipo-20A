@@ -59,8 +59,10 @@ namespace Resto_Bar_Web
             catch (Exception ex)
             {
                 //por si la db tira error
-                lblError.Text = "Error de conexión con el servidor.";
-                lblError.Visible = true;
+                //lblError.Text = "Error de conexión con el servidor.";
+                //lblError.Visible = true;
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
 
