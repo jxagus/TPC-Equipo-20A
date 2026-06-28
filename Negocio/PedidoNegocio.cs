@@ -208,5 +208,29 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public void modificarPedido(int idPedido, int idProducto, int cantidad, decimal precioUnitario)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearSP("SP_ModificarProductosPedido");
+                datos.setearParametros("@IdPedido", idPedido);
+                datos.setearParametros("@IdProducto", idProducto);
+                datos.setearParametros("@Cantidad", cantidad);
+                datos.setearParametros("@PrecioUnitario", precioUnitario);
+
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

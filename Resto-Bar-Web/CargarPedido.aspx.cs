@@ -43,6 +43,21 @@ namespace Resto_Bar_Web
 
             try
             {
+                int idPedidoActual = (Session["IdPedido"] != null) ? Convert.ToInt32(Session["IdPedido"]) : 0;
+                PedidoNegocio pedidoNegocio = new PedidoNegocio();
+
+                if (idPedidoActual > 0)
+                {
+                    //mediante el procedimiento almacenado vamos a modificar un pedido ya existente, dentro de mesas.aspx
+                    foreach (DetallePedido item in carrito)
+                    {
+                        pedidoNegocio.modificarPedido(idPedidoActual, item.IdProducto, item.Cantidad, item.PrecioUnitario);
+                        pedidoNegocio.restarStock(item.IdProducto, item.Cantidad);
+                    }
+                }
+
+                else
+                {
                 //Calculamos el total recorriendo el carrito
                 decimal precioTotal = 0;
                 foreach (DetallePedido item in carrito)
@@ -57,8 +72,8 @@ namespace Resto_Bar_Web
                 nuevoPedido.FechayHoraPedido = DateTime.Now; //fechita actual
                 nuevoPedido.PrecioTotal = precioTotal;
                 nuevoPedido.IdEstadoPedido = 1; //1 Pendiente / 2 finalizado
+
                 //Guardamos el pedido principal
-                PedidoNegocio pedidoNegocio = new PedidoNegocio();
                 int idPedidoGenerado = pedidoNegocio.agregarPedido(nuevoPedido);
 
                 foreach (DetallePedido item in carrito)
@@ -68,14 +83,18 @@ namespace Resto_Bar_Web
                     pedidoNegocio.agregarDetalle(item);
                     pedidoNegocio.restarStock(item.IdProducto, item.Cantidad);
                 }
-                //Vaciamos el carrito y actualizamos la interfaz
+
+                }
+                //Vaciamos el carrito,tambien el idpedido y actualizamos la interfaz
                 Session["Carrito"] = new List<DetallePedido>();
+                Session["IdPedido"] = null;
 
                 ActualizarInterfazCarrito();
                 CargarCardsProductos(); //Volvemos a listar las cards para que reflejen el nuevo stock restado
 
                 string script = "alert('¡Pedido enviado a cocina con exito!'); window.location='CargarPedido.aspx';";
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Redirect", script, true);
+                Response.Redirect("Mesas.aspx", false);
             }
             catch (Exception ex)
             {
@@ -97,6 +116,16 @@ namespace Resto_Bar_Web
                 foreach (string nroMesa in listaMesas)
                 {
                     ddlMesas.Items.Add(new ListItem("Mesa Nro " + nroMesa, nroMesa));
+                }
+                if (Session["MesaSeleccionada"] != null) //pasamos el id de la mesa seleccionada al accionar el vento del click en el btn_AgregarPedido, dentro del form de Mesas.aspx, ademas se deja con estado enable = false para no modificar la mesa seleccionada por el evento
+                {
+                    string mesaSesion = Session["MesaSeleccionada"].ToString();
+                    ListItem item = ddlMesas.Items.FindByValue(mesaSesion);
+                    if (item != null)
+                    {
+                        ddlMesas.ClearSelection();
+                        item.Selected = true;
+                    }
                 }
             }
             catch (Exception ex)
@@ -222,6 +251,7 @@ namespace Resto_Bar_Web
             dgvPedidoActual.DataSource = carrito;
             dgvPedidoActual.DataBind();
         }
+
 
     }
 }

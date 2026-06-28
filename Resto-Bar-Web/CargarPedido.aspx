@@ -15,7 +15,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-4">
                         <label class="form-label fw-bold">Mesas Disponibles:</label>
-                        <asp:DropDownList ID="ddlMesas" runat="server" CssClass="form-select form-select-lg"></asp:DropDownList>
+                        <asp:DropDownList ID="ddlMesas" runat="server" CssClass="form-select form-select-lg" Enabled="false">  </asp:DropDownList>
                     </div>
                     <div class="col-md-8 text-end pt-4">
                         <button type="button" class="btn btn-warning btn-lg position-relative fw-bold" data-bs-toggle="modal" data-bs-target="#modalRevision">
