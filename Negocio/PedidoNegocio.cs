@@ -232,5 +232,37 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public void ObtenerResumenPedidoPorMesa(int idMesa, out int cerradosHoy, out string pedidoActual)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            cerradosHoy = 0;
+            pedidoActual = "No";
+
+            try
+            {
+                datos.setearConsulta(@"SELECT 
+                                    COUNT(CASE WHEN CAST(FechayHoraPedido AS DATE) = CAST(GETDATE() AS DATE) AND IdEstadoPedido = 2 THEN 1 END) AS PedidosCerradosHoy,
+                                    CASE WHEN EXISTS (SELECT 1 FROM dbo.Pedidos WHERE NroMesa = @NroMesa AND IdEstadoPedido = 1) THEN 'Sí' ELSE 'No' END AS PedidoActual
+                                    FROM dbo.Pedidos
+                                    WHERE NroMesa = @NroMesa");
+
+                datos.setearParametros("@NroMesa", idMesa);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    cerradosHoy = Convert.ToInt32(datos.Lector["PedidosCerradosHoy"]);
+                    pedidoActual = datos.Lector["PedidoActual"].ToString();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
     }
 }

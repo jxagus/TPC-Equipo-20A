@@ -4,10 +4,8 @@
     <link href="/Content/Mesas.css" rel="stylesheet" />
 </asp:Content>
 
-
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <h1 class="mb-4">Mesas Asignadas</h1>
-
 
     <div class="d-flex flex-wrap gap-4 justify-content-center">
         <%
@@ -15,15 +13,14 @@
             {
         %>
 
-
         <asp:Repeater ID="repeaterMesas" runat="server" OnItemCommand="repeaterMesas_ItemCommand">
             <ItemTemplate>
                 <div class="col">
-                    <div class="card shadow <%# VerificarEstadoMesa(Eval("EstadoMesa")) %>" style="width: 16rem;">
+                    <div class="card shadow <%# VerificarEstadoMesa(Container.DataItem) %>" style="width: 16rem;">
                         <img src="https://www.shutterstock.com/image-vector/business-meeting-icon-three-people-600nw-2765189057.jpg" class="card-img-top rounded-circle w-75 mx-auto mt-3 shadow-lg user-select-none" alt="img generica">
                         <div class="card-body">
                             <h5 class="card-title text-center user-select-none">Mesa Numero: <%# Eval("IdMesa") %></h5>
-                            <h5 class="card-title text-center user-select-none"><%# Convert.ToInt32(Eval("Idusuario")) !=0 ? "Mesero asignado: " + Eval("Idusuario") : "Mesero sin Asignar"%></h5>
+                            <h5 class="card-title text-center user-select-none"><%# Convert.ToInt32(Eval("Idusuario")) != 0 ? "Mesero asignado: " + Eval("Idusuario") : "Mesero sin Asignar"%></h5>
                             <div class="d-grid gap-3 col-auto ">
                                 <asp:Button ID="btnPedido" CssClass="btn btn-primary" runat="server" Text="Pedido" CommandName="AbrirPedido" CommandArgument='<%# Eval("IdMesa") %>' CausesValidation="false" />
                                 <asp:Button ID="btnAdministrarMesa" CssClass="btn btn-primary" runat="server" Text="Finalizar Asignacion" CommandName="AbrirModal" CommandArgument='<%# Eval("IdMesa") %>' CausesValidation="false" />
@@ -34,17 +31,8 @@
             </ItemTemplate>
         </asp:Repeater>
 
-
-
-
-
-
-
-
         <% } %>
     </div>
-
-
 
     <div class="modal fade" id="modalAdministrarMesa" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -81,15 +69,17 @@
                 <asp:UpdatePanel ID="upModalesPedido" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
                         <div class="modal-body">
+                            <asp:Panel ID="pnlAlertaMesero" runat="server" CssClass="alert alert-danger small fw-bold" Visible="false">
+                                ⚠️ No se pueden agregar pedidos: Debe asignar un mesero a esta mesa primero.
+                            </asp:Panel>
+
                             <ul class="list-group">
                                 <li class="list-group-item d-flex justify-content-between align-items-center">Pedidos cerrados hoy           
-                                   
                                     <span class="badge bg-primary rounded-pill">
                                         <asp:Label ID="lblCerradosHoy" runat="server" Text="0" />
                                     </span>
                                 </li>
                                 <li class="list-group-item d-flex justify-content-between align-items-center">Mesa ocupada
-                                   
                                     <span class="badge bg-primary rounded-pill">
                                         <asp:Label ID="lblPedidoActual" runat="server" Text="No" />
                                     </span>
@@ -98,7 +88,6 @@
                         </div>
                         <div class="modal-footer w-100 d-flex justify-content-center gap-2">
                             <asp:Button ID="btnAgregarPedido" runat="server" Text="Agregar Pedido" CssClass="btn btn-dark btnZoom" OnClick="btnAgregarPedido_Click" />
-
                             <asp:Button ID="btnVerPedido" runat="server" Text="Ver Pedido" CssClass="btn btn-dark btnZoom"
                                 OnClick="btnVerPedido_Click"
                                 data-bs-toggle="modal"
@@ -111,7 +100,6 @@
         </div>
     </div>
 
-
     <div class="modal fade" id="modalPedidoActual" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content shadow-lg">
@@ -121,7 +109,7 @@
 
                 <asp:UpdatePanel ID="UpmodalPedidoActual" runat="server" UpdateMode="Conditional">
                     <ContentTemplate>
-                       <h5 class="modal-title" id="H1" runat="server">Mesa X</h5>
+                        <h5 class="modal-title" id="H1" runat="server">Mesa X</h5>
                         <div class="modal-body">
                             <asp:GridView ID="dgvDetallePedido" runat="server" AutoGenerateColumns="False"
                                 CssClass="table table-hover table-striped border-0">
@@ -132,7 +120,7 @@
                             </asp:GridView>
                         </div>
                         <div class="modal-footer w-100 d-flex justify-content-center gap-2">
-                            <asp:Button ID="btnAgregarProducto" runat="server" Text="Agregar" CssClass="btn btn-dark btnZoom" Onclick="btnAgregarProducto_Click"/>
+                            <asp:Button ID="btnAgregarProducto" runat="server" Text="Agregar" CssClass="btn btn-dark btnZoom" OnClick="btnAgregarProducto_Click" />
                         </div>
                     </ContentTemplate>
                 </asp:UpdatePanel>
@@ -140,6 +128,8 @@
             </div>
         </div>
     </div>
+
+
     <script>
         function mostrarAdvertenciaMesa(checkbox) {
             var label = document.getElementById('lblTextoAdvertencia');

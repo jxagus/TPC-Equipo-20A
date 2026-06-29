@@ -1,138 +1,161 @@
-﻿using Antlr.Runtime.Misc;
-using Dominio;
+﻿using Dominio;
 using Negocio;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using Negocio;
+using Dominio;
+        
 
 namespace Resto_Bar_Web
 {
     public partial class Mesas : System.Web.UI.Page
     {
         public List<Mesa> ListaMesas { get; set; }
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["idUsuario"] == null)
+            try
             {
-                Response.Redirect("Login.aspx");
-                return;
-            }
-
-            MesasNegocio negocio = new MesasNegocio();
-            List<Mesa> todasLasMesas = negocio.listarTodas();
-
-            int idUsuario = Convert.ToInt32(Session["idUsuario"]);
-            int idRol = (Session["idRol"] != null) ? Convert.ToInt32(Session["idRol"]) : -1; //el -1 es de seguridad
-            //admin (0) o gerente (1) ven todas las mesas, el mesero solo ve las suyas
-            if (idRol == 0 || idRol == 1)
-            {
-                ListaMesas = todasLasMesas;
-            }
-            else
-            {
-                ListaMesas = todasLasMesas.FindAll(m => m.IdUsuario == idUsuario);
-            }
-
-            if (!IsPostBack)
-            {
-                repeaterMesas.DataSource = ListaMesas;
-                repeaterMesas.DataBind();
-            }
-
-        }
-
-        public string VerificarEstadoMesa(object estado)
-        {
-            Dominio.EstadoMesa estadoMesa = (Dominio.EstadoMesa)estado;
-
-            string cartaColor = "bg-success bg-opacity-50 text-white";
-
-            if (estadoMesa == Dominio.EstadoMesa.Inhabilitada)
-            {
-                cartaColor = "bg-secondary bg-opacity-50 text-dark";
-            }
-            else
-            {
-                bool tienePedidoActivo = false; /*TEMPORAL PARA PROBAR, DESPUES SE LE VA A AGREGAR FUNCIONALIDAD PARA VERIFICARLO REALMENTE*/
-                if (tienePedidoActivo)
+                //si no hay usuario logueado, al Login directo
+                if (Session["idUsuario"] == null)
                 {
-                    cartaColor = "bg-warning bg-opacity-50 text-dark";
+                    Session.Add("error", "Debes iniciar sesión para acceder a esta sección.");
+                    Response.Redirect("Login.aspx", false);
+                    return;
+                }
+                MesasNegocio negocio = new MesasNegocio();
+                List<Mesa> todasLasMesas = negocio.listarTodas();
+
+                int idUsuario = Convert.ToInt32(Session["idUsuario"]);
+                int idRol = (Session["idRol"] != null) ? Convert.ToInt32(Session["idRol"]) : -1;
+
+                //todo
+                if (idRol == 0 || idRol == 1)
+                {
+                    ListaMesas = todasLasMesas;
+                }
+                //solo las mesas que tiene asignadas
+                else
+                {
+                    //Protegemos la consulta con un operador condicional por si listarTodas() vino null
+                    ListaMesas = todasLasMesas != null ? todasLasMesas.FindAll(m => m.IdUsuario == idUsuario) : new List<Mesa>();
+                }
+
+                if (!IsPostBack)
+                {
+                    if (ListaMesas != null && ListaMesas.Count > 0)
+                    {
+                        repeaterMesas.DataSource = ListaMesas;
+                        repeaterMesas.DataBind();
+                    }
+                    else
+                    {
+                        repeaterMesas.DataSource = null;
+                        repeaterMesas.DataBind();
+                    }
                 }
             }
-            return cartaColor;
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
+            }
+        }
+
+        public string VerificarEstadoMesa(object mesaItem)
+        {
+            if (mesaItem == null) return "bg-white text-dark";
+
+            Mesa mesa = (Mesa)mesaItem;
+
+            if (mesa.EstadoMesa == Dominio.EstadoMesa.Inhabilitada)
+            {
+                return "bg-secondary bg-opacity-50 text-dark opacity-50";
+            }
+
+            PedidoNegocio pedidoNegocio = new PedidoNegocio();
+            List<Pedido> activos = pedidoNegocio.listarPedidosActivos();
+
+            bool tienePedidoActivo = activos.Exists(x => x.NroMesa == mesa.IdMesa);
+
+            if (tienePedidoActivo)
+            {
+                return "bg-warning bg-opacity-50 text-dark fw-bold border border-warning";
+            }
+
+            return "bg-success bg-opacity-25 text-dark";
         }
 
         protected void repeaterMesas_ItemCommand(object source, RepeaterCommandEventArgs e)
         {
+            int idMesa = Convert.ToInt32(e.CommandArgument);
+            Session["MesaSeleccionada"] = idMesa;
+
             if (e.CommandName == "AbrirModal")
             {
-
-                string idMesa = e.CommandArgument.ToString();
-                Session["MesaSeleccionada"] = idMesa;
-                tituloModalMesa.InnerText = "Mesa Numero " + idMesa;
+                tituloModalMesa.InnerText = "Mesa Número " + idMesa;
 
                 string script = "var elModal = document.getElementById('modalAdministrarMesa'); var modalBootstrap = bootstrap.Modal.getInstance(elModal) || new bootstrap.Modal(elModal); modalBootstrap.show();";
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", script, true);
             }
+
             if (e.CommandName == "AbrirPedido")
             {
-                string idMesa = e.CommandArgument.ToString();
-                Session["MesaSeleccionada"] = idMesa;
-                AccesoDatos datos = new AccesoDatos();
-
                 try
                 {
-                    datos.setearConsulta(@"SELECT 
-                        COUNT(CASE WHEN CAST(FechayHoraPedido AS DATE) = CAST(GETDATE() AS DATE) AND IdEstadoPedido = 2 THEN 1 END) AS PedidosCerradosHoy,
-                        CASE WHEN EXISTS (SELECT 1 FROM dbo.Pedidos 
-                        WHERE NroMesa = @NroMesa AND IdEstadoPedido = 1) THEN 'Sí' ELSE 'No' END AS PedidoActual
-                        FROM dbo.Pedidos
-                        WHERE NroMesa = @NroMesa");
-                    datos.setearParametros("@NroMesa", idMesa);
-                    datos.ejecutarLectura();
+                    tituloModalPedido.InnerText = "Mesa " + idMesa;
 
-                    if (datos.Lector.Read())
+                    // 1. VALIDACIÓN REQUERIDA: Verificar si tiene un mesero activo asignado
+                    MesasNegocio mesasNegocio = new MesasNegocio();
+                    Mesa mesaActual = mesasNegocio.listarTodas().Find(m => m.IdMesa == idMesa);
+
+                    if (mesaActual != null && mesaActual.IdUsuario == 0)
                     {
-                        string estadoPedido = datos.Lector["PedidoActual"].ToString();
-                        lblCerradosHoy.Text = datos.Lector["PedidosCerradosHoy"].ToString();
-                        lblPedidoActual.Text = estadoPedido;
-                        if (estadoPedido == "Sí")
-                        {
-                            btnAgregarPedido.Visible = false;
-                            btnVerPedido.Visible = true; //se nos va mostrar el detalle del pedido actual
-                        }
-                        else
-                        {
-                            btnAgregarPedido.Visible = true;
-                            btnVerPedido.Visible = false;
-                        }
+                        //Si no hay mesero (IdUsuario == 0), bloqueamos la carga de pedidos
+                        btnAgregarPedido.Enabled = false;
+                        btnAgregarPedido.CssClass = "btn btn-secondary disabled";
+                        pnlAlertaMesero.Visible = true; 
                     }
                     else
                     {
-                        lblCerradosHoy.Text = "0";
-                        lblPedidoActual.Text = "No";
+                        btnAgregarPedido.Enabled = true;
+                        btnAgregarPedido.CssClass = "btn btn-dark btnZoom";
+                        pnlAlertaMesero.Visible = false;
+                    }
+
+                    PedidoNegocio pedidoNegocio = new PedidoNegocio();
+                    int cerradosHoy;
+                    string estadoPedido;
+
+                    pedidoNegocio.ObtenerResumenPedidoPorMesa(idMesa, out cerradosHoy, out estadoPedido);
+
+                    lblCerradosHoy.Text = cerradosHoy.ToString();
+                    lblPedidoActual.Text = estadoPedido;
+
+                    if (estadoPedido == "Sí")
+                    {
+                        btnAgregarPedido.Visible = false;
+                        btnVerPedido.Visible = true;
+                    }
+                    else
+                    {
+                        // Si está bloqueado por falta de mesero, igual se oculta el botón "Ver Pedido"
+                        btnAgregarPedido.Visible = true;
                         btnVerPedido.Visible = false;
                     }
+
+                    upModalesPedido.Update();
+
+                    string script = "var elModal = document.getElementById('modalPedido'); var modalBootstrap = bootstrap.Modal.getInstance(elModal) || new bootstrap.Modal(elModal); modalBootstrap.show();";
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "PopPedido", script, true);
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    Session.Add("error", ex.ToString());
+                    Response.Redirect("error.aspx", false);
                 }
-                finally
-                {
-                    datos.cerrarConexion();
-                }
-                tituloModalPedido.InnerText = "Mesa " + idMesa;
-
-                upModalesPedido.Update();
-                tituloModalPedido.InnerText = "Mesa " + idMesa;
-
-                string script = "var elModal = document.getElementById('modalPedido'); var modalBootstrap = bootstrap.Modal.getInstance(elModal) || new bootstrap.Modal(elModal); modalBootstrap.show();";
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "PopPedido", script, true);
             }
         }
 
@@ -154,7 +177,6 @@ namespace Resto_Bar_Web
                     if (pedidoMesa != null)
                     {
                         List<DetallePedido> detalles = pedidoNegocio.listarDetallesPorId(pedidoMesa.IdPedido);
-
                         dgvDetallePedido.DataSource = detalles;
                         dgvDetallePedido.DataBind();
                     }
@@ -163,30 +185,40 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                throw ex;
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
 
         protected void btnAgregarPedido_Click(object sender, EventArgs e)
         {
-            CargarOModificarPedido(); //creacion de metodo debido a que tanto este evento como el de agregarProducto van a realizar practicamente lo mismo pero distinguido por un if 
+            CargarOModificarPedido();
         }
 
         protected void btnGuardarEstado_Click(object sender, EventArgs e)
         {
-            if (Session["MesaSeleccionada"] != null)
+            try
             {
-                MesasNegocio negocio = new MesasNegocio();
-
-                int nroMesa = Convert.ToInt32(Session["MesaSeleccionada"]);
-                negocio.finalizarAsignacion(nroMesa);
-                Response.Redirect("Mesas.aspx");
+                if (Session["MesaSeleccionada"] != null)
+                {
+                    MesasNegocio negocio = new MesasNegocio();
+                    int nroMesa = Convert.ToInt32(Session["MesaSeleccionada"]);
+                    negocio.finalizarAsignacion(nroMesa);
+                    Response.Redirect("Mesas.aspx", false);
+                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
+
         protected void btnAgregarProducto_Click(object sender, EventArgs e)
         {
             CargarOModificarPedido();
         }
+
         private void CargarOModificarPedido()
         {
             try
@@ -206,7 +238,8 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                throw ex;
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
     }

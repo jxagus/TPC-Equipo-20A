@@ -18,14 +18,24 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT NroMesa, ISNULL(IdUsuario, 0) AS IdUsuario, MesaUrlImagen, Estado FROM Mesas");
+                datos.setearConsulta("SELECT NroMesa, IdUsuario, MesaUrlImagen, Estado FROM Mesas");
                 datos.ejecutarLectura();
                 while (datos.Lector.Read())
                 {
                     Mesa aux = new Mesa();
                     aux.IdMesa = (int)datos.Lector["NroMesa"];
-                    aux.IdUsuario = (int)datos.Lector["IdUsuario"];
-                    aux.MesaUrlImagen = (string)datos.Lector["MesaUrlImagen"];
+
+                    if (!(datos.Lector["IdUsuario"] is DBNull))
+                    {
+                        aux.IdUsuario = (int)datos.Lector["IdUsuario"];
+                    }
+                    else
+                    {
+                        aux.IdUsuario = 0; 
+                    }
+
+                    aux.MesaUrlImagen = datos.Lector["MesaUrlImagen"] is DBNull ? "" : (string)datos.Lector["MesaUrlImagen"];
+
                     bool estadobdd = (bool)datos.Lector["Estado"];
                     aux.EstadoMesa = estadobdd ? EstadoMesa.Habilitada : EstadoMesa.Inhabilitada;
 
@@ -36,14 +46,12 @@ namespace Negocio
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
             finally
             {
                 datos.cerrarConexion();
             }
-
         }
 
         public void inhabilitarHabilitarMesa(int estado, int id)

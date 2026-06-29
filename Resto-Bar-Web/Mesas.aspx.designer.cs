@@ -69,6 +69,15 @@ namespace Resto_Bar_Web
         protected global::System.Web.UI.UpdatePanel upModalesPedido;
 
         /// <summary>
+        /// Control pnlAlertaMesero.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel pnlAlertaMesero;
+
+        /// <summary>
         /// Control lblCerradosHoy.
         /// </summary>
         /// <remarks>
