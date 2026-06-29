@@ -1,10 +1,12 @@
-﻿using Dominio;
+﻿using Antlr.Runtime.Misc;
+using Dominio;
 using Negocio;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -31,6 +33,12 @@ namespace Resto_Bar_Web
                     if (!IsPostBack)
                     {
                         CargarProductos();
+                        CategoriaNegocio catnegocio = new CategoriaNegocio();
+                        ddlCategoria.DataSource = catnegocio.CargarCategorias();
+                        ddlCategoria.DataValueField = "IdCategoria";
+                        ddlCategoria.DataTextField = "NombreCategoria";
+                        ddlCategoria.DataBind();
+                        ddlCategoria.Items.Insert(0, new ListItem("Seleccione una categoría...", "0"));
                     }
                 }
                 else
@@ -63,30 +71,45 @@ namespace Resto_Bar_Web
         }
         protected void btnAgregarProducto_Click(object sender, EventArgs e)
         {
+            if (!Page.IsValid)
+            {
+                return;
+            }
             try
             {
                 
                 string nombre = txtNombreProducto.Text;
                 string descripcion = txtDescripcion.Text;
-                decimal precio = Convert.ToDecimal(txtPrecio.Text);
+                decimal precio = Convert.ToDecimal(txtPrecio.Text.Replace(",","."), System.Globalization.CultureInfo.InvariantCulture);
                 int stock = Convert.ToInt32(txtStock.Text);
 
                 ProductoNegocio negocio = new ProductoNegocio();
+                /////////////Parte de modificar
                 if (btnAgregarProducto.Text == "Modificar")
                 {
                     int id = Convert.ToInt32(hfIdProducto.Value);
                     negocio.modificarProducto(id, nombre, descripcion, precio, stock);
+                    CategoriaNegocio catNegocio = new CategoriaNegocio();
+                    catNegocio.eliminarCategoriasProducto(id);
+                    guardarCategoriasSeleccionadas(id);
+
                     hfIdProducto.Value = "";
                 }
-                else
+                else//////////////Parte de Agregar nuevo
                 {
-                    negocio.agregarProducto(nombre, descripcion, precio, stock);
+                    int idNuevoProducto = negocio.agregarProducto(nombre, descripcion, precio, stock);
+                    guardarCategoriasSeleccionadas(idNuevoProducto);
                 }
 
                 txtDescripcion.Text = null;
                 txtNombreProducto.Text = null;
                 txtPrecio.Text = null;
                 txtStock.Text = null;
+                divSubcategorias.Visible = false;
+                ddlCategoria.SelectedIndex = 0;
+                IdOculto.Visible = false;
+                btnCancelar.Visible = false;
+                btnAgregarProducto.Text = "Agregar Producto";
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Producto agregado exitosamente!');", true);
 
                 CargarProductos();
@@ -119,15 +142,18 @@ namespace Resto_Bar_Web
             txtStock.Text = null;
             IdOculto.Visible = false;
             btnCancelar.Visible = false;
+            divSubcategorias.Visible = false;
+            ddlCategoria.SelectedIndex = 0;
             btnAgregarProducto.Text = "Agregar Producto";
         }
         
         void cargarFormulario(int id)
         {
+            
             Productos producto = new Productos();
             ProductoNegocio negocio = new ProductoNegocio();
             producto = negocio.cargarProductoPorId(id);
-            
+            cargarFormularioCategorias(id);
             txtNombreProducto.Text = producto.NombreProducto;
             txtDescripcion.Text = producto.DescripcionProducto;
             txtPrecio.Text = producto.Precio.ToString();
@@ -180,8 +206,128 @@ namespace Resto_Bar_Web
 
         }
 
-        protected void btnCrearCategoria_Click(object sender, EventArgs e)
+        protected void ddlCategoria_SelectedIndexChanged(object sender, EventArgs e)
         {
+            int idCategoriaSeleccionada = Convert.ToInt32(ddlCategoria.SelectedValue);
+
+            if (idCategoriaSeleccionada == 0)
+            {
+                divSubcategorias.Visible = false;
+                cklSubcategorias.Items.Clear();
+                return;
+            }
+            CategoriaNegocio catNegocio = new CategoriaNegocio();
+            List<Dominio.Categorias> listaTodas = catNegocio.listarTODAS();
+
+            List<Dominio.Categorias> subcategorias = listaTodas.FindAll(c => c.IdCategoriaPadre == idCategoriaSeleccionada);
+
+            if(subcategorias.Count > 0)
+            {
+                cklSubcategorias.DataSource = subcategorias;
+                cklSubcategorias.DataValueField = "IdCategoria";
+                cklSubcategorias.DataTextField = "NombreCategoria";
+                cklSubcategorias.DataBind();
+
+                divSubcategorias.Visible = true;
+            }
+            else
+            {
+                divSubcategorias.Visible = false;
+            }
+        }
+
+        protected void guardarCategoriasSeleccionadas(int idProducto)
+        {
+            if (idProducto > 0)
+            {
+                CategoriaNegocio catNegocio = new CategoriaNegocio();
+                int idCategoriaSelec = Convert.ToInt32(ddlCategoria.SelectedValue);
+                if (idCategoriaSelec > 0)
+                {
+                    catNegocio.asignarCategoriaaProducto(idProducto, idCategoriaSelec);
+                }
+                foreach (ListItem item in cklSubcategorias.Items)
+                {
+                    if (item.Selected)
+                    {
+                        int idSubcategoria = Convert.ToInt32(item.Value);
+                        catNegocio.asignarCategoriaaProducto(idProducto, idSubcategoria);
+
+                    }
+                }
+            }
+        }
+
+        protected void cargarFormularioCategorias(int id)
+        {
+            CategoriaNegocio catnegocio = new CategoriaNegocio();
+            List<Dominio.Categorias> categoriasAsignadas = catnegocio.listarCategoriasxProducto(id);
+            Dominio.Categorias catPrincipal = categoriasAsignadas.Find(c => c.IdCategoriaPadre == 0);
+            if (catPrincipal != null)
+            {
+                ddlCategoria.SelectedValue = catPrincipal.IdCategoria.ToString();
+                List<Dominio.Categorias> todas = catnegocio.listarTODAS();
+                List<Dominio.Categorias> subcategorias = todas.FindAll(c => c.IdCategoriaPadre == catPrincipal.IdCategoria);
+                if(subcategorias.Count > 0)
+                {
+                    cklSubcategorias.DataSource = subcategorias;
+                    cklSubcategorias.DataValueField = "IdCategoria";
+                    cklSubcategorias.DataTextField = "NombreCategoria";
+                    cklSubcategorias.DataBind();
+                    divSubcategorias.Visible = true;
+
+                    foreach (ListItem item in cklSubcategorias.Items)
+                    {
+                        int idSub = Convert.ToInt32(item.Value);
+                        if (categoriasAsignadas.Exists(c => c.IdCategoria == idSub))
+                        {
+                            item.Selected = true;
+                        }
+                    }
+                }
+                else
+                {
+                    divSubcategorias.Visible = false;
+                }
+            }
+            else
+            {
+                ddlCategoria.SelectedIndex = 0;
+                divSubcategorias.Visible = false;
+                cklSubcategorias.Items.Clear();
+            }
+        }
+
+        protected void lbtnVerCategorias_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                LinkButton btn = (LinkButton)sender;
+                int idProducto = Convert.ToInt32(btn.CommandArgument);
+                CategoriaNegocio catnegocio = new CategoriaNegocio();
+                List <Dominio.Categorias> listaCategorias = catnegocio.listarCategoriasxProducto(idProducto);
+
+                if(listaCategorias != null && listaCategorias.Count > 0 )
+                {
+                    lblSinCategoria.Visible = false;
+                    repCategoriasModal.DataSource = listaCategorias;
+                    repCategoriasModal.DataBind();
+                }
+                else
+                {
+                    repCategoriasModal.DataSource = null;
+                    repCategoriasModal.DataBind();
+                    lblSinCategoria.Visible = true;
+
+                }
+                string script = "var myModal = new bootstrap.Modal(document.getElementById('modalCategorias')); myModal.show();";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "PopVerCategorias", script, true);
+            }
+            catch (Exception ex )
+            {
+
+                throw ex;
+            }
 
         }
     }

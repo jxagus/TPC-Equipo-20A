@@ -33,6 +33,15 @@ namespace Resto_Bar_Web
         protected global::System.Web.UI.WebControls.TextBox txtNombreCategoria;
 
         /// <summary>
+        /// rfvNombreCategoria control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNombreCategoria;
+
+        /// <summary>
         /// chkSubcategoria control.
         /// </summary>
         /// <remarks>

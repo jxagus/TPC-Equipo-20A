@@ -38,7 +38,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("UPDATE Categorias SET NombreCategoria = @nombre WHERE IdCategoria = @id");
+                datos.setearConsulta("UPDATE Categorias SET NombreCategoria = @nombre, IdCategoriapadre = NULL WHERE IdCategoria = @id");
                 datos.setearParametros("@nombre", nombre);
                 datos.setearParametros("@id", id);
                 datos.ejecutarAccion();
@@ -201,5 +201,111 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+
+        public bool tieneSubcategorias(int idcat)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT COUNT(*) FROM Categorias WHERE IdCategoriaPadre = @id");
+                datos.setearParametros("@id", idcat);
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    int cantidad = Convert.ToInt32(datos.Lector[0]);
+                    return cantidad > 0;
+                }
+                return false;
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+
+
+        //////Parte de categorias del producto
+        ///
+        public void asignarCategoriaaProducto(int idprod, int idcat)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("INSERT INTO CategoriasPorProducto (IdProducto, IdCategoria) VALUES (@idProd, @idCat)");
+                datos.setearParametros("@idProd", idprod);
+                datos.setearParametros("@idCat", idcat);
+                datos.ejecutarAccion();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        public void eliminarCategoriasProducto(int idprod) 
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("DELETE FROM CategoriasPorProducto WHERE IdProducto = @idprod");
+                datos.setearParametros("@idprod", idprod);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
+            finally 
+            {
+                datos.cerrarConexion(); 
+            }
+
+        }
+
+        public List<Dominio.Categorias> listarCategoriasxProducto(int idprod)
+        {
+            List<Dominio.Categorias> lista = new List<Dominio.Categorias>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT C.IdCategoria, C.NombreCategoria, C.IdCategoriaPadre FROM Categorias C INNER JOIN CategoriasPorProducto CP ON C.IdCategoria = CP.IdCategoria WHERE CP.IdProducto = @idProd");
+                datos.setearParametros("@idProd", idprod);
+                datos.ejecutarLectura();
+
+                while (datos.Lector.Read())
+                {
+                    Dominio.Categorias aux = new Dominio.Categorias();
+                    aux.IdCategoria = (int)datos.Lector["IdCategoria"];
+                    aux.NombreCategoria = (string)datos.Lector["NombreCategoria"];
+
+                    aux.IdCategoriaPadre = datos.Lector["IdCategoriaPadre"] != DBNull.Value ? Convert.ToInt32(datos.Lector["IdCategoriaPadre"]) : 0;
+                    lista.Add(aux);               
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            finally
+            { 
+                datos.cerrarConexion(); 
+            }
     }
+}
 }

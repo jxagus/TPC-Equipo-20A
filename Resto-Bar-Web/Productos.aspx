@@ -16,17 +16,24 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold">Nombre del Producto</label>
                     <asp:TextBox ID="txtNombreProducto" CssClass="form-control" runat="server"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="rfvNombreProducto" runat="server" ControlToValidate="txtNombreProducto" ForeColor="Red" Display="Dynamic" ErrorMessage="El nombre es obligatorio."></asp:RequiredFieldValidator>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Descripción del Producto</label>
                     <asp:TextBox ID="txtDescripcion" CssClass="form-control" TextMode="MultiLine" Rows="3" runat="server"></asp:TextBox>
+                    <asp:RequiredFieldValidator ID="rfvDescripcionProducto" runat="server" ControlToValidate="txtDescripcion" ForeColor="Red" Display="Dynamic" ErrorMessage="La Descripcion es obligatoria."></asp:RequiredFieldValidator>
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Categoria del Producto</label>
-                    <asp:DropDownList ID="DropDownList1" runat="server"></asp:DropDownList>
-                    <asp:Button ID="btnCrearCategoria" CssClass="btn btn-secondary btn-sm" runat="server" OnClick="btnCrearCategoria_Click" Text="Crear Categoria" />
+                    <asp:DropDownList ID="ddlCategoria" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlCategoria_SelectedIndexChanged" runat="server"></asp:DropDownList>
+                     <asp:RequiredFieldValidator ID="rfvDdlCategoria" runat="server" ControlToValidate="ddlCategoria" InitialValue="0" ForeColor="Red" Display="Dynamic" ErrorMessage="Por favor, seleccione una categoria."></asp:RequiredFieldValidator>
+           
+                </div>
+                <div class="mb-3" id="divSubcategorias" runat="server" visible="false">
+                    <label class="form-label fw-bold">Seleccione las subcategorias acordes: </label>
+                    <asp:CheckBoxList ID="cklSubcategorias" runat="server" CssClass="form-check"></asp:CheckBoxList>
                 </div>
 
                 <div class="mb-3">
@@ -35,17 +42,26 @@
                         <span class="input-group-text">$</span>
                         <asp:TextBox ID="txtPrecio" CssClass="form-control" runat="server"></asp:TextBox>
                         <span class="input-group-text">.00</span>
+                        <div>
+                        <asp:RequiredFieldValidator ID="rfvPrecioProducto" runat="server" ControlToValidate="txtPrecio" ForeColor="Red" Display="Dynamic" ErrorMessage="El Precio es obligatorio."></asp:RequiredFieldValidator>
+                        <asp:RegularExpressionValidator ID="revPrecio" ControlToValidate="txtPrecio" ValidationExpression="^\d+([.,]\d{1,2})?$" runat="server" ForeColor="red" ErrorMessage="El Precio debe ser un numero entero."></asp:RegularExpressionValidator>
+                        </div>
+                        
                     </div>
                 </div>
-
+                
                 <div class="mb-3">
                     <label class="form-label fw-bold">Stock</label>
                     <asp:TextBox ID="txtStock" CssClass="form-control" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvStockProducto" runat="server" ControlToValidate="txtPrecio" ForeColor="Red" Display="Dynamic" ErrorMessage="El Stock es obligatorio."></asp:RequiredFieldValidator>
+                    <asp:RegularExpressionValidator ID="revStock" ControlToValidate="txtStock" ValidationExpression="^\d+$" runat="server" ForeColor="red" ErrorMessage="El Stock debe ser un numero entero."></asp:RegularExpressionValidator>
+
+
                 </div>
 
                 <div class="mb-3">
                     <asp:Button ID="btnAgregarProducto" CssClass="btn btn-primary" OnClick="btnAgregarProducto_Click" runat="server" Text="Agregar Producto" />
-                    <asp:Button ID="btnCancelar" CssClass="btn btn-danger " OnClick="btnCancelar_Click" runat="server" Text="Cancelar" Visible="false" />
+                    <asp:Button ID="btnCancelar" CssClass="btn btn-danger " OnClick="btnCancelar_Click" runat="server" Text="Cancelar" CausesValidation="false" Visible="false" />
                 </div>
             </div>
 
@@ -62,14 +78,19 @@
                             <asp:BoundField DataField="Precio" HeaderText="Precio" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
 
                             <asp:BoundField DataField="Stock" HeaderText="Stock" ItemStyle-HorizontalAlign="Center" />
+                            <asp:TemplateField HeaderText="Categorias" ItemStyle-HorizontalAlign="Center">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="lbtnVerCategorias" runat="server" OnClick="lbtnVerCategorias_Click" CommandArgument='<%# Eval("IdProducto") %>' CssClass="text-decoration-none" CausesValidation="false" ToolTip="Ver Categorias">🏷️</asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
                             <asp:TemplateField HeaderText="Editar" ItemStyle-HorizontalAlign="Center">
                                 <ItemTemplate>
-                                    <asp:LinkButton ID="lbtnEditar" runat="server" OnClick="lbtnEditar_Click" CommandArgument='<%# Eval("IdProducto") %>' CssClass="text-decoration-none" ToolTip="Modificar">🖊</asp:LinkButton>
+                                    <asp:LinkButton ID="lbtnEditar" runat="server" OnClick="lbtnEditar_Click" CommandArgument='<%# Eval("IdProducto") %>' CssClass="text-decoration-none" CausesValidation="false" ToolTip="Modificar">🖊</asp:LinkButton>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField HeaderText="Eliminar" ItemStyle-HorizontalAlign="Center">
                                 <ItemTemplate>
-                                    <asp:LinkButton ID="lbtnEliminar" runat="server" OnClick="lbtnEliminar_Click" CommandArgument='<%# Eval("IdProducto") %>' CommandName="AbrirModalProducto" CssClass="text-decoration-none" ToolTip="Eliminar">🗑️</asp:LinkButton>
+                                    <asp:LinkButton ID="lbtnEliminar" runat="server" OnClick="lbtnEliminar_Click" CommandArgument='<%# Eval("IdProducto") %>' CommandName="AbrirModalProducto" CssClass="text-decoration-none" CausesValidation="false" ToolTip="Eliminar">🗑️</asp:LinkButton>
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -138,30 +159,34 @@
           </div>
         </div>
 
-     <div class="modal fade" id="ModalCargarCategoria" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="H1" runat="server">Cargar Nueva Categoria</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body text-center">
+    <div class="modal fade" id="modalCategorias" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="H1" runat="server">Categorias 🏷️</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul class="list-group list-group-flush">
+                        <asp:Repeater ID="repCategoriasModal" runat="server">
+                            <ItemTemplate>
+                                <li class="list-group-item d-flex align-items-center">
+                                    <span class="me-2">•</span>
+                                    <%# Eval("NombreCategoria")  %>
+                                </li>
+                            </ItemTemplate>
+                        </asp:Repeater>
+                    </ul>
 
-            <div class="aler alert-secondary text-start mx-auto" style="max-width: 400px;">
-                    <%--contenido para cargar la categoria nueva --%>
+                    <asp:Label ID="lblSinCategoria" runat="server" Text="Este Producto no tiene Categorias Asignadas." CssClass="text-muted small text-center d-block my-2" Visible="false"></asp:Label>
+
+                </div>
             </div>
-
-          </div>
-
-            <div class="d-flex flex-column align-items-center my-3 p-3 bg-light rounded-3">
-        <div class="modal-footer">
-            <asp:Button ID="btbCancelarCategoria" runat="server" Text="Cancelar" CssClass="btn btn-secondary" data-bs-dismiss="modal" OnClientClick="return false;" />
-            <asp:Button ID="btnAgregarCategoria" runat="server" Text="Eliminar" CssClass="btn btn-danger"  OnClick="btnAgregarCategoria_Click" />
         </div>
 
+
     </div>
-        </div>
-      </div>
-    </div>
+
+
      
 </asp:Content>

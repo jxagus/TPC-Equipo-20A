@@ -11,17 +11,23 @@ namespace Negocio
 {
     public class ProductoNegocio
     {
-        public void agregarProducto(string nombre, string desc, decimal precio, int stock)
+        public int agregarProducto(string nombre, string desc, decimal precio, int stock)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("INSERT INTO Productos (NombreProducto, DescripcionProducto, Precio, Stock) VALUES (@nombre, @descripcion, @precio, @stock)");
+                datos.setearConsulta("INSERT INTO Productos (NombreProducto, DescripcionProducto, Precio, Stock) VALUES (@nombre, @descripcion, @precio, @stock); SELECT SCOPE_IDENTITY();");
                 datos.setearParametros("@nombre", nombre);
                 datos.setearParametros("@descripcion", desc);
                 datos.setearParametros("@precio", precio);
                 datos.setearParametros("@stock", stock);
-                datos.ejecutarAccion();
+                datos.ejecutarLectura();
+
+                if (datos.Lector.Read())
+                {
+                    return Convert.ToInt32(datos.Lector[0]);
+                }
+                return 0;
             }
             catch (Exception ex)
             {
@@ -184,5 +190,6 @@ namespace Negocio
                  datos.cerrarConexion();
             }
         }
+
     }
 }

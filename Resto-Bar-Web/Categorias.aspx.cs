@@ -48,9 +48,9 @@ namespace Resto_Bar_Web
         protected void btnAgregarCategoria_Click(object sender, EventArgs e)
         {
             CategoriaNegocio negocio = new CategoriaNegocio();
-            if(txtNombreCategoria.Text == string.Empty)
+            if (!Page.IsValid)
             {
-                return; /// temporal
+                return;
             }
 
             if (btnAgregarCategoria.Text == "Agregar Categoria")
@@ -74,11 +74,19 @@ namespace Resto_Bar_Web
                 }
                 else
                 {
+                    if (negocio.tieneSubcategorias(idSeleccionado))
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('No se puede convertir en Subcategoria una Categoria que contiene Subcategorias.');", true);
+                        return;
+                    }
+
                     int idPadre = Convert.ToInt32(ddlCategoriaPadre.SelectedValue);
                     negocio.modificarSubategoria(txtNombreCategoria.Text, idPadre, idSeleccionado);
                 }
             }
 
+
+            ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Categoria Agregada/Modificada con exito!.');", true);
             txtNombreCategoria.Text = string.Empty;
             cargarListadoCategorias();
             cargarSubcategorias();
@@ -86,8 +94,11 @@ namespace Resto_Bar_Web
             divSubcategorias.Visible = false;
             btnAgregarCategoria.Text = "Agregar Categoria";
             ViewState["IdCategoriaAEditar"] = null;
+            btnCancelar.Visible = false;
 
         }
+
+
 
         protected void btnCancelar_Click(object sender, EventArgs e)
         {

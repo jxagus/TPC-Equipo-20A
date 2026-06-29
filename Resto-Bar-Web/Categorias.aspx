@@ -13,6 +13,7 @@
                     <div class="mb-3">
                         <label class="form-label fw-bold">Nombre de la Categoria</label>
                         <asp:TextBox ID="txtNombreCategoria" CssClass="form-control" runat="server"></asp:TextBox>
+                        <asp:RequiredFieldValidator ID="rfvNombreCategoria" runat="server" ControlToValidate="txtNombreCategoria" ForeColor="Red" Display="Dynamic" ErrorMessage="El nombre es obligatorio."></asp:RequiredFieldValidator>
                     </div>
 
          
@@ -50,7 +51,7 @@
                                 <%# Eval("NombreCategoria") %>
                               </button>
                               <div class="d-flex align-items-center p-2 bg-light border-start">
-                                  <asp:LinkButton ID="btnEditarCategoria" CommandName="EditarCategoria" CommandArgument='<%# Eval("IdCategoria") %>' CssClass="btn btn-sm btn-outline-secondary" runat="server" ToolTip="Editar">🖊</asp:LinkButton>
+                                  <asp:LinkButton ID="btnEditarCategoria" CommandName="EditarCategoria" CommandArgument='<%# Eval("IdCategoria") %>' CssClass="btn btn-sm btn-outline-secondary" runat="server" CausesValidation="false" ToolTip="Editar">🖊</asp:LinkButton>
                               </div>
                             </h2>
 
@@ -61,7 +62,7 @@
                                         <ItemTemplate>
                                             <li class="list-group-item d-flex justify-content-between align-items-center">
                                                 <%# Eval("NombreCategoria") %>
-                                                <asp:LinkButton ID="btnEditarSubcategoria" CommandName="EditarSubcategoria" CommandArgument='<%# Eval("IdCategoria") %>' CssClass="btn btn-sm btn-outline-secondary" runat="server" ToolTip="Editar">🖊</asp:LinkButton>
+                                                <asp:LinkButton ID="btnEditarSubcategoria" CommandName="EditarSubcategoria" CommandArgument='<%# Eval("IdCategoria") %>' CssClass="btn btn-sm btn-outline-secondary" runat="server" CausesValidation="false" ToolTip="Editar">🖊</asp:LinkButton>
                                             </li>
                                         </ItemTemplate>
                                     </asp:Repeater>
