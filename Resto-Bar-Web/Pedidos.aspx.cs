@@ -30,22 +30,93 @@ namespace Resto_Bar_Web
                 PedidoNegocio negocio = new PedidoNegocio();
                 List<Pedido> listaActivos = negocio.listarPedidosActivos();
 
-                if (listaActivos.Count == 0)
+                Session["ListaPedidosActivos"] = listaActivos;
+
+                int mesaFiltrar; //para mantener el filtro
+                if (!string.IsNullOrEmpty(txtFiltroMesa.Text.Trim()) && int.TryParse(txtFiltroMesa.Text.Trim(), out mesaFiltrar) && mesaFiltrar >= 1)
                 {
-                    pnlVacio.CssClass = "text-center py-5";
-                    repPedidos.DataSource = null;
-                }
-                else
-                {
-                    pnlVacio.CssClass = "text-center py-5 d-none";
-                    repPedidos.DataSource = listaActivos;
+                    listaActivos = listaActivos.FindAll(p => p.NroMesa == mesaFiltrar);
                 }
 
-                repPedidos.DataBind();
+                RenderizarLista(listaActivos);
             }
             catch (Exception ex)
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error al cargar la cola de pedidos: " + ex.Message + "');", true);
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
+            }
+        }
+
+        private void RenderizarLista(List<Pedido> lista)
+        {
+            if (lista == null || lista.Count == 0)
+            {
+                pnlVacio.CssClass = "text-center py-5";
+                repPedidos.DataSource = null;
+            }
+            else
+            {
+                pnlVacio.CssClass = "text-center py-5 d-none";
+                repPedidos.DataSource = lista;
+            }
+            repPedidos.DataBind();
+        }
+
+        protected void btnFiltrar_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                //por las dudas
+                lblErrorFiltro.Visible = false;
+                lblErrorFiltro.Text = "";
+
+                if (string.IsNullOrEmpty(txtFiltroMesa.Text.Trim()))
+                {
+                    CargarColaPedidos();
+                    return;
+                }
+
+                int mesaFiltrar;
+                //Intentamos parsear para filtrar letras
+                bool esNumeroValido = int.TryParse(txtFiltroMesa.Text.Trim(), out mesaFiltrar);
+
+                //letras/simbolos/negativos
+                if (!esNumeroValido || mesaFiltrar < 1)
+                {
+                    lblErrorFiltro.Text = "❌ ¡Solo números positivos!";
+                    lblErrorFiltro.Visible = true;
+
+                    //Renderizamos una lista vacia para denotar visualmente que fallo la operación
+                    RenderizarLista(new List<Pedido>());
+                    return;
+                }
+
+                PedidoNegocio negocio = new PedidoNegocio();
+                List<Pedido> listaActivos = negocio.listarPedidosActivos();
+                List<Pedido> listaFiltrada = listaActivos.FindAll(p => p.NroMesa == mesaFiltrar);
+
+                RenderizarLista(listaFiltrada);
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
+            }
+        }
+
+        protected void btnLimpiarFiltro_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                txtFiltroMesa.Text = "";
+                lblErrorFiltro.Visible = false;
+                lblErrorFiltro.Text = "";
+                CargarColaPedidos();
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
 
@@ -59,7 +130,6 @@ namespace Resto_Bar_Web
                 {
                     PedidoNegocio negocio = new PedidoNegocio();
 
-                    //buscamos el pedido activo para sacar NroMesa antes de finalizarlo
                     List<Pedido> activos = negocio.listarPedidosActivos();
                     Pedido pedidoActual = activos.Find(p => p.IdPedido == idPedido);
 
@@ -86,7 +156,8 @@ namespace Resto_Bar_Web
                 }
                 catch (Exception ex)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error: " + ex.Message + "');", true);
+                    Session.Add("error", ex.ToString());
+                    Response.Redirect("error.aspx", false);
                 }
             }
             else if (e.CommandName == "VerDetalle")
@@ -106,17 +177,18 @@ namespace Resto_Bar_Web
                 }
                 catch (Exception ex)
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error al cargar el detalle: " + ex.Message + "');", true);
+                    Session.Add("error", ex.ToString());
+                    Response.Redirect("error.aspx", false);
                 }
             }
         }
+
         public bool DeterminarVisibilidadMonto()
         {
             if (Session["idRol"] != null)
             {
                 int rolUsuario = Convert.ToInt32(Session["idRol"]);
 
-                //Admin (0) o Gerente (1)
                 if (rolUsuario == 0 || rolUsuario == 1)
                 {
                     return true;
@@ -125,5 +197,4 @@ namespace Resto_Bar_Web
             return false;
         }
     }
-
 }

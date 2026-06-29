@@ -24,17 +24,36 @@ namespace Resto_Bar_Web
                     Session["Carrito"] = new List<DetallePedido>();
                 }
 
-                CargarComboMesas();
+                EstablecerMesaSeleccionada();
                 CargarCardsProductos();
-                ActualizarInterfazCarrito(); 
+                ActualizarInterfazCarrito();
             }
         }
+
+        private void EstablecerMesaSeleccionada()
+        {
+            if (Session["MesaSeleccionada"] != null)
+            {
+                lblMesaSeleccionada.Text = "Mesa Nro " + Session["MesaSeleccionada"].ToString();
+            }
+            //lo capturamos como plan B por las dudas
+            else if (!string.IsNullOrEmpty(Request.QueryString["idMesa"]))
+            {
+                string idMesaUrl = Request.QueryString["idMesa"];
+                Session["MesaSeleccionada"] = idMesaUrl; //Lo resguardamos en session tambien
+                lblMesaSeleccionada.Text = "Mesa Nro " + idMesaUrl;
+            }
+            else
+            {
+                lblMesaSeleccionada.Text = "No seleccionada";
+                lblMesaSeleccionada.CssClass = "badge bg-danger fs-5 px-3 py-2";
+            }
+        }
+
         protected void btnConfirmarPedido_Click(object sender, EventArgs e)
         {
-            //agarra el carrito desde la sesion
             List<DetallePedido> carrito = (List<DetallePedido>)Session["Carrito"];
 
-            //Validacion basica por las dudas
             if (carrito == null || carrito.Count == 0)
             {
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('El pedido esta vacio.');", true);
@@ -48,92 +67,60 @@ namespace Resto_Bar_Web
 
                 if (idPedidoActual > 0)
                 {
-                    //mediante el procedimiento almacenado vamos a modificar un pedido ya existente, dentro de mesas.aspx
                     foreach (DetallePedido item in carrito)
                     {
                         pedidoNegocio.modificarPedido(idPedidoActual, item.IdProducto, item.Cantidad, item.PrecioUnitario);
                         pedidoNegocio.restarStock(item.IdProducto, item.Cantidad);
                     }
                 }
-
                 else
                 {
-                //Calculamos el total recorriendo el carrito
-                decimal precioTotal = 0;
-                foreach (DetallePedido item in carrito)
-                {
-                    precioTotal = precioTotal + item.Subtotal;
+                    decimal precioTotal = 0;
+                    foreach (DetallePedido item in carrito)
+                    {
+                        precioTotal = precioTotal + item.Subtotal;
+                    }
+
+                    int nroMesaSeleccionada = 0;
+                    if (Session["MesaSeleccionada"] != null)
+                    {
+                        nroMesaSeleccionada = Convert.ToInt32(Session["MesaSeleccionada"]);
+                    }
+
+                    Pedido nuevoPedido = new Pedido();
+                    nuevoPedido.NroMesa = nroMesaSeleccionada;
+                    nuevoPedido.IdUsuario = Convert.ToInt32(Session["idUsuario"]);
+                    nuevoPedido.FechayHoraPedido = DateTime.Now;
+                    nuevoPedido.PrecioTotal = precioTotal;
+                    nuevoPedido.IdEstadoPedido = 1; // 1 Pendiente
+
+                    int idPedidoGenerado = pedidoNegocio.agregarPedido(nuevoPedido);
+
+                    foreach (DetallePedido item in carrito)
+                    {
+                        item.IdPedido = idPedidoGenerado;
+                        pedidoNegocio.agregarDetalle(item);
+                        pedidoNegocio.restarStock(item.IdProducto, item.Cantidad);
+                    }
                 }
 
-                //Creamos el objeto Pedido para la base de datos
-                Pedido nuevoPedido = new Pedido();
-                nuevoPedido.NroMesa = Convert.ToInt32(ddlMesas.SelectedValue);
-                nuevoPedido.IdUsuario = Convert.ToInt32(Session["idUsuario"]);
-                nuevoPedido.FechayHoraPedido = DateTime.Now; //fechita actual
-                nuevoPedido.PrecioTotal = precioTotal;
-                nuevoPedido.IdEstadoPedido = 1; //1 Pendiente / 2 finalizado
-
-                //Guardamos el pedido principal
-                int idPedidoGenerado = pedidoNegocio.agregarPedido(nuevoPedido);
-
-                foreach (DetallePedido item in carrito)
-                {
-                    item.IdPedido = idPedidoGenerado; 
-
-                    pedidoNegocio.agregarDetalle(item);
-                    pedidoNegocio.restarStock(item.IdProducto, item.Cantidad);
-                }
-
-                }
-                //Vaciamos el carrito,tambien el idpedido y actualizamos la interfaz
                 Session["Carrito"] = new List<DetallePedido>();
                 Session["IdPedido"] = null;
 
                 ActualizarInterfazCarrito();
-                CargarCardsProductos(); //Volvemos a listar las cards para que reflejen el nuevo stock restado
+                CargarCardsProductos();
 
-                string script = "alert('¡Pedido enviado a cocina con exito!'); window.location='CargarPedido.aspx';";
+                string script = "alert('¡Pedido enviado a cocina con exito!'); window.location='Mesas.aspx';";
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "Redirect", script, true);
                 Response.Redirect("Mesas.aspx", false);
             }
             catch (Exception ex)
             {
-                //Response.Write("<h1 style='color:red; background:white; position:fixed; top:0; left:0; z-index:99999;'>ERROR REAL: " + ex.Message + "</h1>");
-                //Response.End(); 
                 Session.Add("error", ex.ToString());
                 Response.Redirect("error.aspx", false);
             }
         }
-        private void CargarComboMesas()
-        {
-            try
-            {
-                PedidoNegocio pedidoNegocio = new PedidoNegocio();
-                List<string> listaMesas = pedidoNegocio.listarNumeroMesas();
 
-                ddlMesas.Items.Clear();
-
-                foreach (string nroMesa in listaMesas)
-                {
-                    ddlMesas.Items.Add(new ListItem("Mesa Nro " + nroMesa, nroMesa));
-                }
-                if (Session["MesaSeleccionada"] != null) //pasamos el id de la mesa seleccionada al accionar el vento del click en el btn_AgregarPedido, dentro del form de Mesas.aspx, ademas se deja con estado enable = false para no modificar la mesa seleccionada por el evento
-                {
-                    string mesaSesion = Session["MesaSeleccionada"].ToString();
-                    ListItem item = ddlMesas.Items.FindByValue(mesaSesion);
-                    if (item != null)
-                    {
-                        ddlMesas.ClearSelection();
-                        item.Selected = true;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Session.Add("error", ex.ToString());
-                Response.Redirect("error.aspx", false);
-            }
-        }
         private void CargarCardsProductos()
         {
             try
@@ -148,7 +135,7 @@ namespace Resto_Bar_Web
                 Response.Redirect("error.aspx", false);
             }
         }
-        //Se ejecuta al apretar "Añadir" en cualquier Card de producto
+
         protected void repProductos_ItemCommand(object sender, RepeaterCommandEventArgs e)
         {
             if (e.CommandName == "AgregarProducto")
@@ -168,7 +155,6 @@ namespace Resto_Bar_Web
                     }
                 }
 
-                //Si encontramos el producto y hay stock, operamos con el carrito
                 if (seleccionado != null)
                 {
                     if (seleccionado.Stock <= 0)
@@ -180,7 +166,6 @@ namespace Resto_Bar_Web
                     List<DetallePedido> carrito = (List<DetallePedido>)Session["Carrito"];
                     DetallePedido itemExistente = null;
 
-                    //Buscamos si el artículo ya estaba en el carrito
                     foreach (DetallePedido d in carrito)
                     {
                         if (d.IdProducto == idProducto)
@@ -192,7 +177,6 @@ namespace Resto_Bar_Web
 
                     if (itemExistente != null)
                     {
-                        //Si ya existia, validamos que no supere el stock disponible y aumentamos la cantidad
                         if (itemExistente.Cantidad >= seleccionado.Stock)
                         {
                             ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Límite de stock alcanzado para este producto.');", true);
@@ -202,7 +186,6 @@ namespace Resto_Bar_Web
                     }
                     else
                     {
-                        //Si es la primera vez que se agrega, creamos un nuevo renglon de detalle
                         DetallePedido nuevoItem = new DetallePedido();
                         nuevoItem.IdProducto = seleccionado.IdProducto;
                         nuevoItem.NombreProducto = seleccionado.NombreProducto;
@@ -212,12 +195,12 @@ namespace Resto_Bar_Web
                         carrito.Add(nuevoItem);
                     }
 
-                    //Guardamos el estado actualizado en la sesion y refrescamos los componentes visuales
                     Session["Carrito"] = carrito;
                     ActualizarInterfazCarrito();
                 }
             }
         }
+
         protected void dgvPedidoActual_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             List<DetallePedido> carrito = (List<DetallePedido>)Session["Carrito"];
@@ -227,9 +210,9 @@ namespace Resto_Bar_Web
             Session["Carrito"] = carrito;
             ActualizarInterfazCarrito();
 
-            //Script de Bootstrap para volver a abrir el modal automaticamente tras el PostBack
             ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "var myModal = new bootstrap.Modal(document.getElementById('modalRevision')); myModal.show();", true);
         }
+
         private void ActualizarInterfazCarrito()
         {
             List<DetallePedido> carrito = (List<DetallePedido>)Session["Carrito"];
@@ -237,21 +220,17 @@ namespace Resto_Bar_Web
             int totalUnidades = 0;
             decimal montoTotal = 0;
 
-            //Recorremos el carrito acumulando cantidades y subtotales
             foreach (DetallePedido item in carrito)
             {
                 totalUnidades += item.Cantidad;
                 montoTotal += item.Subtotal;
             }
 
-            //Asignamos a las etiquetas visuales
             lblCantidadItems.Text = totalUnidades.ToString();
             lblTotalPedido.Text = string.Format("{0:C}", montoTotal);
 
             dgvPedidoActual.DataSource = carrito;
             dgvPedidoActual.DataBind();
         }
-
-
     }
 }

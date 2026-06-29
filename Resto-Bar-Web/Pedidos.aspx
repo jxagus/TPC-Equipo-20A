@@ -8,7 +8,27 @@
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="mb-0">📋 Cola de Pedidos Activos</h2>
-            <a href="CargarPedido.aspx" class="btn btn-primary fw-bold px-4 shadow-sm">➕ Nueva Orden</a>
+            <a href="Mesas.aspx" class="btn btn-primary fw-bold px-4 shadow-sm">➕ Nueva Orden</a>
+        </div>
+
+        <div class="card mb-4 shadow-sm border-0">
+            <div class="card-body bg-light rounded shadow-sm">
+                <div class="row align-items-end g-3">
+                    
+                    <div class="col-12 col-sm-4 col-md-3">
+                        <label class="form-label fw-bold text-secondary mb-1">🔍 Filtrar por Mesa:</label>
+                        <asp:TextBox ID="txtFiltroMesa" runat="server" CssClass="form-control" placeholder="Ej: 4"></asp:TextBox>
+                        
+                        <asp:Label ID="lblErrorFiltro" runat="server" CssClass="text-danger small d-block mt-1 fw-bold" Visible="false"></asp:Label>
+                    </div>
+
+                    <div class="col-12 col-sm-8 col-md-6 d-flex gap-2">
+                        <asp:Button ID="btnFiltrar" runat="server" Text="Filtrar" CssClass="btn btn-primary px-4 fw-bold shadow-sm" OnClick="btnFiltrar_Click" />
+                        <asp:Button ID="btnLimpiarFiltro" runat="server" Text="No Filtrar / Ver Todos" CssClass="btn btn-outline-secondary px-3" OnClick="btnLimpiarFiltro_Click" />
+                    </div>
+
+                </div>
+            </div>
         </div>
 
         <div class="card shadow-sm">
@@ -67,6 +87,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="modalDetallePedido" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -76,7 +97,6 @@
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
                     <asp:GridView ID="dgvDetallePedido" runat="server" AutoGenerateColumns="False"
                         CssClass="table table-hover table-striped border-0">
                         <Columns>
@@ -86,7 +106,6 @@
                             <asp:BoundField DataField="Subtotal" HeaderText="Subtotal" DataFormatString="{0:C}" HeaderStyle-CssClass="table-dark text-white fw-bold text-success" />
                         </Columns>
                     </asp:GridView>
-
                 </div>
                 <div class="modal-footer bg-light">
                     <button type="button" class="btn btn-secondary fw-bold" data-bs-dismiss="modal">Cerrar Ventana</button>
@@ -94,6 +113,7 @@
             </div>
         </div>
     </div>
+
     <div class="modal fade" id="modalExitoPedido" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content p-3 ticket-comprobante">
@@ -101,14 +121,11 @@
                     <h5 class="modal-title ticket-titulo">*** COMPROBANTE DE PAGO ***</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-
                 <div class="modal-body">
                     <div class="container-fluid">
                         <div class="row fw-bold">
                             <div class="col-md-6">
-                                Mesa:
-                           
-                                <asp:Label ID="lblFacturaMesa" runat="server" />
+                                Mesa: <asp:Label ID="lblFacturaMesa" runat="server" />
                             </div>
                             <div class="col-md-6 text-end">
                                 Pedido: #<asp:Label ID="lblFacturaIdPedido" runat="server" />
@@ -147,7 +164,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="modal-footer border-0 d-grid gap-2">
                     <button type="button" class="btn btn-dark w-100" data-bs-dismiss="modal">Aceptar y Finalizar</button>
                 </div>

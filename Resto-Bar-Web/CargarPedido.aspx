@@ -1,37 +1,41 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CargarPedido.aspx.cs" Inherits="Resto_Bar_Web.CargarPedido" %>
+﻿<%@ Page Title="Cargar Pedido" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="CargarPedido.aspx.cs" Inherits="Resto_Bar_Web.CargarPedido" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="Stylesheets" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container-fluid mt-3">
-        <h2 class="mb-4">📋 Nueva Orden / Cargar Pedido</h2>
+        
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">📋 Nueva Orden / Cargar Pedido</h2>
+            
+            <div>
+                <button type="button" class="btn btn-warning btn-lg position-relative fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalRevision">
+                    🛒 Revisar Pedido Actual
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                        <asp:Label ID="lblCantidadItems" runat="server" Text="0"></asp:Label>
+                    </span>
+                </button>
+            </div>
+        </div>
 
         <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-degrade-pasos fw-bold">
-                Paso 1: Seleccionar Mesa
-           
+            <div class="card-header bg-degrade-pasos fw-bold text-white">
+                Información del Pedido
             </div>
             <div class="card-body">
                 <div class="row align-items-center">
-                    <div class="col-md-4">
-                        <label class="form-label fw-bold">Mesas Disponibles:</label>
-                        <asp:DropDownList ID="ddlMesas" runat="server" CssClass="form-select form-select-lg" Enabled="false">  </asp:DropDownList>
-                    </div>
-                    <div class="col-md-8 text-end pt-4">
-                        <button type="button" class="btn btn-warning btn-lg position-relative fw-bold" data-bs-toggle="modal" data-bs-target="#modalRevision">
-                            🛒 Revisar Pedido Actual
-                           
-                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                                <asp:Label ID="lblCantidadItems" runat="server" Text="0"></asp:Label>
-                            </span>
-                        </button>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-center gap-2">
+                            <label class="form-label fw-bold mb-0 fs-5 text-secondary">Mesa Seleccionada:</label>
+                            <asp:Label ID="lblMesaSeleccionada" runat="server" CssClass="badge bg-primary fs-5 px-3 py-2" Text="Ninguna (Error)"></asp:Label>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        </div>
+
         <div class="card mb-4 shadow-sm">
-            <div class="card-header bg-degrade-pasos fw-bold">
+            <div class="card-header bg-degrade-pasos fw-bold text-white">
                 Paso 2: Seleccionar Productos
             </div>
             <div class="card-body">
@@ -40,7 +44,7 @@
                         <ItemTemplate>
                             <div class="col">
                                 <div class="card h-100 border-secondary shadow-sm d-flex flex-column justify-content-between">
-
+                                    
                                     <div class="card-body text-center">
                                         <h5 class="card-title fw-bold text-uppercase mb-2">
                                             <%# Eval("NombreProducto") %>
@@ -70,6 +74,7 @@
                 </div>
             </div>
         </div>
+
         <div class="modal fade" id="modalRevision" tabindex="-1" aria-labelledby="modalRevisionLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
@@ -85,7 +90,6 @@
                                 <asp:BoundField DataField="Cantidad" HeaderText="Cant." ItemStyle-HorizontalAlign="Center" />
                                 <asp:BoundField DataField="PrecioUnitario" HeaderText="Precio Unit." DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
                                 <asp:BoundField DataField="Subtotal" HeaderText="Subtotal" DataFormatString="{0:C}" ItemStyle-HorizontalAlign="Right" />
-
                                 <asp:CommandField ShowDeleteButton="True" DeleteText="❌ Quitar" ControlStyle-CssClass="btn btn-sm btn-outline-danger" />
                             </Columns>
                         </asp:GridView>
@@ -105,4 +109,5 @@
                 </div>
             </div>
         </div>
+    </div>
 </asp:Content>
