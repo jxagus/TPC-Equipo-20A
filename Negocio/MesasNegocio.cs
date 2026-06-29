@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Dominio;
-using Negocio;
 
 namespace Negocio
 {
@@ -18,8 +17,9 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT NroMesa, IdUsuario, MesaUrlImagen, Estado FROM Mesas");
+                datos.setearConsulta("SELECT M.NroMesa, M.IdUsuario, M.MesaUrlImagen, M.Estado,ISNULL(U.NombreUsuario, 'Sin Asignar') AS NombreMesero FROM Mesas M LEFT JOIN Usuarios U ON M.IdUsuario = U.IdUsuario");
                 datos.ejecutarLectura();
+
                 while (datos.Lector.Read())
                 {
                     Mesa aux = new Mesa();
@@ -31,8 +31,10 @@ namespace Negocio
                     }
                     else
                     {
-                        aux.IdUsuario = 0; 
+                        aux.IdUsuario = 0;
                     }
+
+                    aux.NombreMesero = (string)datos.Lector["NombreMesero"];
 
                     aux.MesaUrlImagen = datos.Lector["MesaUrlImagen"] is DBNull ? "" : (string)datos.Lector["MesaUrlImagen"];
 

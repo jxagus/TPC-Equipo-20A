@@ -1,11 +1,10 @@
-﻿using Dominio;
-using Negocio;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Negocio;
 using Dominio;
+
         
 
 namespace Resto_Bar_Web
@@ -242,5 +241,43 @@ namespace Resto_Bar_Web
                 Response.Redirect("error.aspx", false);
             }
         }
+        protected void dgvDetallePedido_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            if (e.CommandName == "Eliminar")
+            {
+                string[] arg = e.CommandArgument.ToString().Split(',');
+                int idPedido = Convert.ToInt32(arg[0]);
+                int idProducto = Convert.ToInt32(arg[1]);
+
+                PedidoNegocio negocio = new PedidoNegocio();
+                negocio.eliminarProductoDelPedido(idPedido, idProducto);
+
+                cargarDetallePedido();
+            }
+        }
+        private void cargarDetallePedido()
+        {
+            if (Session["MesaSeleccionada"] != null)
+            {
+                int nroMesa = Convert.ToInt32(Session["MesaSeleccionada"]);
+                PedidoNegocio pedidoNegocio = new PedidoNegocio();
+                List<Pedido> activos = pedidoNegocio.listarPedidosActivos();
+                Pedido pedidoMesa = activos.Find(x => x.NroMesa == nroMesa);
+
+                if (pedidoMesa != null)
+                {
+                    List<DetallePedido> detalles = pedidoNegocio.listarDetallesPorId(pedidoMesa.IdPedido);
+                    dgvDetallePedido.DataSource = detalles;
+                    dgvDetallePedido.DataBind();
+                }
+                else
+                {
+                    dgvDetallePedido.DataSource = null;
+                    dgvDetallePedido.DataBind();
+                }
+                UpmodalPedidoActual.Update();
+            }
+        }
+
     }
 }

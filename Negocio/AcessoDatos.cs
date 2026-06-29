@@ -50,7 +50,7 @@ namespace Negocio
             }
             finally
             {
-                conexion.Close(); // Cerrar la conexión al final
+                conexion.Close();
             }
         }
         public void ejecutarLectura()
@@ -100,6 +100,34 @@ namespace Negocio
                 lector.Close();
 
             conexion.Close();
+        }
+        public void limpiarComando()
+        {
+            comando.Parameters.Clear();
+        }
+        public void limpiarParametros()
+        {
+            if (this.comando.Parameters != null)
+            {
+                this.comando.Parameters.Clear();
+            }
+        }
+        public void resetearAcceso()
+        {
+            if (this.comando != null)
+            {
+                this.comando.Parameters.Clear();
+            }
+
+            if (this.lector != null && !this.lector.IsClosed)
+            {
+                this.lector.Close();
+            }
+
+            if (this.conexion != null && this.conexion.State == System.Data.ConnectionState.Open)
+            {
+                this.conexion.Close();
+            }
         }
     }
 }

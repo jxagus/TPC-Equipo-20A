@@ -108,7 +108,7 @@
 
                 <footer>
                     <hr />
-                    <p>&copy; <%: DateTime.Now.Year %> - Sistema de Gestión Resto Bar</p>
+                    <p>&copy; <%: DateTime.Now.Year %> - Sistema de Gestión Resto Bar - Equipo 20A</p>
                 </footer>
 
             </div>

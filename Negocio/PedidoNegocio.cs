@@ -264,5 +264,52 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public void eliminarProductoDelPedido(int idPedido, int idProducto)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT Cantidad FROM DetallePedido WHERE IdPedido = @idPedido AND IdProducto = @idProducto");
+                datos.setearParametros("@idPedido", idPedido);
+                datos.setearParametros("@idProducto", idProducto);
+                datos.ejecutarLectura();
+                int cant = 0;
+                if (datos.Lector.Read()) cant = (int)datos.Lector["Cantidad"];
+
+                datos.resetearAcceso(); 
+
+                //Stock
+                if (cant > 0)
+                {
+                    datos.setearConsulta("UPDATE Productos SET Stock = Stock + @cantidad WHERE IdProducto = @idProducto");
+                    datos.setearParametros("@cantidad", cant);
+                    datos.setearParametros("@idProducto", idProducto);
+                    datos.ejecutarAccion();
+                    datos.resetearAcceso(); 
+                }
+
+                //Borrar
+                datos.setearConsulta("DELETE FROM DetallePedido WHERE IdPedido = @idPedido AND IdProducto = @idProducto");
+                datos.setearParametros("@idPedido", idPedido);
+                datos.setearParametros("@idProducto", idProducto);
+                datos.ejecutarAccion();
+                datos.resetearAcceso();
+
+                // Borrar pedido si vacio
+                datos.setearConsulta("SELECT COUNT(*) FROM DetallePedido WHERE IdPedido = @idPedido");
+                datos.setearParametros("@idPedido", idPedido);
+                int restante = datos.ejecutarAccionEscalar();
+
+                if (restante == 0)
+                {
+                    datos.resetearAcceso(); //Limpiamos antes de la ultima accion
+                    datos.setearConsulta("DELETE FROM Pedidos WHERE IdPedido = @idPedido");
+                    datos.setearParametros("@idPedido", idPedido);
+                    datos.ejecutarAccion();
+                }
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); } 
+        }
     }
 }

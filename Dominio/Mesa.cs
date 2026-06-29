@@ -15,6 +15,7 @@ namespace Dominio
     {
         public int IdMesa { get; set; }
         public int IdUsuario { get; set; }
+        public string NombreMesero { get; set; }
         public string MesaUrlImagen { get; set; }
         public EstadoMesa EstadoMesa { get; set; } /*No confundir con el estado del PEDIDO. Este es el estado de la porpia mesa, por si se inhabilita una mesa por X razon*/
     }
