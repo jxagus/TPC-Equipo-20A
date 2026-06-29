@@ -40,15 +40,32 @@ namespace Resto_Bar_Web
 
         private void VerificarEstiloNavbarPorRol()
         {
-            if (Session["idRol"] != null)
-            {
-                int rol = (int)Session["idRol"];
+            sidebarMenu.Attributes["class"] = "sidebar";
 
-                //Si el rol es 2 (Mesero / Mozo)
-                if (rol == 2)
-                {
+            var rolSesion = Session["idRol"];
+
+            if (rolSesion == null)
+            {
+                sidebarMenu.Attributes["class"] += " bg-color-invitado";
+                return;
+            }
+
+            int rol = (int)rolSesion;
+
+            switch (rol)
+            {
+                case 0: // Admin
+                    sidebarMenu.Attributes["class"] += " bg-gradient-admin";
+                    break;
+                case 1: // Gerente
+                    sidebarMenu.Attributes["class"] += " bg-degrade-pasos";
+                    break;
+                case 2: // Mozo
                     sidebarMenu.Attributes["class"] += " bg-gradient-mozo";
-                }
+                    break;
+                default: // Cualquier otro caso
+                    sidebarMenu.Attributes["class"] += " bg-color-invitado";
+                    break;
             }
         }
     }
