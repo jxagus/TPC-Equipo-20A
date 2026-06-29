@@ -58,9 +58,31 @@ namespace Resto_Bar_Web
                 try
                 {
                     PedidoNegocio negocio = new PedidoNegocio();
+
+                    //buscamos el pedido activo para sacar NroMesa antes de finalizarlo
+                    List<Pedido> activos = negocio.listarPedidosActivos();
+                    Pedido pedidoActual = activos.Find(p => p.IdPedido == idPedido);
+
+                    List<DetallePedido> detalles = negocio.listarDetallesPorId(idPedido);
+
+                    lblFacturaMesa.Text = (pedidoActual != null) ? pedidoActual.NroMesa.ToString() : "-";
+                    lblFacturaIdPedido.Text = idPedido.ToString();
+
+                    repFacturaItems.DataSource = detalles;
+                    repFacturaItems.DataBind();
+
+                    decimal totalFactura = 0;
+                    foreach (var item in detalles)
+                    {
+                        totalFactura += Convert.ToDecimal(item.Subtotal);
+                    }
+                    lblFacturaTotal.Text = totalFactura.ToString("N2");
+
                     negocio.finalizarPedido(idPedido);
                     CargarColaPedidos();
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('📦 Pedido #" + idPedido + " entregado.');", true);
+
+                    string script = "var miModal = new bootstrap.Modal(document.getElementById('modalExitoPedido')); miModal.show();";
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "PopFactura", script, true);
                 }
                 catch (Exception ex)
                 {

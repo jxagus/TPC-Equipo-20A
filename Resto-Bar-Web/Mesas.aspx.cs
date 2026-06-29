@@ -16,8 +16,27 @@ namespace Resto_Bar_Web
         public List<Mesa> ListaMesas { get; set; }
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (Session["idUsuario"] == null)
+            {
+                Response.Redirect("Login.aspx");
+                return;
+            }
+
             MesasNegocio negocio = new MesasNegocio();
-            ListaMesas = negocio.listarTodas();
+            List<Mesa> todasLasMesas = negocio.listarTodas();
+
+            int idUsuario = Convert.ToInt32(Session["idUsuario"]);
+            int idRol = (Session["idRol"] != null) ? Convert.ToInt32(Session["idRol"]) : -1; //el -1 es de seguridad
+            //admin (0) o gerente (1) ven todas las mesas, el mesero solo ve las suyas
+            if (idRol == 0 || idRol == 1)
+            {
+                ListaMesas = todasLasMesas;
+            }
+            else
+            {
+                ListaMesas = todasLasMesas.FindAll(m => m.IdUsuario == idUsuario);
+            }
+
             if (!IsPostBack)
             {
                 repeaterMesas.DataSource = ListaMesas;
@@ -164,48 +183,6 @@ namespace Resto_Bar_Web
                 Response.Redirect("Mesas.aspx");
             }
         }
-
-        protected void btnCerrarPedido_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Session["MesaSeleccionada"] != null)
-                {
-                    string mesaSesion = Session["MesaSeleccionada"].ToString();
-                    int nroMesa = Convert.ToInt32(mesaSesion);
-
-                    PedidoNegocio pedidoNegocio = new PedidoNegocio();
-                    List<Pedido> activos = pedidoNegocio.listarPedidosActivos();
-                    Pedido pedidoMesa = activos.Find(x => x.NroMesa == nroMesa);
-
-                    if (pedidoMesa != null)
-                    {
-                        List<DetallePedido> detalles = pedidoNegocio.listarDetallesPorId(pedidoMesa.IdPedido);
-
-
-                        lblFacturaMesa.Text = nroMesa.ToString();
-                        lblFacturaIdPedido.Text = pedidoMesa.IdPedido.ToString();
-
-                        repFacturaItems.DataSource = detalles;
-                        repFacturaItems.DataBind();
-
-                        decimal total = 0;
-                        foreach (var item in detalles)
-                        {
-                            total += Convert.ToDecimal(item.Subtotal);
-                        }
-                        lblFacturaTotal.Text = total.ToString("N2");
-                        pedidoNegocio.finalizarPedido(pedidoMesa.IdPedido);
-                        upModalFactura.Update();
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-
         protected void btnAgregarProducto_Click(object sender, EventArgs e)
         {
             CargarOModificarPedido();
