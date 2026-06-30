@@ -13,9 +13,8 @@ namespace Negocio
             try
             {
                 datos.setearConsulta(
-                    "DECLARE @FechaFiltro DATE = ISNULL((SELECT MAX(CAST(FechayHoraPedido AS DATE)) FROM Pedidos), CAST(GETDATE() AS DATE)); " +
                     "SELECT ISNULL(SUM(PrecioTotal), 0) FROM Pedidos " +
-                    "WHERE CAST(FechayHoraPedido AS DATE) = @FechaFiltro AND IdEstadoPedido = 2"); // 2 = Finalizado
+                    "WHERE CAST(FechayHoraPedido AS DATE) = CAST(GETDATE() AS DATE) AND IdEstadoPedido = 2");
 
                 datos.ejecutarLectura();
                 return datos.Lector.Read() ? Convert.ToDecimal(datos.Lector[0]) : 0;
@@ -64,8 +63,7 @@ namespace Negocio
             try
             {
                 datos.setearConsulta(
-                    "DECLARE @FechaFiltro DATE = ISNULL((SELECT MAX(CAST(FechayHoraPedido AS DATE)) FROM Pedidos), CAST(GETDATE() AS DATE)); " +
-                    "SELECT COUNT(*) FROM Pedidos WHERE CAST(FechayHoraPedido AS DATE) = @FechaFiltro");
+                    "SELECT COUNT(*) FROM Pedidos WHERE CAST(FechayHoraPedido AS DATE) = CAST(GETDATE() AS DATE)");
 
                 datos.ejecutarLectura();
                 return datos.Lector.Read() ? Convert.ToInt32(datos.Lector[0]) : 0;
@@ -93,9 +91,8 @@ namespace Negocio
             try
             {
                 datos.setearConsulta(
-                    "DECLARE @FechaFiltro DATE = ISNULL((SELECT MAX(CAST(FechayHoraPedido AS DATE)) FROM Pedidos), CAST(GETDATE() AS DATE)); " +
                     "SELECT TOP 1 NroMesa FROM Pedidos " +
-                    "WHERE CAST(FechayHoraPedido AS DATE) = @FechaFiltro " +
+                    "WHERE CAST(FechayHoraPedido AS DATE) = CAST(GETDATE() AS DATE) " +
                     "GROUP BY NroMesa ORDER BY COUNT(*) DESC");
 
                 datos.ejecutarLectura();
@@ -105,7 +102,6 @@ namespace Negocio
             finally { datos.cerrarConexion(); }
         }
 
-        //TOP 5 PLATOS MAS SOLICITADO
         public List<Productos> ObtenerTopPlatos()
         {
             List<Productos> lista = new List<Productos>();
