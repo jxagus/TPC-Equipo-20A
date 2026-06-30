@@ -11,35 +11,24 @@
     display: flex;
     flex-direction: column;
 }
+/*Cargar Pedido*/
 .bg-degrade-pasos {
     background-color: transparent !important;
     background: linear-gradient(90deg, #343a40 0%, #001a1a 45%, #002d2d 80%, #004d4d 100%) !important;
     color: #ffffff !important;
 }
-/*.bg-color-invitado {
-    background-color: #5a6268 !important; /* Un gris neutro 
-    color: #ffffff !important;
-}
 
-.sidebar-invitado {
-    background: #5a6268 !important;
-}
-
-.bg-gradient-mozo {
-    background: linear-gradient(135deg, #004d4a 0%, #12755f 100%) !important;
-
-}
-/* 1. Admin/Gerente: Azul */
+/*Admin/Gerente*/
 .bg-gradient-admin {
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%) !important;
 }
 
-/* 2. Mozo: Degradé original (el que antes usaba admin) */
+/*Mozo*/
 .bg-degrade-pasos {
     background: linear-gradient(90deg, #343a40 0%, #001a1a 45%, #002d2d 80%, #004d4d 100%) !important;
 }
 
-/* 3. Invitado: Gris con degradé amarillo */
+/*Invitado*/
 .bg-color-invitado {
     background: linear-gradient(180deg, #5a6268 0%, #8c7f00 100%) !important;
     color: #ffffff !important;
@@ -62,7 +51,7 @@
     background-color: #343a40;
     color: white;
 }
-
+/* main content*/
 .main-content {
     flex: 1;
     padding: 25px;

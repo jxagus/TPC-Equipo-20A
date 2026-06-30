@@ -24,6 +24,15 @@ namespace Resto_Bar_Web
         protected global::System.Web.UI.WebControls.TextBox txtNombre;
 
         /// <summary>
+        /// Control txtApellido.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtApellido;
+
+        /// <summary>
         /// Control txtNombreUsuario.
         /// </summary>
         /// <remarks>
@@ -42,6 +51,15 @@ namespace Resto_Bar_Web
         protected global::System.Web.UI.WebControls.TextBox txtContrasena;
 
         /// <summary>
+        /// Control txtRepetirContrasena.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtRepetirContrasena;
+
+        /// <summary>
         /// Control ddlRol.
         /// </summary>
         /// <remarks>
@@ -51,6 +69,15 @@ namespace Resto_Bar_Web
         protected global::System.Web.UI.WebControls.DropDownList ddlRol;
 
         /// <summary>
+        /// Control lblMensajeError.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label lblMensajeError;
+
+        /// <summary>
         /// Control btnRegistrar.
         /// </summary>
         /// <remarks>
@@ -58,5 +85,23 @@ namespace Resto_Bar_Web
         /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnRegistrar;
+
+        /// <summary>
+        /// Control dgvUsuarios.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView dgvUsuarios;
+
+        /// <summary>
+        /// Control dgvEliminados.
+        /// </summary>
+        /// <remarks>
+        /// Campo generado automáticamente.
+        /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView dgvEliminados;
     }
 }
