@@ -71,6 +71,28 @@ namespace Negocio
 
             return -1;
         }
+        public Usuario ValidarLogin(string user, string pass)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT IdUsuario, IdRol, Estado FROM Usuarios WHERE NombreUsuario = @user AND Contrasena = @pass");
+                datos.setearParametros("@user", user);
+                datos.setearParametros("@pass", pass);
+                datos.ejecutarLectura();
 
+                if (datos.Lector.Read())
+                {
+                    Usuario u = new Usuario();
+                    u.IdUsuario = (int)datos.Lector["IdUsuario"];
+                    u.IdRol = (int)datos.Lector["IdRol"];
+                    u.Estado = (bool)datos.Lector["Estado"];
+                    return u;
+                }
+                return null; ///no existe o credenciales malas
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
     }
 }

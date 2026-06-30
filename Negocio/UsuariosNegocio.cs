@@ -30,7 +30,7 @@ namespace Negocio
                     if (!(datos.Lector["Nombre"] is DBNull))
                         aux.Nombre = (string)datos.Lector["Nombre"];
                     else
-                        aux.Nombre = ""; 
+                        aux.Nombre = "";
 
                     //Apellido
                     if (!(datos.Lector["Apellido"] is DBNull))
@@ -60,8 +60,7 @@ namespace Negocio
                 datos.setearConsulta(
                     "SELECT IdUsuario, NombreUsuario " +
                     "FROM Usuarios " +
-                    "WHERE IdRol = @rol");
-
+                    "WHERE IdRol = @rol AND Estado = 1");
                 datos.setearParametros("@rol", 2);
                 datos.ejecutarLectura();
 

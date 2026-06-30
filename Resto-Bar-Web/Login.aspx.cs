@@ -31,8 +31,6 @@ namespace Resto_Bar_Web
         protected void btnIniciarSesion_Click(object sender, EventArgs e)
         {
             lblError.Visible = false;
-            lblError.Text = "";
-
             string usuario = txtUsuario.Text.Trim();
             string contrasena = txtContrasena.Text;
 
@@ -40,12 +38,20 @@ namespace Resto_Bar_Web
 
             try
             {
-                int idUsuario = negocio.existeUsuario(usuario, contrasena);
+                Usuario usuarioLogueado = negocio.ValidarLogin(usuario, contrasena);
 
-                if (idUsuario != 0)
+                if (usuarioLogueado != null)
                 {
-                    Session.Add("idUsuario", idUsuario);
-                    Session.Add("idRol", negocio.traerRol(idUsuario));
+                    //ESTADO
+                    if (usuarioLogueado.Estado == false)
+                    {
+                        lblError.Text = "⚠️ Esta cuenta se encuentra inactiva.";
+                        lblError.Visible = true;
+                        return;
+                    }
+
+                    Session.Add("idUsuario", usuarioLogueado.IdUsuario);
+                    Session.Add("idRol", usuarioLogueado.IdRol);
 
                     Response.Redirect("Dashboard.aspx", false);
                 }
