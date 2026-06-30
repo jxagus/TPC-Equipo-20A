@@ -15,33 +15,43 @@ namespace Resto_Bar_Web
         private List<Dominio.Categorias> listaTodas;
         protected void Page_Load(object sender, EventArgs e)
         {
-
-            if (Session["idUsuario"] == null)
+            try
             {
-                //ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: no esta iniciado sesion');", true);
-                Response.Redirect("Login.aspx");
 
-                ///redirigir a una pagian de error, el mensaje es temporal
-            }
-            else
-            {
-                LoginNegocio negocio = new LoginNegocio();
-                int idUsuario = Convert.ToInt32(Session["idUsuario"]);
-                int rol = negocio.traerRol(idUsuario);
-                if (rol == 0 || rol == 1)
+                if (Session["idUsuario"] == null)
                 {
-                    if (!IsPostBack)
-                    {
-                        cargarListadoCategorias();
-                        
-                        cargarSubcategorias();
-                    }
+                    //ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: no esta iniciado sesion');", true);
+                    Response.Redirect("Login.aspx");
+
+                    ///redirigir a una pagian de error, el mensaje es temporal
                 }
                 else
                 {
-                    ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Permisos insuficientes');", true);
-                    ///redirigir a pagina de error, el mensaje es temporal
+                    LoginNegocio negocio = new LoginNegocio();
+                    int idUsuario = Convert.ToInt32(Session["idUsuario"]);
+                    int rol = negocio.traerRol(idUsuario);
+                    if (rol == 0 || rol == 1)
+                    {
+                        if (!IsPostBack)
+                        {
+                            cargarListadoCategorias();
+
+                            cargarSubcategorias();
+                        }
+                    }
+                    else
+                    {
+                        ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Permisos insuficientes');", true);
+                        ///redirigir a pagina de error, el mensaje es temporal
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
+                throw ex;
             }
         }
 

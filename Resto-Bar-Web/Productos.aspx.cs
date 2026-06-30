@@ -33,12 +33,7 @@ namespace Resto_Bar_Web
                     if (!IsPostBack)
                     {
                         CargarProductos();
-                        CategoriaNegocio catnegocio = new CategoriaNegocio();
-                        ddlCategoria.DataSource = catnegocio.CargarCategorias();
-                        ddlCategoria.DataValueField = "IdCategoria";
-                        ddlCategoria.DataTextField = "NombreCategoria";
-                        ddlCategoria.DataBind();
-                        ddlCategoria.Items.Insert(0, new ListItem("Seleccione una categoría...", "0"));
+                        cargarDDLS();
                     }
                 }
                 else
@@ -329,6 +324,172 @@ namespace Resto_Bar_Web
                 throw ex;
             }
 
+        }
+
+        protected void dgvProductos_PageIndexChanging(object sender, GridViewPageEventArgs e)
+        {
+            dgvProductos.PageIndex = e.NewPageIndex;
+            ProductoNegocio negocio = new ProductoNegocio();
+            List<Productos> lista = negocio.listar();
+
+            string criterio = ViewState["CriterioOrden"]?.ToString();
+            string orden = ViewState["DireccionOrden"]?.ToString();
+            if (criterio == "0" || orden == "0")
+            {
+                CargarProductos();
+                return;
+            }
+
+            if (orden == "ASC")
+            {
+                if (criterio == "IdProducto") lista = lista.OrderBy(x => x.IdProducto).ToList();
+                if (criterio == "Nombre") lista = lista.OrderBy(x => x.NombreProducto).ToList();
+                if (criterio == "Stock") lista = lista.OrderBy(x => x.Stock).ToList();
+                if (criterio == "Precio") lista = lista.OrderBy(x => x.Precio).ToList();
+            }
+            else
+            {
+                if (criterio == "IdProducto") lista = lista.OrderByDescending(x => x.IdProducto).ToList();
+                if (criterio == "Nombre") lista = lista.OrderByDescending(x => x.NombreProducto).ToList();
+                if (criterio == "Stock") lista = lista.OrderByDescending(x => x.Stock).ToList();
+                if (criterio == "Precio") lista = lista.OrderByDescending(x => x.Precio).ToList();
+
+            }
+
+            dgvProductos.DataSource = lista;
+            dgvProductos.DataBind();
+        }
+
+        protected void ddlFiltro_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void ddlDireccion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void ddlCategoriasFiltrado_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int idCategoriaSeleccionada = Convert.ToInt32(ddlCategoriasFiltrado.SelectedValue);
+
+            if (idCategoriaSeleccionada == 0)
+            {
+                divFiltroSubcategorias.Visible = false;
+                cklFiltroSubcategorias.Items.Clear();
+                return;
+            }
+            CategoriaNegocio catNegocio = new CategoriaNegocio();
+            List<Dominio.Categorias> listaTodas = catNegocio.listarTODAS();
+
+            List<Dominio.Categorias> subcategorias = listaTodas.FindAll(c => c.IdCategoriaPadre == idCategoriaSeleccionada);
+
+            if (subcategorias.Count > 0)
+            {
+                cklFiltroSubcategorias.DataSource = subcategorias;
+                cklFiltroSubcategorias.DataValueField = "IdCategoria";
+                cklFiltroSubcategorias.DataTextField = "NombreCategoria";
+                cklFiltroSubcategorias.DataBind();
+
+                divFiltroSubcategorias.Visible = true;
+            }
+            else
+            {
+                divFiltroSubcategorias.Visible = false;
+            }
+        }
+
+        protected void cargarDDLS()
+        {
+            CategoriaNegocio catnegocio = new CategoriaNegocio();
+
+            ddlCategoria.DataSource = catnegocio.CargarCategorias();
+            ddlCategoria.DataValueField = "IdCategoria";
+            ddlCategoria.DataTextField = "NombreCategoria";
+            ddlCategoria.DataBind();
+            ddlCategoria.Items.Insert(0, new ListItem("Seleccione una categoría...", "0"));
+
+            ddlCategoriasFiltrado.DataSource = catnegocio.CargarCategorias();
+            ddlCategoriasFiltrado.DataValueField = "IdCategoria";
+            ddlCategoriasFiltrado.DataTextField = "NombreCategoria";
+            ddlCategoriasFiltrado.DataBind();
+            ddlCategoriasFiltrado.Items.Insert(0, new ListItem("Seleccione una categoría...", "0"));
+
+            ddlFiltro.Items.Add(new ListItem("ID", "IdProducto"));
+            ddlFiltro.Items.Add(new ListItem("Nombre Producto", "Nombre"));
+            ddlFiltro.Items.Add(new ListItem("Precio", "Precio"));
+            ddlFiltro.Items.Add(new ListItem("Stock", "Stock"));
+            ddlDireccion.Items.Add(new ListItem("Ascendente","ASC"));
+            ddlDireccion.Items.Add(new ListItem("Descendente", "DESC"));
+
+        }
+
+        protected void btnAplicarFiltros_Click(object sender, EventArgs e)
+        {
+            ProductoNegocio negocio = new ProductoNegocio();
+            CategoriaNegocio catNegocio = new CategoriaNegocio();
+            List<Productos> lista = negocio.listar();
+            string criterio = ddlFiltro.SelectedValue;
+            string orden = ddlDireccion.SelectedValue;
+            ViewState["CriterioOrden"] = criterio;
+            ViewState["DireccionOrden"] = orden;
+            List<int> idsMarcados = new List<int>();
+            foreach (ListItem item in cklFiltroSubcategorias.Items)
+            {
+                if (item.Selected)
+                {
+                    idsMarcados.Add(int.Parse(item.Value));
+
+                }
+            }
+
+            if (ddlCategoriasFiltrado.SelectedValue != "0")
+            {
+                int idCat = int.Parse(ddlCategoriasFiltrado.SelectedValue);
+                List<int> idProductos = catNegocio.ListarIdsProductosPorCategoria(idCat);
+                lista = lista.FindAll(p => idProductos.Contains(p.IdProducto));
+            }
+
+            if (idsMarcados.Count > 0)
+            {
+                List<int> idsFiltrados = catNegocio.ListarIdsProductosPorSubategoria(idsMarcados);
+                lista = lista.FindAll(p => idsFiltrados.Contains(p.IdProducto));
+                
+            }
+
+            if(orden == "ASC")
+            {
+                if(criterio == "IdProducto") lista = lista.OrderBy(x => x.IdProducto).ToList();
+                if (criterio == "Nombre") lista = lista.OrderBy(x => x.NombreProducto).ToList();
+                if (criterio == "Stock") lista = lista.OrderBy(x => x.Stock).ToList();
+                if (criterio == "Precio") lista = lista.OrderBy(x => x.Precio).ToList();
+            }
+            else
+            {
+                if (criterio == "IdProducto") lista = lista.OrderByDescending(x => x.IdProducto).ToList();
+                if (criterio == "Nombre") lista = lista.OrderByDescending(x => x.NombreProducto).ToList();
+                if (criterio == "Stock") lista = lista.OrderByDescending(x => x.Stock).ToList();
+                if (criterio == "Precio") lista = lista.OrderByDescending(x => x.Precio).ToList();
+
+            }
+
+            dgvProductos.DataSource = lista;
+            dgvProductos.DataBind();
+
+
+        }
+
+
+        protected void btnLimpiarFiltros_Click(object sender, EventArgs e)
+        {
+            ddlFiltro.SelectedIndex = 0;
+            ddlDireccion.SelectedIndex = 0;
+            ddlCategoriasFiltrado.SelectedIndex = 0;
+            divFiltroSubcategorias.Visible = false;
+            CargarProductos();
+            ViewState["CriterioOrden"] = 0;
+            ViewState["DireccionOrden"] = 0;
         }
     }
 }

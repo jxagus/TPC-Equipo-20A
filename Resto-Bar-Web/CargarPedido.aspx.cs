@@ -11,22 +11,33 @@ namespace Resto_Bar_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["idUsuario"] == null)
+            try
             {
-                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error: no esta iniciado sesion');", true);
-                return;
-            }
 
-            if (!IsPostBack)
-            {
-                if (Session["Carrito"] == null)
+                if (Session["idUsuario"] == null)
                 {
-                    Session["Carrito"] = new List<DetallePedido>();
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error: no esta iniciado sesion');", true);
+                    Response.Redirect("login.aspx", false);
+                    return;
                 }
 
-                EstablecerMesaSeleccionada();
-                CargarCardsProductos();
-                ActualizarInterfazCarrito();
+                if (!IsPostBack)
+                {
+                    if (Session["Carrito"] == null)
+                    {
+                        Session["Carrito"] = new List<DetallePedido>();
+                    }
+
+                    EstablecerMesaSeleccionada();
+                    CargarCardsProductos();
+                    ActualizarInterfazCarrito();
+                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
+                throw ex;
             }
         }
 
