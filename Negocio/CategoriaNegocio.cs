@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Deployment.Internal;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -306,6 +307,61 @@ namespace Negocio
             { 
                 datos.cerrarConexion(); 
             }
+        }
+
+        public List<int> ListarIdsProductosPorCategoria(int idCategoria)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List <int> lista = new List<int>();
+            try
+            {
+                datos.setearConsulta("SELECT IdProducto FROM CategoriasPorProducto WHERE IdCategoria = @idcat");
+                datos.setearParametros("@idcat", idCategoria);
+                datos.ejecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    lista.Add((int)datos.Lector["IdProducto"]);
+                }
+                return lista;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+
+            }
+        }
+        public List<int> ListarIdsProductosPorSubategoria(List<int> idsSubcategorias)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            List<int> lista = new List<int>();
+
+            string listaIds = string.Join(",", idsSubcategorias);
+
+            try
+            {
+                datos.setearConsulta("SELECT DISTINCT IdProducto FROM CategoriasPorProducto WHERE IdCategoria IN (" + listaIds + ")");
+                datos.ejecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    lista.Add((int)datos.Lector["IdProducto"]);
+                }
+                return lista;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+
+            }
+        }
     }
-}
 }

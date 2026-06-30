@@ -6,7 +6,7 @@
         <div class="container-fluid mt-2">
             <div class="row">
                 <div class="col-md-4 pe-md-4 border-end">
-                    <h2 class="mb-4">Carga de Categorias</h2>
+                    <h2 class="border-bottom pb-2 mb-4">Carga de Categorias</h2>
                     <asp:HiddenField ID="hfIdCategoria" runat="server"/>
 
 
@@ -39,7 +39,7 @@
 
 
             <div class="col-md-8 ps-md-4">
-              <h2 class="mb-4">Categorias Existentes</h2>
+              <h2 class="border-bottom pb-2 mb-4">Categorias Existentes</h2>
 
                 <div class="accordion" id="accorditionCategorias">
                     <asp:Repeater Id="repCategorias" runat="server" OnItemCommand="repCategorias_ItemCommand" OnItemDataBound="repCategorias_ItemDataBound">

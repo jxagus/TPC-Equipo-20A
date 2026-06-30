@@ -43,10 +43,10 @@ namespace Resto_Bar_Web
             catch (Exception ex)
             {
                 //Response.Write("<h2 style='color:red;'>Error al guardar personal:</h2>");
-               // Response.Write("<pre>" + ex.Message + "</pre>");
+                //Response.Write("<pre>" + ex.Message + "</pre>");
                 //Response.End();
                 Session.Add("error", ex.ToString());
-                Response.Redirect("error.aspx", false);
+                Response.Redirect("Error.aspx", false);
             }
         }
     }

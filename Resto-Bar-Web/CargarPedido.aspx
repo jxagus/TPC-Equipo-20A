@@ -83,6 +83,7 @@
                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
+                        <%///LIMPIAR CADA VEZ QUE SE ENTRA A CARGAR PEDIDO %>
                         <asp:GridView ID="dgvPedidoActual" runat="server" AutoGenerateColumns="False"
                             CssClass="table table-hover table-striped align-middle" OnRowDeleting="dgvPedidoActual_RowDeleting">
                             <Columns>

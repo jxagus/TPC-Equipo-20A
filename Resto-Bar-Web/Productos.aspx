@@ -1,4 +1,8 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Productos.aspx.cs" Inherits="Resto_Bar_Web.Insumos" %>
+<asp:Content ID="Content2" ContentPlaceHolderID="Stylesheets" runat="server">
+    <link href="/Content/Productos.css" rel="stylesheet" type="text/css" />
+</asp:Content>
+
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -6,11 +10,11 @@
         <div class="row">
 
             <div class="col-md-4 pe-md-4 border-end">
-                <h2 class="mb-4">Carga de Producto</h2>
+                <h2 class="border-bottom pb-2 mb-4">Carga de Producto</h2>
                 <asp:HiddenField ID="hfIdProducto" runat="server"/>
                 <div class="mb-3" id="IdOculto" visible="false" runat="server" >
                     <label class="form-label fw-bold">ID Del Producto</label>
-                    <asp:TextBox ID="txtId" CssClass="form-control" placeholder="" runat="server" disabled></asp:TextBox>
+                    <asp:TextBox ID="txtId" CssClass="form-control" placeholder="" runat="server" ReadOnly="true"></asp:TextBox>
                 </div>
 
                 <div class="mb-3">
@@ -53,7 +57,7 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold">Stock</label>
                     <asp:TextBox ID="txtStock" CssClass="form-control" runat="server"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rfvStockProducto" runat="server" ControlToValidate="txtPrecio" ForeColor="Red" Display="Dynamic" ErrorMessage="El Stock es obligatorio."></asp:RequiredFieldValidator>
+                        <asp:RequiredFieldValidator ID="rfvStockProducto" runat="server" ControlToValidate="txtStock" ForeColor="Red" Display="Dynamic" ErrorMessage="El Stock es obligatorio."></asp:RequiredFieldValidator>
                     <asp:RegularExpressionValidator ID="revStock" ControlToValidate="txtStock" ValidationExpression="^\d+$" runat="server" ForeColor="red" ErrorMessage="El Stock debe ser un numero entero."></asp:RegularExpressionValidator>
 
 
@@ -66,10 +70,21 @@
             </div>
 
             <div class="col-md-8 ps-md-4">
-                <h2 class="mb-4">Productos Existentes</h2>
+                <h2 class="border-bottom pb-2 mb-4">Productos Existentes</h2>
+                <nav class="navbar bg-body-tertiary">
+                    <div class="container-fluid">
+                    <div class="d-flex w-100" role="search">
+                        <asp:TextBox ID="txtBuscarProducto" CssClass="form-control me-2" placeholder="Buscar Producto..." aria-label="Search" runat="server"></asp:TextBox>
+                        <asp:Button ID="btnBuscarProducto" runat="server" CssClass="btn btn-outline-secondary me-2"  Text="🔎" CausesValidation="false" OnClientClick="return false;"/>
+                        <asp:Button ID="btnFiltros" runat="server" CssClass="btn btn-outline-success me-2" data-bs-toggle="offcanvas" data-bs-target="#menuFiltros" aria-controls="menuFiltros" Text="Abrir Filtros" CausesValidation="false" OnClientClick="return false;"/>
+                    </div>
+                    </div>
+                </nav>
 
                 <div class="table-responsive">
-                    <asp:GridView ID="dgvProductos" runat="server" OnRowCommand="dgvProductos_RowCommand" AutoGenerateColumns="False" CssClass="table table-striped table-hover table-bordered align-middle">
+                    <asp:GridView ID="dgvProductos" runat="server" AllowPaging="true" PageSize="9" OnPageIndexChanging="dgvProductos_PageIndexChanging" OnRowCommand="dgvProductos_RowCommand" AutoGenerateColumns="False" CssClass="table table-striped table-hover table-bordered align-middle">
+                        <PagerSettings Mode="NextPrevious" PreviousPagetext="&#8249; Anterior" NextPageText="Siguiente &#8250;"/>
+                        <PagerStyle HorizontalAlign="Center" CssClass="paginacion-grid"/>
                         <Columns>
                             <asp:BoundField DataField="IdProducto" HeaderText="ID" ItemStyle-Width="50px" />
 
@@ -187,6 +202,46 @@
 
     </div>
 
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="menuFiltros" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+        <h4 class="offcanvas-title" id="offcanvasRightLabel">Filtros Disponibles</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+
+
+                    <div class="mb-3">
+                        <h6 class="border-bottom pb-2 mb-4">Ordenar Por</h6>
+                        <div class="d-grid gap-2">
+                            <asp:DropDownList ID="ddlFiltro" CssClass="form-select" OnSelectedIndexChanged="ddlFiltro_SelectedIndexChanged" runat="server"></asp:DropDownList>
+                            <asp:DropDownList ID="ddlDireccion" CssClass="form-select" OnSelectedIndexChanged="ddlDireccion_SelectedIndexChanged" runat="server"></asp:DropDownList>
+
+                        </div>
+                    </div>
+            <asp:UpdatePanel Id="upFiltros" runat="server">
+                <ContentTemplate>
+                    <div class="mb-3">
+                        <h6 class="border-bottom pb-2 mb-4">Filtrar por Categoria</h6>
+                        <asp:DropDownList ID="ddlCategoriasFiltrado" AutoPostBack="true" CssClass="form-select" OnSelectedIndexChanged="ddlCategoriasFiltrado_SelectedIndexChanged" runat="server"></asp:DropDownList>
+                    </div>
+                    <div id="divFiltroSubcategorias" class="mb-3" runat="server" visible="false">
+                        <h6 class="border-bottom pb-2 mb-4">Filtrar por Subcategorias:</h6>
+                        <asp:CheckBoxList ID="cklFiltroSubcategorias" runat="server" CssClass="form-check"></asp:CheckBoxList>
+                    </div>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+
+
+        </div>
+        <div class="offcanvas-footer p-3 border-top w-100">
+            <div class="d-grid gap-2">
+                <asp:Button ID="btnAplicarFiltros" CssClass="btn btn-success" CausesValidation="false" OnClick="btnAplicarFiltros_Click" runat="server" Text="Aplicar Filtros" />
+                <asp:Button ID="btnLimpiarFiltros" CssClass="btn btn-secondary" CausesValidation="false" OnClick="btnLimpiarFiltros_Click" runat="server" Text="Limpiar Filtros" />
+
+            </div>
+        </div>
+    </div>
 
      
 </asp:Content>
