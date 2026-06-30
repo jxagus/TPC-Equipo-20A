@@ -13,28 +13,21 @@ namespace Resto_Bar_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (Session["idUsuario"] != null)
+            if (Session["idUsuario"] == null)
             {
-                //ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: no esta iniciado sesion');", true);
-
-                ///redirigir a una pagian de error, el mensaje es temporal
+                Response.Redirect("~/Login.aspx");
+                return;
             }
             else
             {
                 LoginNegocio negocio = new LoginNegocio();
                 int idUsuario = Convert.ToInt32(Session["idUsuario"]);
                 int rol = negocio.traerRol(idUsuario);
-                if (rol == 0 || rol == 1)
-                {
 
-                }
-                else
+                if (rol != 0 && rol != 1)
                 {
-                    //ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Permisos insuficientes');", true);
-
-                    ///redirigir a pagina de error, el mensaje es temporal
                     Response.Redirect("~/Login.aspx");
-
+                    return;
                 }
             }
 
@@ -50,65 +43,60 @@ namespace Resto_Bar_Web
 
         private void CargarMozos()
         {
-            AccesoDatos ad = new AccesoDatos();
             try
             {
-                ad.setearConsulta(
-                    "SELECT IdUsuario, NombreUsuario " +
-                    "FROM Usuarios " +
-                    "WHERE IdRol = @rol");
+                UsuariosNegocio negocio = new UsuariosNegocio();
+                List<Usuario> mozos = negocio.listarMozos();
 
-                ad.setearParametros("@rol", 2);
-                ad.ejecutarLectura();
-
+                ddlMozo.Items.Clear();
                 ddlMozo.Items.Add(new ListItem("-- Seleccioná un mozo --", "0"));
 
-                while (ad.Lector.Read())
+                foreach (Usuario mozo in mozos)
                 {
-                    int idUsuario = Convert.ToInt32(ad.Lector["IdUsuario"]);
-                    string nombreUsuario = ad.Lector["NombreUsuario"].ToString();
-
-                    ddlMozo.Items.Add(new ListItem(nombreUsuario, idUsuario.ToString()));
+                    ddlMozo.Items.Add(new ListItem(mozo.NombreUsuario, mozo.IdUsuario.ToString()));
                 }
             }
-            finally
+            catch (Exception ex)
             {
-                ad.cerrarConexion();
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false); throw ex;
             }
         }
 
         private void CargarMesas()
         {
-            MesasNegocio negocio = new MesasNegocio();
-
-            ddlMesa.Items.Clear();
-            ddlMesa.Items.Add(new ListItem("-- Seleccioná una mesa --", "0"));
-
-
-            List<Mesa> mesas = negocio.listarTodas();
-
-            foreach (Mesa mesa in mesas)
-            {
-                if (mesa.EstadoMesa == EstadoMesa.Habilitada && mesa.IdUsuario == 0)
-                {
-                    ddlMesa.Items.Add(
-                        new ListItem("Mesa " + mesa.IdMesa, mesa.IdMesa.ToString())
-                    );
-                }
-            }
-        }
-        public void asignarMozoAMesa(int idMesa, int idUsuarioMozo)
-        {
-            AccesoDatos datos = new AccesoDatos();
-
             try
             {
-                datos.setearConsulta("UPDATE Mesas SET IdUsuario = @idUsuario WHERE IdMesa = @idMesa");
+                MesasNegocio negocio = new MesasNegocio();
 
-                datos.setearParametros("@idUsuario", idUsuarioMozo);
-                datos.setearParametros("@idMesa", idMesa);
+                ddlMesa.Items.Clear();
+                ddlMesa.Items.Add(new ListItem("-- Seleccioná una mesa --", "0"));
 
-                datos.ejecutarAccion();
+
+                List<Mesa> mesas = negocio.listarTodas();
+
+                foreach (Mesa mesa in mesas)
+                {
+                    if (mesa.EstadoMesa == EstadoMesa.Habilitada && mesa.IdUsuario == 0)
+                    {
+                        ddlMesa.Items.Add(
+                            new ListItem("Mesa " + mesa.IdMesa, mesa.IdMesa.ToString())
+                        );
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false); throw ex;
+            }
+        }
+        public void asignarMozoAMesa(int nroMesa, int idUsuarioMozo)
+        {
+            try
+            {
+                MesasNegocio negocio = new MesasNegocio();
+                negocio.asignarMozo(nroMesa, idUsuarioMozo);
             }
             catch (Exception ex)
             {
@@ -142,10 +130,26 @@ namespace Resto_Bar_Web
         }
         protected void btnAceptar_Click(object sender, EventArgs e)
         {
+            try
+            {
             MesasNegocio negocio = new MesasNegocio();
+
+            if (ddlAccion.SelectedValue == "0" && negocio.mesaTienePedido(int.Parse(ddlMesas.SelectedValue)))
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('No se puede inhabilitar: la mesa tiene un pedido activo.');", true);
+                return;
+            }
+
             negocio.inhabilitarHabilitarMesa(int.Parse(ddlAccion.SelectedValue), int.Parse(ddlMesas.SelectedValue));
             CargarMesas();
             CargarMesasPost();
+
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
+            }
         }
         private void CargarAccion()
         {
@@ -155,27 +159,35 @@ namespace Resto_Bar_Web
         }
         public void CargarMesasPost()
         {
-            ddlMesas.Items.Clear();
-            ddlMesas.Items.Add(new ListItem("-- Seleccioná una mesa --", "0"));
-            MesasNegocio negocio = new MesasNegocio();
-            List<Mesa> mesas = negocio.listarTodas();
-
-            string seleccion = ddlAccion.SelectedValue;
-
-            foreach (Mesa mesa in mesas)
+            try
             {
-                if (seleccion == "0" &&  mesa.EstadoMesa == EstadoMesa.Habilitada)
+                ddlMesas.Items.Clear();
+                ddlMesas.Items.Add(new ListItem("-- Seleccioná una mesa --", "0"));
+                MesasNegocio negocio = new MesasNegocio();
+                List<Mesa> mesas = negocio.listarTodas();
+
+                string seleccion = ddlAccion.SelectedValue;
+
+                foreach (Mesa mesa in mesas)
                 {
-                    ddlMesas.Items.Add(
-                        new ListItem("Mesa " + mesa.IdMesa, mesa.IdMesa.ToString())
-                    );
+                    if (seleccion == "0" && mesa.EstadoMesa == EstadoMesa.Habilitada && !negocio.mesaTienePedido(mesa.IdMesa))
+                    {
+                        ddlMesas.Items.Add(
+                            new ListItem("Mesa " + mesa.IdMesa, mesa.IdMesa.ToString())
+                        );
+                    }
+                    else if (seleccion == "1" && mesa.EstadoMesa == EstadoMesa.Inhabilitada)
+                    {
+                        ddlMesas.Items.Add(
+                            new ListItem("Mesa " + mesa.IdMesa, mesa.IdMesa.ToString())
+                        );
+                    }
                 }
-                else if (seleccion == "1" && mesa.EstadoMesa == EstadoMesa.Inhabilitada)
-                {
-                    ddlMesas.Items.Add(
-                        new ListItem("Mesa " + mesa.IdMesa, mesa.IdMesa.ToString())
-                    );
-                }
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
         protected void ddlAccion_SelectedIndexChanged(object sender, EventArgs e)
@@ -217,9 +229,6 @@ namespace Resto_Bar_Web
             }
             catch (Exception ex)
             {
-                //lblMensaje.Text = "Error al intentar dar de alta la mesa.";
-                //lblMensaje.CssClass = "alert alert-danger d-block mb-3";
-                //lblMensaje.Visible = true;
                 Session.Add("error", ex.ToString());
                 Response.Redirect("error.aspx", false);
             }

@@ -187,6 +187,12 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public bool mesaTienePedido(int idMesa)
+        {
+            PedidoNegocio pedidoNegocio = new PedidoNegocio();
+            List<Pedido> activos = pedidoNegocio.listarPedidosActivos();
+            return activos.Exists(p => p.NroMesa == idMesa);
+        }
 
     }  
     

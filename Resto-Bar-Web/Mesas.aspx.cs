@@ -278,6 +278,12 @@ namespace Resto_Bar_Web
                 UpmodalPedidoActual.Update();
             }
         }
+        public bool MesaTienePedido(object idMesa)
+        {
+            int nroMesa = Convert.ToInt32(idMesa);
+            MesasNegocio negocio = new MesasNegocio();
+            return negocio.mesaTienePedido(nroMesa);
+        }
 
     }
 }
