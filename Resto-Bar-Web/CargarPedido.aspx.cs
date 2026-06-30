@@ -43,21 +43,37 @@ namespace Resto_Bar_Web
 
         private void EstablecerMesaSeleccionada()
         {
-            if (Session["MesaSeleccionada"] != null)
+            try
             {
-                lblMesaSeleccionada.Text = "Mesa Nro " + Session["MesaSeleccionada"].ToString();
+                string mesaEnCarrito = Session["MesaEnCarrito"]?.ToString(); //mesa en carrito la cual esta persistiendo si no se da con el evento del btn finalizar pedido
+                string mesaActual = Session["MesaSeleccionada"]?.ToString();   // la session MesaSeleccionada para marcar la mesa actual, donde guardamos una modificacion dentro de la mesa seleccionada (en la page de mesas)
+
+                if (!string.IsNullOrEmpty(Request.QueryString["idMesa"]))
+                {
+                    mesaActual = Request.QueryString["idMesa"];
+                    Session["MesaSeleccionada"] = mesaActual; //guardamos en session la mesa actual
+                }
+                if (mesaActual != null)
+                {
+                    lblMesaSeleccionada.Text = "Mesa Nro " + mesaActual; //esto pq en la session ya se encuentra guardado la mesa actual
+                }
+                else
+                {
+                    lblMesaSeleccionada.Text = "No seleccionada";
+                    lblMesaSeleccionada.CssClass = "badge bg-danger fs-5 px-3 py-2";
+                }
+                if (mesaEnCarrito != null && mesaActual != null && mesaEnCarrito != mesaActual) // comparamos mesa anterior con mesa actual (ademas marcamos si ambas son distintas a null), dentro de la session, para poder limpiar la interfaz del carrito si la misma no es confirmada y se procede con otro pedido con distinto idMesa
+                {
+                    Session["Carrito"] = new List<DetallePedido>();
+                    Session["IdPedido"] = null; //marcamos idpedido como null
+                }
+                Session["MesaEnCarrito"] = mesaActual;
+                ActualizarInterfazCarrito();
             }
-            //lo capturamos como plan B por las dudas
-            else if (!string.IsNullOrEmpty(Request.QueryString["idMesa"]))
+            catch (Exception ex)
             {
-                string idMesaUrl = Request.QueryString["idMesa"];
-                Session["MesaSeleccionada"] = idMesaUrl; //Lo resguardamos en session tambien
-                lblMesaSeleccionada.Text = "Mesa Nro " + idMesaUrl;
-            }
-            else
-            {
-                lblMesaSeleccionada.Text = "No seleccionada";
-                lblMesaSeleccionada.CssClass = "badge bg-danger fs-5 px-3 py-2";
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
             }
         }
 
