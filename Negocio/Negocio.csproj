@@ -48,6 +48,7 @@
     <Compile Include="DashboardNegocio.cs" />
     <Compile Include="LoginNegocio.cs" />
     <Compile Include="MesasNegocio.cs" />
+    <Compile Include="MetodoPagoNegocio.cs" />
     <Compile Include="PedidoNegocio.cs" />
     <Compile Include="ProductoNegocio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

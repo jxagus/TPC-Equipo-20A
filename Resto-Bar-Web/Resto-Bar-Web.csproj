@@ -132,6 +132,7 @@
     <Content Include="Error.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
+    <Content Include="MetodosDePago.aspx" />
     <Content Include="Productos.aspx" />
     <Content Include="Pedidos.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -251,6 +252,13 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="MetodosDePago.aspx.cs">
+      <DependentUpon>MetodosDePago.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MetodosDePago.aspx.designer.cs">
+      <DependentUpon>MetodosDePago.aspx</DependentUpon>
     </Compile>
     <Compile Include="Productos.aspx.cs">
       <DependentUpon>Productos.aspx</DependentUpon>

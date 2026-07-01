@@ -11,7 +11,7 @@ namespace Resto_Bar_Web
 {
 
 
-    public partial class CrearPersonal
+    public partial class MetodosDePago
     {
 
         /// <summary>
@@ -24,76 +24,40 @@ namespace Resto_Bar_Web
         protected global::System.Web.UI.WebControls.TextBox txtNombre;
 
         /// <summary>
-        /// txtApellido control.
+        /// rfvNombreMetodo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtApellido;
+        protected global::System.Web.UI.WebControls.RequiredFieldValidator rfvNombreMetodo;
 
         /// <summary>
-        /// txtNombreUsuario control.
+        /// btnAgregarMetodoPago control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtNombreUsuario;
+        protected global::System.Web.UI.WebControls.Button btnAgregarMetodoPago;
 
         /// <summary>
-        /// txtContrasena control.
+        /// btnCancelar control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtContrasena;
+        protected global::System.Web.UI.WebControls.Button btnCancelar;
 
         /// <summary>
-        /// txtRepetirContrasena control.
+        /// dgvMetodosDePago control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtRepetirContrasena;
-
-        /// <summary>
-        /// ddlRol control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.DropDownList ddlRol;
-
-        /// <summary>
-        /// lblMensajeError control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Label lblMensajeError;
-
-        /// <summary>
-        /// btnRegistrar control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnRegistrar;
-
-        /// <summary>
-        /// dgvUsuarios control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView dgvUsuarios;
+        protected global::System.Web.UI.WebControls.GridView dgvMetodosDePago;
 
         /// <summary>
         /// dgvEliminados control.

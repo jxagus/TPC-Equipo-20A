@@ -10,5 +10,6 @@ namespace Dominio
     {
         public int IdMetodo { get; set; }
         public string NombreMetodo { get; set; }
+        public bool Activo {  get; set; }
     }
 }
