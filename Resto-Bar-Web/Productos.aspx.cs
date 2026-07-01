@@ -9,6 +9,7 @@ using System.Web;
 using System.Web.Configuration;
 using System.Web.UI;
 using System.Web.UI.WebControls;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Resto_Bar_Web
 {
@@ -54,9 +55,10 @@ namespace Resto_Bar_Web
             {
                 ProductoNegocio negocio = new ProductoNegocio();
 
-                dgvProductos.DataSource = negocio.listar();
+                dgvProductos.DataSource = negocio.listar(1);
 
                 dgvProductos.DataBind();
+                dgvProductos.Columns[8].Visible = false;
             }
             catch (Exception ex)
             {
@@ -193,7 +195,23 @@ namespace Resto_Bar_Web
 
                 string script = "var miModal = new bootstrap.Modal(document.getElementById('modalEliminarProducto')); miModal.show();";
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "PopProducto", script, true);
+            }else if (e.CommandName == "AbrirModalConfirmacion")
+            {
+
+                string idProducto = e.CommandArgument.ToString();
+                Session["IdProductoaReactivar"] = idProducto;
+                hfIdProducto.Value = idProducto;
+
+                ProductoNegocio negocio = new ProductoNegocio();
+                Productos seleccionado = negocio.cargarProductoPorId(int.Parse(idProducto));
+
+                lblIdProductoReactivar.Text = idProducto;
+                lblNombreProductoReactivar.Text = seleccionado.NombreProducto;
+
+                string script = "var myModal = new bootstrap.Modal(document.getElementById('modalConfirmarReactivar')); myModal.show();";
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "PopConfirmarReactivar", script, true);
             }
+
         }
 
         protected void btnAgregarCategoria_Click(object sender, EventArgs e)
@@ -329,35 +347,7 @@ namespace Resto_Bar_Web
         protected void dgvProductos_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             dgvProductos.PageIndex = e.NewPageIndex;
-            ProductoNegocio negocio = new ProductoNegocio();
-            List<Productos> lista = negocio.listar();
-
-            string criterio = ViewState["CriterioOrden"]?.ToString();
-            string orden = ViewState["DireccionOrden"]?.ToString();
-            if (criterio == "0" || orden == "0")
-            {
-                CargarProductos();
-                return;
-            }
-
-            if (orden == "ASC")
-            {
-                if (criterio == "IdProducto") lista = lista.OrderBy(x => x.IdProducto).ToList();
-                if (criterio == "Nombre") lista = lista.OrderBy(x => x.NombreProducto).ToList();
-                if (criterio == "Stock") lista = lista.OrderBy(x => x.Stock).ToList();
-                if (criterio == "Precio") lista = lista.OrderBy(x => x.Precio).ToList();
-            }
-            else
-            {
-                if (criterio == "IdProducto") lista = lista.OrderByDescending(x => x.IdProducto).ToList();
-                if (criterio == "Nombre") lista = lista.OrderByDescending(x => x.NombreProducto).ToList();
-                if (criterio == "Stock") lista = lista.OrderByDescending(x => x.Stock).ToList();
-                if (criterio == "Precio") lista = lista.OrderByDescending(x => x.Precio).ToList();
-
-            }
-
-            dgvProductos.DataSource = lista;
-            dgvProductos.DataBind();
+            filtroYOrden();
         }
 
         protected void ddlFiltro_SelectedIndexChanged(object sender, EventArgs e)
@@ -427,13 +417,50 @@ namespace Resto_Bar_Web
 
         protected void btnAplicarFiltros_Click(object sender, EventArgs e)
         {
+            ViewState["CriterioOrden"] = ddlFiltro.SelectedValue;
+            ViewState["DireccionOrden"] = ddlDireccion.SelectedValue;
+            filtroYOrden();
+
+        }
+
+
+        protected void btnLimpiarFiltros_Click(object sender, EventArgs e)
+        {
+            limpiarFiltros();
+            filtroYOrden();
+        }
+
+        protected void btnBuscarProducto_Click(object sender, EventArgs e)
+        {
+            ViewState["ProductoBusqueda"] = txtBuscarProducto.Text;
+            filtroYOrden();
+        }
+
+        protected void filtroYOrden()
+        {
             ProductoNegocio negocio = new ProductoNegocio();
             CategoriaNegocio catNegocio = new CategoriaNegocio();
-            List<Productos> lista = negocio.listar();
-            string criterio = ddlFiltro.SelectedValue;
-            string orden = ddlDireccion.SelectedValue;
-            ViewState["CriterioOrden"] = criterio;
-            ViewState["DireccionOrden"] = orden;
+            bool verActivos = ViewState["VerActivos"] != null ? (bool)ViewState["VerActivos"] : true;
+            int estadoActivo = verActivos ? 1 : 0;
+            List<Productos> lista = negocio.listar(estadoActivo);
+
+            ///////////Buscador
+            ///
+            string textoBuscador = ViewState["ProductoBusqueda"]?.ToString();
+            if(!string.IsNullOrEmpty(textoBuscador)) {
+                lista = lista.FindAll(p => p.NombreProducto.ToUpper().Contains(textoBuscador.ToUpper()));
+            }
+
+
+            ///////////Filtro Categorias
+            if (ddlCategoriasFiltrado.SelectedValue != "0")
+            {
+                int idCat = int.Parse(ddlCategoriasFiltrado.SelectedValue);
+                List<int> idProductos = catNegocio.ListarIdsProductosPorCategoria(idCat);
+                lista = lista.FindAll(p => idProductos.Contains(p.IdProducto));
+            }
+
+            ///////////Filtro Subcategorias
             List<int> idsMarcados = new List<int>();
             foreach (ListItem item in cklFiltroSubcategorias.Items)
             {
@@ -443,24 +470,20 @@ namespace Resto_Bar_Web
 
                 }
             }
-
-            if (ddlCategoriasFiltrado.SelectedValue != "0")
-            {
-                int idCat = int.Parse(ddlCategoriasFiltrado.SelectedValue);
-                List<int> idProductos = catNegocio.ListarIdsProductosPorCategoria(idCat);
-                lista = lista.FindAll(p => idProductos.Contains(p.IdProducto));
-            }
-
             if (idsMarcados.Count > 0)
             {
                 List<int> idsFiltrados = catNegocio.ListarIdsProductosPorSubategoria(idsMarcados);
                 lista = lista.FindAll(p => idsFiltrados.Contains(p.IdProducto));
-                
+
             }
 
-            if(orden == "ASC")
+            ///////////Orden Ascendente/Descendente
+            string criterio = ddlFiltro.SelectedValue;
+            string orden = ddlDireccion.SelectedValue;
+
+            if (orden == "ASC")
             {
-                if(criterio == "IdProducto") lista = lista.OrderBy(x => x.IdProducto).ToList();
+                if (criterio == "IdProducto") lista = lista.OrderBy(x => x.IdProducto).ToList();
                 if (criterio == "Nombre") lista = lista.OrderBy(x => x.NombreProducto).ToList();
                 if (criterio == "Stock") lista = lista.OrderBy(x => x.Stock).ToList();
                 if (criterio == "Precio") lista = lista.OrderBy(x => x.Precio).ToList();
@@ -477,19 +500,57 @@ namespace Resto_Bar_Web
             dgvProductos.DataSource = lista;
             dgvProductos.DataBind();
 
-
+            if(dgvProductos.Columns.Count > 7)
+            {
+                dgvProductos.Columns[6].Visible = verActivos;
+                dgvProductos.Columns[7].Visible = verActivos;
+                dgvProductos.Columns[8].Visible = !verActivos;
+            }
         }
 
+        protected void btnPapelera_Click(object sender, EventArgs e)
+        {
+            limpiarFiltros();
+            if (ViewState["VerActivos"] == null || (bool)ViewState["VerActivos"] == true)
+            {
+                ViewState["VerActivos"] = false;
+                btnPapelera.Text = "🔙";
+                btnPapelera.ToolTip = "Volver atras";
+                btnPapelera.CssClass = "btn btn-outline-success me-2";
+                
+            }
+            else
+            {
 
-        protected void btnLimpiarFiltros_Click(object sender, EventArgs e)
+                ViewState["VerActivos"] = true;
+                btnPapelera.Text = "🗑️";
+                btnPapelera.ToolTip = "Ver Papelera";
+                btnPapelera.CssClass = "btn btn-outline-danger me-2";
+            }
+
+            filtroYOrden();
+        }
+
+        protected void limpiarFiltros()
         {
             ddlFiltro.SelectedIndex = 0;
             ddlDireccion.SelectedIndex = 0;
             ddlCategoriasFiltrado.SelectedIndex = 0;
+            cklFiltroSubcategorias.Items.Clear();
+            txtBuscarProducto.Text = "";
             divFiltroSubcategorias.Visible = false;
-            CargarProductos();
             ViewState["CriterioOrden"] = 0;
             ViewState["DireccionOrden"] = 0;
+            ViewState["ProductoBusqueda"] = null;
+        }
+
+        protected void btnConfirmarReactivar_Click(object sender, EventArgs e)
+        {
+            ProductoNegocio negocio = new ProductoNegocio();
+            int id = Convert.ToInt32(hfIdProducto.Value);
+            negocio.activarProducto(id);
+            hfIdProducto.Value = "";
+            filtroYOrden();
         }
     }
 }

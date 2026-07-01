@@ -153,7 +153,7 @@ namespace Resto_Bar_Web
             try
             {
                 ProductoNegocio negocio = new ProductoNegocio();
-                repProductos.DataSource = negocio.listar();
+                repProductos.DataSource = negocio.listar(1);
                 repProductos.DataBind();
             }
             catch (Exception ex)
@@ -170,7 +170,7 @@ namespace Resto_Bar_Web
                 int idProducto = Convert.ToInt32(e.CommandArgument);
 
                 ProductoNegocio prodNegocio = new ProductoNegocio();
-                List<Productos> listaProductos = prodNegocio.listar();
+                List<Productos> listaProductos = prodNegocio.listar(1);
                 Productos seleccionado = null;
 
                 foreach (Productos p in listaProductos)

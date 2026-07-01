@@ -147,14 +147,15 @@ namespace Negocio
         }
 
 
-        public List<Productos> listar()
+        public List<Productos> listar(int EstanActivos)
         {
             List<Productos> lista = new List<Productos>();
             AccesoDatos datos = new AccesoDatos();
-
+          
             try
             {
-                datos.setearConsulta("SELECT IdProducto, NombreProducto, DescripcionProducto, Precio, Stock FROM Productos WHERE Activo = 1");
+                datos.setearConsulta("SELECT IdProducto, NombreProducto, DescripcionProducto, Precio, Stock FROM Productos WHERE Activo = @estaactivo");
+                datos.setearParametros("@estaactivo", EstanActivos);
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())

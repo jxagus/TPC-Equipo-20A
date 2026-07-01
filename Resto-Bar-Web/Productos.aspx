@@ -73,18 +73,21 @@
                 <h2 class="border-bottom pb-2 mb-4">Productos Existentes</h2>
                 <nav class="navbar bg-body-tertiary">
                     <div class="container-fluid">
-                    <div class="d-flex w-100" role="search">
-                        <asp:TextBox ID="txtBuscarProducto" CssClass="form-control me-2" placeholder="Buscar Producto..." aria-label="Search" runat="server"></asp:TextBox>
-                        <asp:Button ID="btnBuscarProducto" runat="server" CssClass="btn btn-outline-secondary me-2"  Text="🔎" CausesValidation="false" OnClientClick="return false;"/>
-                        <asp:Button ID="btnFiltros" runat="server" CssClass="btn btn-outline-success me-2" data-bs-toggle="offcanvas" data-bs-target="#menuFiltros" aria-controls="menuFiltros" Text="Abrir Filtros" CausesValidation="false" OnClientClick="return false;"/>
-                    </div>
+                        <asp:Panel ID="pnlBuscador" DefaultButton="btnBuscarProducto" CssClass="d-flex w-100" role="search" runat="server">
+                                <asp:Button ID="btnPapelera" runat="server" CssClass="btn btn-outline-danger me-2" OnClick="btnPapelera_Click" ToolTip="Ver Papelera" Text="🗑️" CausesValidation="false"/>
+                                <asp:TextBox ID="txtBuscarProducto" CssClass="form-control me-2" placeholder="Buscar Producto..." aria-label="Search" runat="server"></asp:TextBox>
+                                <asp:Button ID="btnBuscarProducto" runat="server" CssClass="btn btn-outline-secondary me-2" ToolTip="Buscar" OnClick="btnBuscarProducto_Click" Text="🔎" CausesValidation="false"/>
+                                <asp:Button ID="btnFiltros" runat="server" CssClass="btn btn-outline-success me-2" data-bs-toggle="offcanvas" data-bs-target="#menuFiltros" aria-controls="menuFiltros" ToolTip="Abrir Filtros" Text="Abrir Filtros" CausesValidation="false" OnClientClick="return false;"/>
+                        </asp:Panel>
                     </div>
                 </nav>
 
                 <div class="table-responsive">
-                    <asp:GridView ID="dgvProductos" runat="server" AllowPaging="true" PageSize="9" OnPageIndexChanging="dgvProductos_PageIndexChanging" OnRowCommand="dgvProductos_RowCommand" AutoGenerateColumns="False" CssClass="table table-striped table-hover table-bordered align-middle">
+
+                    <asp:GridView ID="dgvProductos" runat="server" AllowPaging="true" EmptyDataText="No hay resultados que coincidan con la busqueda" PageSize="9" OnPageIndexChanging="dgvProductos_PageIndexChanging" OnRowCommand="dgvProductos_RowCommand" AutoGenerateColumns="False" CssClass="table table-striped table-hover table-bordered align-middle">
                         <PagerSettings Mode="NextPrevious" PreviousPagetext="&#8249; Anterior" NextPageText="Siguiente &#8250;"/>
                         <PagerStyle HorizontalAlign="Center" CssClass="paginacion-grid"/>
+                        <EmptyDataRowStyle CssClass="text-center align-middle fw-bold p-5 text-muted fs-5" />
                         <Columns>
                             <asp:BoundField DataField="IdProducto" HeaderText="ID" ItemStyle-Width="50px" />
 
@@ -108,6 +111,11 @@
                                     <asp:LinkButton ID="lbtnEliminar" runat="server" OnClick="lbtnEliminar_Click" CommandArgument='<%# Eval("IdProducto") %>' CommandName="AbrirModalProducto" CssClass="text-decoration-none" CausesValidation="false" ToolTip="Eliminar">🗑️</asp:LinkButton>
                                 </ItemTemplate>
                             </asp:TemplateField>
+                            <asp:TemplateField HeaderText="Reactivar" ItemStyle-HorizontalAlign="Center">
+                                <ItemTemplate>
+                                    <asp:LinkButton ID="lbtnReactivar" runat="server" CommandArgument='<%# Eval("IdProducto") %>' CommandName="AbrirModalConfirmacion" CssClass="text-decoration-none" CausesValidation="false" ToolTip="Reactivar Producto">✅</asp:LinkButton>
+                                </ItemTemplate>
+                            </asp:TemplateField>
                         </Columns>
                     </asp:GridView>
                 </div>
@@ -116,7 +124,7 @@
         </div>
     </div>
 
-
+    <%////// MODAL ELIMINAR PRODUCTO %>
          <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-hidden="true">
           <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -158,22 +166,24 @@
                 <div id="alertaEliminarProducto" class="mt-3 w-100 user-select-none">
                     <div class="alert alert-danger d-flex align-items-center justify-content-center text-center shadow-sm m-0 alertaFade" role="alert">
                         <div>
-                        En caso de error puede recuperar el producto en la seccion de "Productos Eliminados"
+                        En caso de error puede recuperar el producto en la papelera al lado del buscador.
                       </div>
                     </div>
                 </div>
 
                 <div class="d-flex flex-column align-items-center my-3 p-3 bg-light rounded-3">
             <div class="modal-footer">
-                <asp:Button ID="btnCancelarEliminarProducto" runat="server" Text="Cancelar" CssClass="btn btn-secondary" data-bs-dismiss="modal" OnClientClick="return false;" />
-                <asp:Button ID="btnAplicarEliminarProducto" runat="server" Text="Eliminar" CssClass="btn btn-danger"  OnClick="btnAplicarEliminarProducto_Click" />
+                <asp:Button ID="btnCancelarEliminarProducto" CausesValidation="false" runat="server" Text="Cancelar" CssClass="btn btn-secondary" data-bs-dismiss="modal" OnClientClick="return false;" />
+                <asp:Button ID="btnAplicarEliminarProducto" CausesValidation="false" runat="server" Text="Eliminar" CssClass="btn btn-danger"  OnClick="btnAplicarEliminarProducto_Click" />
             </div>
-
-        </div>
+               </div>
             </div>
           </div>
         </div>
 
+
+
+    <%////MODAL CATEGORIAS %>
     <div class="modal fade" id="modalCategorias" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-sm">
             <div class="modal-content">
@@ -201,8 +211,39 @@
 
 
     </div>
+    <%//////MODAL REACTIVAR PRODUCTO %>
+    <div class="modal fade" id="modalConfirmarReactivar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="H2" runat="server">¿Quiere reactivar este producto?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="aler alert-secondary text-start mx-auto" style="max-width: 400px;">
+                    <div class="mb-2">
+                        <strong>Id del Producto: </strong>
+                        <asp:Label ID="lblIdProductoReactivar" runat="server" CssClass=""></asp:Label>
+                    </div>
+                    <div class="mb-2">
+                        <strong>Nombre del Producto: </strong>
+                        <asp:Label ID="lblNombreProductoReactivar" runat="server" CssClass=""></asp:Label>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-column align-items-center my-3 p-3 bg-light rounded-3">
+                <div class="modal-footer">
+                    <asp:Button ID="btnCancelarReactivar" CausesValidation="false" runat="server" Text="Cancelar" CssClass="btn btn-secondary" data-bs-dismiss="modal" OnClientClick="return false;" />
+                    <asp:Button ID="btnConfirmarReactivar" CausesValidation="false" runat="server" Text="Reactivar" CssClass="btn btn-success"  OnClick="btnConfirmarReactivar_Click" />
+                </div>
+            </div>
+        </div>
+    </div>
 
 
+</div>
+
+    <%////OFF CANVAS %>
     <div class="offcanvas offcanvas-end" tabindex="-1" id="menuFiltros" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
         <h4 class="offcanvas-title" id="offcanvasRightLabel">Filtros Disponibles</h4>
