@@ -19,8 +19,8 @@
                             <h5 class="card-title text-center user-select-none">Mesa Numero: <%# Eval("IdMesa") %></h5>
                             <h5 class="card-title text-center user-select-none"><%# Convert.ToInt32(Eval("IdUsuario")) != 0 ? "Mesero: " + Eval("NombreMesero") : "Mesero sin Asignar"%></h5>
                             <div class="d-grid gap-3 col-auto ">
-                                <asp:Button ID="btnPedido" CssClass="btn btn-primary" runat="server" Text="Pedido" CommandName="AbrirPedido" CommandArgument='<%# Eval("IdMesa") %>' CausesValidation="false"  Enabled='<%# ((Dominio.EstadoMesa)Eval("EstadoMesa")) == Dominio.EstadoMesa.Habilitada %>' />
-                                <asp:Button ID="btnAdministrarMesa" CssClass="btn btn-primary" runat="server" Text="Finalizar Asignacion"  CommandName="AbrirModal" CommandArgument='<%# Eval("IdMesa") %>'  Enabled='<%# !MesaTienePedido(Eval("IdMesa")) && ((Dominio.EstadoMesa)Eval("EstadoMesa")) == Dominio.EstadoMesa.Habilitada %>' />
+                                <asp:Button ID="btnPedido" CssClass="btn btn-dark" runat="server" Text="Pedido" CommandName="AbrirPedido" CommandArgument='<%# Eval("IdMesa") %>' CausesValidation="false"  Enabled='<%# ((Dominio.EstadoMesa)Eval("EstadoMesa")) == Dominio.EstadoMesa.Habilitada %>' />
+                                <asp:Button ID="btnAdministrarMesa" CssClass="btn btn-dark" runat="server" Text="Finalizar Asignacion"  CommandName="AbrirModal" CommandArgument='<%# Eval("IdMesa") %>'  Enabled='<%# !MesaTienePedido(Eval("IdMesa")) && ((Dominio.EstadoMesa)Eval("EstadoMesa")) == Dominio.EstadoMesa.Habilitada %>' />
                                 <%// se agrega enable, condicional a si la mesa contiene un pedido activo o no y tambien si la mesa esta inhabilitada no se podra clickear los botnes pq los mismos no van a estar disponibles%>
                             </div>
                         </div>

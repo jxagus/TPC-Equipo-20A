@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Productos.aspx.cs" Inherits="Resto_Bar_Web.Insumos" %>
+
 <asp:Content ID="Content2" ContentPlaceHolderID="Stylesheets" runat="server">
     <link href="/Content/Productos.css" rel="stylesheet" type="text/css" />
 </asp:Content>
@@ -32,8 +33,8 @@
                 <div class="mb-3">
                     <label class="form-label fw-bold">Categoria del Producto</label>
                     <asp:DropDownList ID="ddlCategoria" CssClass="form-select" AutoPostBack="true" OnSelectedIndexChanged="ddlCategoria_SelectedIndexChanged" runat="server"></asp:DropDownList>
-                     <asp:RequiredFieldValidator ID="rfvDdlCategoria" runat="server" ControlToValidate="ddlCategoria" InitialValue="0" ForeColor="Red" Display="Dynamic" ErrorMessage="Por favor, seleccione una categoria."></asp:RequiredFieldValidator>
-           
+                    <asp:RequiredFieldValidator ID="rfvDdlCategoria" runat="server" ControlToValidate="ddlCategoria" InitialValue="0" ForeColor="Red" Display="Dynamic" ErrorMessage="Por favor, seleccione una categoria."></asp:RequiredFieldValidator>
+
                 </div>
                 <div class="mb-3" id="divSubcategorias" runat="server" visible="false">
                     <label class="form-label fw-bold">Seleccione las subcategorias acordes: </label>
@@ -47,21 +48,27 @@
                         <asp:TextBox ID="txtPrecio" CssClass="form-control" runat="server"></asp:TextBox>
                         <span class="input-group-text">.00</span>
                         <div>
-                        <asp:RequiredFieldValidator ID="rfvPrecioProducto" runat="server" ControlToValidate="txtPrecio" ForeColor="Red" Display="Dynamic" ErrorMessage="El Precio es obligatorio."></asp:RequiredFieldValidator>
-                        <asp:RegularExpressionValidator ID="revPrecio" ControlToValidate="txtPrecio" ValidationExpression="^\d+([.,]\d{1,2})?$" runat="server" ForeColor="red" ErrorMessage="El Precio debe ser un numero entero."></asp:RegularExpressionValidator>
+                            <asp:RequiredFieldValidator ID="rfvPrecioProducto" runat="server" ControlToValidate="txtPrecio" ForeColor="Red" Display="Dynamic" ErrorMessage="El Precio es obligatorio."></asp:RequiredFieldValidator>
+                            <asp:RegularExpressionValidator ID="revPrecio" ControlToValidate="txtPrecio" ValidationExpression="^\d+([.,]\d{1,2})?$" runat="server" ForeColor="red" ErrorMessage="El Precio debe ser un numero entero."></asp:RegularExpressionValidator>
                         </div>
-                        
+
                     </div>
                 </div>
-                
+
                 <div class="mb-3">
                     <label class="form-label fw-bold">Stock</label>
                     <asp:TextBox ID="txtStock" CssClass="form-control" runat="server"></asp:TextBox>
-                        <asp:RequiredFieldValidator ID="rfvStockProducto" runat="server" ControlToValidate="txtStock" ForeColor="Red" Display="Dynamic" ErrorMessage="El Stock es obligatorio."></asp:RequiredFieldValidator>
+                    <asp:RequiredFieldValidator ID="rfvStockProducto" runat="server" ControlToValidate="txtStock" ForeColor="Red" Display="Dynamic" ErrorMessage="El Stock es obligatorio."></asp:RequiredFieldValidator>
                     <asp:RegularExpressionValidator ID="revStock" ControlToValidate="txtStock" ValidationExpression="^\d+$" runat="server" ForeColor="red" ErrorMessage="El Stock debe ser un numero entero."></asp:RegularExpressionValidator>
 
 
                 </div>
+                <div class="mb-3">
+                    <label class="form-label">Imagen del Producto</label>
+                    <input type="file" id="txtImagen" runat="server" class="form-control" />
+                    <small class="text-muted">Formatos permitidos: JPG, JPEG, PNG</small>
+                </div>
+                <asp:Image ID="ImgProducto" ImageUrl="https://www.elcohetealaluna.com/wp-content/uploads/2019/10/ina.png" runat="server" CssClass="img-fluid mb-3" />
 
                 <div class="mb-3">
                     <asp:Button ID="btnAgregarProducto" CssClass="btn btn-primary" OnClick="btnAgregarProducto_Click" runat="server" Text="Agregar Producto" />
@@ -74,10 +81,10 @@
                 <nav class="navbar bg-body-tertiary">
                     <div class="container-fluid">
                         <asp:Panel ID="pnlBuscador" DefaultButton="btnBuscarProducto" CssClass="d-flex w-100" role="search" runat="server">
-                                <asp:Button ID="btnPapelera" runat="server" CssClass="btn btn-outline-danger me-2" OnClick="btnPapelera_Click" ToolTip="Ver Papelera" Text="🗑️" CausesValidation="false"/>
-                                <asp:TextBox ID="txtBuscarProducto" CssClass="form-control me-2" placeholder="Buscar Producto..." aria-label="Search" runat="server"></asp:TextBox>
-                                <asp:Button ID="btnBuscarProducto" runat="server" CssClass="btn btn-outline-secondary me-2" ToolTip="Buscar" OnClick="btnBuscarProducto_Click" Text="🔎" CausesValidation="false"/>
-                                <asp:Button ID="btnFiltros" runat="server" CssClass="btn btn-outline-success me-2" data-bs-toggle="offcanvas" data-bs-target="#menuFiltros" aria-controls="menuFiltros" ToolTip="Abrir Filtros" Text="Abrir Filtros" CausesValidation="false" OnClientClick="return false;"/>
+                            <asp:Button ID="btnPapelera" runat="server" CssClass="btn btn-outline-danger me-2" OnClick="btnPapelera_Click" ToolTip="Ver Papelera" Text="🗑️" CausesValidation="false" />
+                            <asp:TextBox ID="txtBuscarProducto" CssClass="form-control me-2" placeholder="Buscar Producto..." aria-label="Search" runat="server"></asp:TextBox>
+                            <asp:Button ID="btnBuscarProducto" runat="server" CssClass="btn btn-outline-secondary me-2" ToolTip="Buscar" OnClick="btnBuscarProducto_Click" Text="🔎" CausesValidation="false" />
+                            <asp:Button ID="btnFiltros" runat="server" CssClass="btn btn-outline-success me-2" data-bs-toggle="offcanvas" data-bs-target="#menuFiltros" aria-controls="menuFiltros" ToolTip="Abrir Filtros" Text="Abrir Filtros" CausesValidation="false" OnClientClick="return false;" />
                         </asp:Panel>
                     </div>
                 </nav>
@@ -85,8 +92,8 @@
                 <div class="table-responsive">
 
                     <asp:GridView ID="dgvProductos" runat="server" AllowPaging="true" EmptyDataText="No hay resultados que coincidan con la busqueda" PageSize="9" OnPageIndexChanging="dgvProductos_PageIndexChanging" OnRowCommand="dgvProductos_RowCommand" AutoGenerateColumns="False" CssClass="table table-striped table-hover table-bordered align-middle">
-                        <PagerSettings Mode="NextPrevious" PreviousPagetext="&#8249; Anterior" NextPageText="Siguiente &#8250;"/>
-                        <PagerStyle HorizontalAlign="Center" CssClass="paginacion-grid"/>
+                        <PagerSettings Mode="NextPrevious" PreviousPageText="&#8249; Anterior" NextPageText="Siguiente &#8250;" />
+                        <PagerStyle HorizontalAlign="Center" CssClass="paginacion-grid" />
                         <EmptyDataRowStyle CssClass="text-center align-middle fw-bold p-5 text-muted fs-5" />
                         <Columns>
                             <asp:BoundField DataField="IdProducto" HeaderText="ID" ItemStyle-Width="50px" />
@@ -125,61 +132,61 @@
     </div>
 
     <%////// MODAL ELIMINAR PRODUCTO %>
-         <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-hidden="true">
-          <div class="modal-dialog modal-dialog-centered">
+    <div class="modal fade" id="modalEliminarProducto" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="tituloModalEliminarProducto" runat="server">¿Esta seguro de eliminar este producto?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body text-center">
-        
-                <div class="aler alert-secondary text-start mx-auto" style="max-width: 400px;">
-                    <div class="mb-2">
-                        <strong>Id del Producto: </strong>
-                        <asp:Label ID="lblEliminarId" runat="server" CssClass=""></asp:Label>
-                    </div>
-                    <div class="mb-2">
-                        <strong>Nombre: </strong>
-                        <asp:Label ID="lblEliminarNombre" runat="server" CssClass=""></asp:Label>
-
-                    </div>
-                    <div class="mb-2">
-                        <strong>Descripcion: </strong>
-                        <asp:Label ID="lblEliminarDescripcion" runat="server" CssClass=""></asp:Label>
-
-                    </div>
-                    <div class="mb-2">
-                        <strong>Precio: </strong>
-                        <asp:Label ID="lblEliminarPrecio" runat="server" CssClass=""></asp:Label>
-
-                    </div>
-                    <div class="mb-2">
-                        <strong>Stock Actual: </strong>
-                        <asp:Label ID="lblEliminarStock" runat="server" CssClass=""></asp:Label>
-
-                    </div>
+                <div class="modal-header">
+                    <h5 class="modal-title" id="tituloModalEliminarProducto" runat="server">¿Esta seguro de eliminar este producto?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body text-center">
 
-              </div>
+                    <div class="aler alert-secondary text-start mx-auto" style="max-width: 400px;">
+                        <div class="mb-2">
+                            <strong>Id del Producto: </strong>
+                            <asp:Label ID="lblEliminarId" runat="server" CssClass=""></asp:Label>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Nombre: </strong>
+                            <asp:Label ID="lblEliminarNombre" runat="server" CssClass=""></asp:Label>
+
+                        </div>
+                        <div class="mb-2">
+                            <strong>Descripcion: </strong>
+                            <asp:Label ID="lblEliminarDescripcion" runat="server" CssClass=""></asp:Label>
+
+                        </div>
+                        <div class="mb-2">
+                            <strong>Precio: </strong>
+                            <asp:Label ID="lblEliminarPrecio" runat="server" CssClass=""></asp:Label>
+
+                        </div>
+                        <div class="mb-2">
+                            <strong>Stock Actual: </strong>
+                            <asp:Label ID="lblEliminarStock" runat="server" CssClass=""></asp:Label>
+
+                        </div>
+                    </div>
+
+                </div>
 
                 <div id="alertaEliminarProducto" class="mt-3 w-100 user-select-none">
                     <div class="alert alert-danger d-flex align-items-center justify-content-center text-center shadow-sm m-0 alertaFade" role="alert">
                         <div>
-                        En caso de error puede recuperar el producto en la papelera al lado del buscador.
-                      </div>
+                            En caso de error puede recuperar el producto en la papelera al lado del buscador.
+                        </div>
                     </div>
                 </div>
 
                 <div class="d-flex flex-column align-items-center my-3 p-3 bg-light rounded-3">
-            <div class="modal-footer">
-                <asp:Button ID="btnCancelarEliminarProducto" CausesValidation="false" runat="server" Text="Cancelar" CssClass="btn btn-secondary" data-bs-dismiss="modal" OnClientClick="return false;" />
-                <asp:Button ID="btnAplicarEliminarProducto" CausesValidation="false" runat="server" Text="Eliminar" CssClass="btn btn-danger"  OnClick="btnAplicarEliminarProducto_Click" />
+                    <div class="modal-footer">
+                        <asp:Button ID="btnCancelarEliminarProducto" CausesValidation="false" runat="server" Text="Cancelar" CssClass="btn btn-secondary" data-bs-dismiss="modal" OnClientClick="return false;" />
+                        <asp:Button ID="btnAplicarEliminarProducto" CausesValidation="false" runat="server" Text="Eliminar" CssClass="btn btn-danger" OnClick="btnAplicarEliminarProducto_Click" />
+                    </div>
+                </div>
             </div>
-               </div>
-            </div>
-          </div>
         </div>
+    </div>
 
 
 
@@ -213,54 +220,54 @@
     </div>
     <%//////MODAL REACTIVAR PRODUCTO %>
     <div class="modal fade" id="modalConfirmarReactivar" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-sm">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="H2" runat="server">¿Quiere reactivar este producto?</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="aler alert-secondary text-start mx-auto" style="max-width: 400px;">
-                    <div class="mb-2">
-                        <strong>Id del Producto: </strong>
-                        <asp:Label ID="lblIdProductoReactivar" runat="server" CssClass=""></asp:Label>
-                    </div>
-                    <div class="mb-2">
-                        <strong>Nombre del Producto: </strong>
-                        <asp:Label ID="lblNombreProductoReactivar" runat="server" CssClass=""></asp:Label>
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="H2" runat="server">¿Quiere reactivar este producto?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="aler alert-secondary text-start mx-auto" style="max-width: 400px;">
+                        <div class="mb-2">
+                            <strong>Id del Producto: </strong>
+                            <asp:Label ID="lblIdProductoReactivar" runat="server" CssClass=""></asp:Label>
+                        </div>
+                        <div class="mb-2">
+                            <strong>Nombre del Producto: </strong>
+                            <asp:Label ID="lblNombreProductoReactivar" runat="server" CssClass=""></asp:Label>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="d-flex flex-column align-items-center my-3 p-3 bg-light rounded-3">
-                <div class="modal-footer">
-                    <asp:Button ID="btnCancelarReactivar" CausesValidation="false" runat="server" Text="Cancelar" CssClass="btn btn-secondary" data-bs-dismiss="modal" OnClientClick="return false;" />
-                    <asp:Button ID="btnConfirmarReactivar" CausesValidation="false" runat="server" Text="Reactivar" CssClass="btn btn-success"  OnClick="btnConfirmarReactivar_Click" />
+                <div class="d-flex flex-column align-items-center my-3 p-3 bg-light rounded-3">
+                    <div class="modal-footer">
+                        <asp:Button ID="btnCancelarReactivar" CausesValidation="false" runat="server" Text="Cancelar" CssClass="btn btn-secondary" data-bs-dismiss="modal" OnClientClick="return false;" />
+                        <asp:Button ID="btnConfirmarReactivar" CausesValidation="false" runat="server" Text="Reactivar" CssClass="btn btn-success" OnClick="btnConfirmarReactivar_Click" />
+                    </div>
                 </div>
             </div>
         </div>
+
+
     </div>
-
-
-</div>
 
     <%////OFF CANVAS %>
     <div class="offcanvas offcanvas-end" tabindex="-1" id="menuFiltros" aria-labelledby="offcanvasRightLabel">
         <div class="offcanvas-header">
-        <h4 class="offcanvas-title" id="offcanvasRightLabel">Filtros Disponibles</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            <h4 class="offcanvas-title" id="offcanvasRightLabel">Filtros Disponibles</h4>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
 
 
-                    <div class="mb-3">
-                        <h6 class="border-bottom pb-2 mb-4">Ordenar Por</h6>
-                        <div class="d-grid gap-2">
-                            <asp:DropDownList ID="ddlFiltro" CssClass="form-select" OnSelectedIndexChanged="ddlFiltro_SelectedIndexChanged" runat="server"></asp:DropDownList>
-                            <asp:DropDownList ID="ddlDireccion" CssClass="form-select" OnSelectedIndexChanged="ddlDireccion_SelectedIndexChanged" runat="server"></asp:DropDownList>
+            <div class="mb-3">
+                <h6 class="border-bottom pb-2 mb-4">Ordenar Por</h6>
+                <div class="d-grid gap-2">
+                    <asp:DropDownList ID="ddlFiltro" CssClass="form-select" OnSelectedIndexChanged="ddlFiltro_SelectedIndexChanged" runat="server"></asp:DropDownList>
+                    <asp:DropDownList ID="ddlDireccion" CssClass="form-select" OnSelectedIndexChanged="ddlDireccion_SelectedIndexChanged" runat="server"></asp:DropDownList>
 
-                        </div>
-                    </div>
-            <asp:UpdatePanel Id="upFiltros" runat="server">
+                </div>
+            </div>
+            <asp:UpdatePanel ID="upFiltros" runat="server">
                 <ContentTemplate>
                     <div class="mb-3">
                         <h6 class="border-bottom pb-2 mb-4">Filtrar por Categoria</h6>
@@ -284,5 +291,5 @@
         </div>
     </div>
 
-     
+
 </asp:Content>

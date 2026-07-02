@@ -19,6 +19,7 @@ namespace Dominio
         public decimal Precio { get; set; }
         public int Stock { get; set; }
         public EstadoProducto Activo { get; set; }
+        public string UrlImagen { get; set; } //AGREGADO PARA CONTENER IMAGENES
 
         // PROPIEDADES AGREGADAS PARA ESTADISTICAS DEL DASHBOARD
         public int CantidadVendida { get; set; }

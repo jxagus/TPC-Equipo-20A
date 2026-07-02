@@ -4,10 +4,10 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="MainContent" runat="server">
     <div class="container-fluid mt-3">
-        
+
         <div class="d-flex justify-content-between align-items-center mb-4">
             <h2 class="mb-0">📋 Nueva Orden / Cargar Pedido</h2>
-            
+
             <div>
                 <button type="button" class="btn btn-warning btn-lg position-relative fw-bold shadow-sm" data-bs-toggle="modal" data-bs-target="#modalRevision">
                     🛒 Revisar Pedido Actual
@@ -44,7 +44,11 @@
                         <ItemTemplate>
                             <div class="col">
                                 <div class="card h-100 border-secondary shadow-sm d-flex flex-column justify-content-between">
-                                    
+                                    <%-- Imagen del producto --%>
+                                    <img src='<%# ResolveUrl("~/ImagenesProducto/" + Eval("UrlImagen")) %>'
+                                        class="card-img-top"
+                                        style="height: 160px; object-fit: cover;"
+                                        alt='<%# Eval("NombreProducto") %>' />
                                     <div class="card-body text-center">
                                         <h5 class="card-title fw-bold text-uppercase mb-2">
                                             <%# Eval("NombreProducto") %>
@@ -102,8 +106,8 @@
                     </div>
                     <div class="modal-footer bg-light">
                         <asp:Button ID="btnConfirmarPedido" runat="server"
-                            Text="Confirmar y Enviar a Cocina" 
-                            CssClass="btn btn-success fw-bold px-4" 
+                            Text="Confirmar y Enviar a Cocina"
+                            CssClass="btn btn-success fw-bold px-4"
                             UseSubmitBehavior="false"
                             OnClick="btnConfirmarPedido_Click" />
                     </div>

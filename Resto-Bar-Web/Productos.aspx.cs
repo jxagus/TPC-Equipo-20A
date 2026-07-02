@@ -90,12 +90,32 @@ namespace Resto_Bar_Web
                     catNegocio.eliminarCategoriasProducto(id);
                     guardarCategoriasSeleccionadas(id);
 
+                    //se agrega imagen de producto
+                    string ruta = Server.MapPath("~/ImagenesProducto/");
+                    txtImagen.PostedFile.SaveAs(ruta + "producto-" + id + ".jpg");
+
+                    ProductosImagenesNegocio imagenNegocio = new ProductosImagenesNegocio();
+                    ProductosImagenes imagen = new ProductosImagenes();
+                    imagen.IdProducto = id;
+                    imagen.UrlImagen = "producto-" + id + ".jpg";
+                    imagenNegocio.agregarImagen(imagen);
+
                     hfIdProducto.Value = "";
                 }
                 else//////////////Parte de Agregar nuevo
                 {
                     int idNuevoProducto = negocio.agregarProducto(nombre, descripcion, precio, stock);
+                    string ruta = Server.MapPath("./ImagenesProducto/");
                     guardarCategoriasSeleccionadas(idNuevoProducto);
+
+                    //se agrega imagen de producto (lectura img)
+                    txtImagen.PostedFile.SaveAs(ruta + "producto-" + idNuevoProducto + ".JPG");
+                    ProductosImagenesNegocio imagenNegocio = new ProductosImagenesNegocio();
+                    ProductosImagenes imagen = new ProductosImagenes();
+
+                    imagen.IdProducto = idNuevoProducto;
+                    imagen.UrlImagen = "producto-" + idNuevoProducto + ".jpg";
+                    imagenNegocio.agregarImagen(imagen);
                 }
 
                 txtDescripcion.Text = null;
@@ -108,6 +128,7 @@ namespace Resto_Bar_Web
                 btnCancelar.Visible = false;
                 btnAgregarProducto.Text = "Agregar Producto";
                 ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Producto agregado exitosamente!');", true);
+
 
                 CargarProductos();
             }

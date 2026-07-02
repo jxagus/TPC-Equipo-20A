@@ -40,7 +40,7 @@ namespace Negocio
             }
         }
 
-        public void modificarProducto (int id, string nombre, string desc, decimal precio, int stock)
+        public void modificarProducto(int id, string nombre, string desc, decimal precio, int stock)
         {
             AccesoDatos datos = new AccesoDatos();
             try
@@ -151,10 +151,14 @@ namespace Negocio
         {
             List<Productos> lista = new List<Productos>();
             AccesoDatos datos = new AccesoDatos();
-          
+
             try
             {
-                datos.setearConsulta("SELECT IdProducto, NombreProducto, DescripcionProducto, Precio, Stock FROM Productos WHERE Activo = @estaactivo");
+                datos.setearConsulta(@"SELECT P.IdProducto, P.NombreProducto, P.DescripcionProducto, P.Precio, P.Stock,
+                                ISNULL(PI.UrlImagen, '') AS UrlImagen
+                                FROM Productos P
+                                LEFT JOIN ProductosImagenes PI ON P.IdProducto = PI.IdProducto  
+                                WHERE P.Activo = @estaactivo");//unimos las tablas ProductosImagenes y Productos, si el idProducto contiene null en la tabla este queda vacio y en caso contrario se carga la url en la tabla ProductoImagenes con aux abajo
                 datos.setearParametros("@estaactivo", EstanActivos);
                 datos.ejecutarLectura();
 
@@ -165,7 +169,7 @@ namespace Negocio
                     aux.IdProducto = (int)datos.Lector["IdProducto"];
                     aux.NombreProducto = (string)datos.Lector["NombreProducto"];
 
-                     if (!(datos.Lector["DescripcionProducto"] is DBNull))
+                    if (!(datos.Lector["DescripcionProducto"] is DBNull))
                     {
                         aux.DescripcionProducto = (string)datos.Lector["DescripcionProducto"];
                     }
@@ -174,6 +178,7 @@ namespace Negocio
                         aux.DescripcionProducto = "";
                     }
 
+                    aux.UrlImagen = datos.Lector["UrlImagen"].ToString();
                     aux.Precio = (decimal)datos.Lector["Precio"];
                     aux.Stock = (int)datos.Lector["Stock"];
 
@@ -188,7 +193,7 @@ namespace Negocio
             }
             finally
             {
-                 datos.cerrarConexion();
+                datos.cerrarConexion();
             }
         }
 
