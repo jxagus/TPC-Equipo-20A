@@ -120,6 +120,8 @@
     <Content Include="Content\bootstrap.rtl.min.css" />
     <Content Include="Content\dashboard.css" />
     <Content Include="Content\factura.css" />
+    <Content Include="Content\ImagenLogin\Login.jpg" />
+    <Content Include="Content\Login.css" />
     <Content Include="Content\Productos.css" />
     <Content Include="Content\Mesas.css" />
     <Content Include="Content\Sidebar.css" />

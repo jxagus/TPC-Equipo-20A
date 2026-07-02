@@ -1,0 +1,46 @@
+﻿body {
+    background-image: url('/Content/ImagenLogin/Login.jpg') !important;
+    background-size: cover !important;
+    background-position: center !important;
+    background-attachment: fixed !important;
+    background-repeat: no-repeat !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    min-height: 100vh !important;
+}
+
+/* Fondo oscuro suave sobre la imagen */
+.main-content,
+#MainContent {
+    background: rgba(0, 0, 0, 0.4) !important;
+    min-height: 100vh !important;
+    padding-top: 80px !important; /* Espacio para el navbar */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#MainContent .card {
+    background-color: rgba(255, 255, 255, 0.96) !important;
+    backdrop-filter: blur(8px) !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.35) !important;
+    border-radius: 16px !important;
+    max-width: 380px !important;
+    width: 90% !important;
+}
+
+@media (max-width: 768px) {
+#MainContent {
+     padding-top: 70px !important;
+ }
+
+#MainContent .card {
+    margin: 15px !important;
+    }
+}
+
+@media (max-width: 576px) {
+    #MainContent .card {
+        padding: 25px 20px !important;
+    }
+}

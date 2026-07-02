@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Login" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Login.aspx.cs" Inherits="Resto_Bar_Web.WebForm2" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
-
+    <link href="/Content/Login.css" rel="stylesheet" />
     <div class="d-flex flex-grow-1 justify-content-center align-items-center" style="min-height: 70vh; width: 100%;">
 
         <asp:Panel ID="pnlLogin" runat="server" CssClass="card p-4 shadow-sm text-start" Style="width: 100%; max-width: 380px; border-radius: 12px; background-color: #ffffff;">
