@@ -16,7 +16,15 @@ namespace Resto_Bar_Web
                 Response.Redirect("Login.aspx");
                 return;
             }
-
+            /*if (Session["idUsuario"] != null && ((Usuario)Session["idUsuario").IdRol == 0) )
+            {
+                btnHistorialVentas.Visible = true;
+            }
+            else
+            {
+                btnHistorialVentas.Visible = false;
+            }
+            */
             if (!IsPostBack)
             {
                 CargarColaPedidos();
@@ -236,5 +244,22 @@ namespace Resto_Bar_Web
             ddlMetodosDePago.DataBind();
             ddlMetodosDePago.Items.Insert(0, new ListItem("Seleccione...", "0"));
         }
+        /*protected void btnHistorialVentas_Click(object sender, EventArgs e)
+        {
+            PedidoNegocio negocio = new PedidoNegocio();
+
+            var listaHistorial = negocio.ObtenerHistorialCompleto();
+
+            //Limpiamos las columnas del dGv
+            dgvDetallePedido.AutoGenerateColumns = true;
+
+            dgvDetallePedido.DataSource = listaHistorial;
+            dgvDetallePedido.DataBind();
+
+            lblModalIdPedido.Text = " Historial de Ventas";
+
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "AbrirModal", "$('#modalDetallePedido').modal('show');", true);
+        }
+        */
     }
 }

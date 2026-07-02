@@ -14,11 +14,11 @@
         <div class="card mb-4 shadow-sm border-0">
             <div class="card-body bg-light rounded shadow-sm">
                 <div class="row align-items-end g-3">
-                    
+
                     <div class="col-12 col-sm-4 col-md-3">
                         <label class="form-label fw-bold text-secondary mb-1">🔍 Filtrar por Mesa:</label>
                         <asp:TextBox ID="txtFiltroMesa" runat="server" CssClass="form-control" placeholder="Ej: 4"></asp:TextBox>
-                        
+
                         <asp:Label ID="lblErrorFiltro" runat="server" CssClass="text-danger small d-block mt-1 fw-bold" Visible="false"></asp:Label>
                     </div>
 
@@ -125,7 +125,8 @@
                     <div class="container-fluid">
                         <div class="row fw-bold">
                             <div class="col-md-6">
-                                Mesa: <asp:Label ID="lblFacturaMesa" runat="server" />
+                                Mesa:
+                                <asp:Label ID="lblFacturaMesa" runat="server" />
                             </div>
                             <div class="col-md-6 text-end">
                                 Pedido: #<asp:Label ID="lblFacturaIdPedido" runat="server" />
@@ -154,8 +155,8 @@
 
                         <div class="row ticket-total">
                             <div class="d-flex align-items-center justify-content-between my-3 text-success fw-bold">
-                                <span class="text-nowrap me-2">Metodo de Pago:</span> 
-                                <asp:DropDownList ID="ddlMetodosDePago" CssClass="form-select form-select-sm w-51 fs-6 py-0 px-2 font-monospace"  Style="background-image: none; padding-right:0.5rem !important;" runat="server"></asp:DropDownList>
+                                <span class="text-nowrap me-2">Metodo de Pago:</span>
+                                <asp:DropDownList ID="ddlMetodosDePago" CssClass="form-select form-select-sm w-51 fs-6 py-0 px-2 font-monospace" Style="background-image: none; padding-right: 0.5rem !important;" runat="server"></asp:DropDownList>
                             </div>
                             <div class="col-6 text-end ms-auto">TOTAL:</div>
                             <div class="col-6 text-end">

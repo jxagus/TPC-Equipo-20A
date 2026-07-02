@@ -312,6 +312,31 @@ namespace Negocio
             catch (Exception ex) { throw ex; }
             finally { datos.cerrarConexion(); } 
         }
+        public List<Pedido> ObtenerHistorialCompleto()
+        {
+            List<Pedido> lista = new List<Pedido>();
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("SELECT IdPedido, NroMesa, IdUsuario, FechayHoraPedido, PrecioTotal, IdMetodo, IdEstadoPedido FROM Pedidos WHERE IdEstadoPedido = 2 ORDER BY FechayHoraPedido DESC");
+                datos.ejecutarLectura();
+                while (datos.Lector.Read())
+                {
+                    Pedido aux = new Pedido();
+                    aux.IdPedido = (int)datos.Lector["IdPedido"];
+                    aux.NroMesa = (int)datos.Lector["NroMesa"];
+                    aux.IdUsuario = (int)datos.Lector["IdUsuario"];
+                    aux.FechayHoraPedido = (DateTime)datos.Lector["FechayHoraPedido"];
+                    aux.PrecioTotal = (decimal)datos.Lector["PrecioTotal"];
+                    aux.IdMetodo = (int)datos.Lector["IdMetodo"];
+                    aux.IdEstadoPedido = (int)datos.Lector["IdEstadoPedido"];
 
+                    lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex) { throw ex; }
+            finally { datos.cerrarConexion(); }
+        }
     }
 }
