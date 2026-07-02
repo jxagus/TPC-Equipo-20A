@@ -28,6 +28,25 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
+        public void modificarImagen(ProductosImagenes imagen)
+        {
+            AccesoDatos datos = new AccesoDatos();
+            try
+            {
+                datos.setearConsulta("UPDATE ProductosImagenes SET UrlImagen = @urlImagen WHERE IdProducto = @idProducto");
+                datos.setearParametros("@idProducto", imagen.IdProducto);
+                datos.setearParametros("@urlImagen", imagen.UrlImagen);
+                datos.ejecutarAccion();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
 
         public void eliminarImagen(int idImagen)
         {

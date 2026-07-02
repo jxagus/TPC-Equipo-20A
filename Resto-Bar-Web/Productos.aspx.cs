@@ -98,7 +98,7 @@ namespace Resto_Bar_Web
                     ProductosImagenes imagen = new ProductosImagenes();
                     imagen.IdProducto = id;
                     imagen.UrlImagen = "producto-" + id + ".jpg";
-                    imagenNegocio.agregarImagen(imagen);
+                    imagenNegocio.modificarImagen(imagen);
 
                     hfIdProducto.Value = "";
                 }
