@@ -127,14 +127,15 @@ namespace Negocio
                 datos.cerrarConexion();
             }
         }
-        public void finalizarPedido(int idPedido)
+        public void finalizarPedido(int idPedido, int idMetodoPago)
         {
             AccesoDatos datos = new AccesoDatos();
             try
             {
                 //Cambiamos el estado al ID 2 (Finalizado)
-                datos.setearConsulta("UPDATE Pedidos SET IdEstadoPedido = 2 WHERE IdPedido = @idPedido");
+                datos.setearConsulta("UPDATE Pedidos SET IdEstadoPedido = 2, IdMetodo = @idMetodopago WHERE IdPedido = @idPedido");
                 datos.setearParametros("@idPedido", idPedido);
+                datos.setearParametros("@idMetodopago", idMetodoPago);
 
                 datos.ejecutarAccion();
             }

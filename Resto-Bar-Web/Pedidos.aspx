@@ -153,6 +153,10 @@
                         <div class="ticket-separador"></div>
 
                         <div class="row ticket-total">
+                            <div class="d-flex align-items-center justify-content-between my-3 text-success fw-bold">
+                                <span class="text-nowrap me-2">Metodo de Pago:</span> 
+                                <asp:DropDownList ID="ddlMetodosDePago" CssClass="form-select form-select-sm w-51 fs-6 py-0 px-2 font-monospace"  Style="background-image: none; padding-right:0.5rem !important;" runat="server"></asp:DropDownList>
+                            </div>
                             <div class="col-6 text-end ms-auto">TOTAL:</div>
                             <div class="col-6 text-end">
                                 $<asp:Label ID="lblFacturaTotal" runat="server" />
@@ -165,7 +169,7 @@
                     </div>
                 </div>
                 <div class="modal-footer border-0 d-grid gap-2">
-                    <button type="button" class="btn btn-dark w-100" data-bs-dismiss="modal">Aceptar y Finalizar</button>
+                    <asp:Button ID="btnFinalizarPedido" CssClass="btn btn-dark w-100" runat="server" OnClick="btnFinalizarPedido_Click" Text="Aceptar y Finalizar" />
                 </div>
             </div>
         </div>

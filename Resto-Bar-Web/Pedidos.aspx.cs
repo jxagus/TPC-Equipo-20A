@@ -20,6 +20,7 @@ namespace Resto_Bar_Web
             if (!IsPostBack)
             {
                 CargarColaPedidos();
+                cargarMetodosDePago();
             }
         }
 
@@ -123,11 +124,13 @@ namespace Resto_Bar_Web
         protected void repPedidos_ItemCommand(object sender, RepeaterCommandEventArgs e)
         {
             int idPedido = Convert.ToInt32(e.CommandArgument);
+            ViewState["idPedidoFinalizar"] = idPedido;
 
             if (e.CommandName == "FinalizarPedido")
             {
                 try
                 {
+                    ddlMetodosDePago.SelectedIndex = 0;
                     PedidoNegocio negocio = new PedidoNegocio();
 
                     List<Pedido> activos = negocio.listarPedidosActivos();
@@ -148,7 +151,7 @@ namespace Resto_Bar_Web
                     }
                     lblFacturaTotal.Text = totalFactura.ToString("N2");
 
-                    negocio.finalizarPedido(idPedido);
+                    //negocio.finalizarPedido(idPedido);
                     CargarColaPedidos();
 
                     string script = "var miModal = new bootstrap.Modal(document.getElementById('modalExitoPedido')); miModal.show();";
@@ -195,6 +198,43 @@ namespace Resto_Bar_Web
                 }
             }
             return false;
+        }
+
+        protected void btnFinalizarPedido_Click(object sender, EventArgs e)
+        {
+            if(ddlMetodosDePago.SelectedIndex == 0)
+            {
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: Metodo de Pago Invlado. Intente Nuevamente');", true);
+                return;
+            }
+            try
+            {
+                int idCategoria = Convert.ToInt32(ddlMetodosDePago.SelectedValue);
+                int idPedido = Convert.ToInt32(ViewState["idPedidoFinalizar"]);
+                PedidoNegocio negocio = new PedidoNegocio();
+                negocio.finalizarPedido(idPedido, idCategoria);
+                ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Pedido Finalizado Exitosamente!');", true);
+                CargarColaPedidos();
+            }
+            catch (Exception ex)
+            {
+                Session.Add("error", ex.ToString());
+                Response.Redirect("error.aspx", false);
+
+                throw;
+            }
+        }
+
+        private void cargarMetodosDePago()
+        {
+            MetodoPagoNegocio negocio = new MetodoPagoNegocio();
+            List<MetodoPago> todos = negocio.listar();
+            List<MetodoPago> metodosActivos = todos.FindAll(x => x.Activo == true);
+            ddlMetodosDePago.DataSource = metodosActivos;
+            ddlMetodosDePago.DataValueField = "IdMetodo";
+            ddlMetodosDePago.DataTextField = "NombreMetodo";
+            ddlMetodosDePago.DataBind();
+            ddlMetodosDePago.Items.Insert(0, new ListItem("Seleccione...", "0"));
         }
     }
 }

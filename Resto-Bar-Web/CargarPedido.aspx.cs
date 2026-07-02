@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Dominio;
@@ -210,6 +211,7 @@ namespace Resto_Bar_Web
                             return;
                         }
                         itemExistente.Cantidad++;
+
                     }
                     else
                     {
