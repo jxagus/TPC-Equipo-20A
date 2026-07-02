@@ -33,6 +33,24 @@ namespace Resto_Bar_Web
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl sidebarMenu;
 
         /// <summary>
+        /// phMenuGestion control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phMenuGestion;
+
+        /// <summary>
+        /// phCrearPersonal control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.PlaceHolder phCrearPersonal;
+
+        /// <summary>
         /// TipoUsuario control.
         /// </summary>
         /// <remarks>
