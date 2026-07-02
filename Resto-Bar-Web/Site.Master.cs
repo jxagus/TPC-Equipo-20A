@@ -13,6 +13,7 @@ namespace Resto_Bar_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            sidebarMenu.Visible = false;
             if (!IsPostBack)
             {
                 if (Session["idUsuario"] == null)
@@ -27,14 +28,30 @@ namespace Resto_Bar_Web
             {
                 int rol = (int)Session["idRol"];
 
+                sidebarMenu.Visible = true;
                 if (rol == 0)
+                {
                     TipoUsuario.InnerText = "👤 Admin";
+                    phMenuGestion.Visible = true;
+                    phCrearPersonal.Visible = true;
+                }
+
 
                 else if (rol == 1)
+                {
                     TipoUsuario.InnerText = "👤 Gerente";
+                    phMenuGestion.Visible = true;
+                    phCrearPersonal.Visible = false;
+                }
 
                 else if (rol == 2)
+                {
                     TipoUsuario.InnerText = "👤 Mesero";
+                    phMenuGestion.Visible = false;
+                    phCrearPersonal.Visible = false;
+
+                }
+
             }
         }
 
@@ -68,5 +85,6 @@ namespace Resto_Bar_Web
                     break;
             }
         }
+
     }
 }

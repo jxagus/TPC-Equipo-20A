@@ -13,6 +13,7 @@ namespace Resto_Bar_Web
     {
         protected void Page_Load(object sender, EventArgs e)
         {
+            
             if (!IsPostBack)
             {
                 if (Session["idUsuario"] != null)

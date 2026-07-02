@@ -21,6 +21,11 @@ namespace Resto_Bar_Web
                     Response.Redirect("login.aspx", false);
                     return;
                 }
+                if (Session["MesaSeleccionada"] == null)
+                {
+                    string script = "alert('No hay una mesa seleccionada'); window.location.href = 'Mesas.aspx';";
+                    ClientScript.RegisterStartupScript(this.GetType(), "alertPermisos", script, true);
+                }
 
                 if (!IsPostBack)
                 {

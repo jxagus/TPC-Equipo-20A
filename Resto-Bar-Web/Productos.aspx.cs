@@ -39,8 +39,8 @@ namespace Resto_Bar_Web
                 }
                 else
                 {
-
-                    throw new Exception("Permisos insuficientes: Su nivel de usuario no está autorizado para acceder a la gestión de productos.");
+                    string script = "alert('Permisos insuficientes'); window.location.href = 'Dashboard.aspx';";
+                    ClientScript.RegisterStartupScript(this.GetType(), "alertPermisos", script, true);
                 }
             }
             catch (Exception ex)

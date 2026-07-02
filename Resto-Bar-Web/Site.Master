@@ -50,12 +50,9 @@
 
                 <ul class="nav flex-column h-100">
                     <li class="nav-item">
-                        <a class="nav-link" runat="server" href="~/">🏠 Inicio</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" runat="server" href="~/Dashboard">📊 Dashboard</a>
                     </li>
-
+    <asp:PlaceHolder runat="server" ID="phMenuGestion" >
                     <li class="nav-item">
                         <button class="nav-link w-100 text-start border-0 bg-transparent d-flex align-items-center gap-2"
                             type="button"
@@ -70,11 +67,15 @@
                         <div class="collapse" id="menuGestion">
                             <ul class="nav flex-column ps-3">
                                 <li class="nav-item">
-                                    <a class="nav-link" runat="server" href="~/AsignacionMesa">✍️ Meseros y Mesas</a>
+                                    <a class="nav-link" runat="server" href="~/AsignacionMesa">
+                                        ✍️ Meseros y Mesas
+                                    </a>
                                 </li>
+                         <asp:PlaceHolder runat="server" ID="phCrearPersonal" >
                                 <li class="nav-item">
                                     <a class="nav-link" runat="server" href="~/CrearPersonal.aspx">🧑‍ Crear Personal</a>
                                 </li>
+                         </asp:PlaceHolder>
                                 <li class="nav-item">
                                     <a class="nav-link" runat="server" href="~/MetodosDePago.aspx">💳 Metodos de Pago</a>
                                 </li>
@@ -87,7 +88,7 @@
                             </ul>
                         </div>
                     </li>
-
+    </asp:PlaceHolder>
                     <li class="nav-item">
                         <a class="nav-link" runat="server" href="~/Mesas.aspx">🍽️ Mis Mesas</a>
                     </li>

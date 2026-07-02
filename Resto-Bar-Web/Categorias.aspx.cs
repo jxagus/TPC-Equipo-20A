@@ -17,13 +17,11 @@ namespace Resto_Bar_Web
         {
             try
             {
-
                 if (Session["idUsuario"] == null)
                 {
-                    //ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Error: no esta iniciado sesion');", true);
-                    Response.Redirect("Login.aspx");
-
-                    ///redirigir a una pagian de error, el mensaje es temporal
+                    ClientScript.RegisterStartupScript(this.GetType(), "alert", "alert('Error: no esta iniciado sesion');", true);
+                    Response.Redirect("login.aspx", false);
+                    return;
                 }
                 else
                 {
@@ -41,8 +39,8 @@ namespace Resto_Bar_Web
                     }
                     else
                     {
-                        ClientScript.RegisterStartupScript(this.GetType(), "alert", $"alert('Permisos insuficientes');", true);
-                        ///redirigir a pagina de error, el mensaje es temporal
+                        string script = "alert('Permisos insuficientes'); window.location.href = 'Dashboard.aspx';";
+                        ClientScript.RegisterStartupScript(this.GetType(), "alertPermisos", script, true);
                     }
                 }
             }

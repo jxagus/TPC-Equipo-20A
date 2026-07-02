@@ -21,7 +21,8 @@ namespace Resto_Bar_Web
 
             if (idRolLogueado == 2)
             {
-                Response.Redirect("Mesas.aspx");
+                string script = "alert('Permisos insuficientes'); window.location.href = 'Dashboard.aspx';";
+                ClientScript.RegisterStartupScript(this.GetType(), "alertPermisos", script, true);
             }
             if (!IsPostBack)
             {
