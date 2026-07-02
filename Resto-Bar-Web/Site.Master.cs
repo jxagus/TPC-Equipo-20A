@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Dominio;
+using Negocio;
+using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Dominio;
-using Negocio;
 
 namespace Resto_Bar_Web
 {
@@ -14,6 +15,7 @@ namespace Resto_Bar_Web
         protected void Page_Load(object sender, EventArgs e)
         {
             sidebarMenu.Visible = false;
+            bodyDelaPagina.Style["margin-left"] = "0px";
             if (!IsPostBack)
             {
                 if (Session["idUsuario"] == null)
@@ -27,6 +29,7 @@ namespace Resto_Bar_Web
             if (Session["idRol"] != null)
             {
                 int rol = (int)Session["idRol"];
+                bodyDelaPagina.Style["margin-left"] = "250px";
 
                 sidebarMenu.Visible = true;
                 if (rol == 0)

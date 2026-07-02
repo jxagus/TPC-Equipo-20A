@@ -47,8 +47,9 @@
                 <div class="logo">
                     RESTO BAR
                 </div>
+            <div class="sidebar-scroll-container">
 
-                <ul class="nav flex-column h-100">
+                <ul class="nav flex-column">
                     <li class="nav-item">
                         <a class="nav-link" runat="server" href="~/Dashboard">📊 Dashboard</a>
                     </li>
@@ -96,15 +97,15 @@
                     <li class="nav-item">
                         <a class="nav-link" runat="server" href="~/Pedidos.aspx">📋 Pedidos</a>
                     </li>
-
-                    <li class="nav-item mt-auto">
-                        <a id="TipoUsuario" class="nav-link" runat="server" href="~/Login.aspx">👤 Login</a>
-                    </li>
+                    
                 </ul>
-
+            </div>
+                <div class="usuario-bottom">
+                    <a id="TipoUsuario" class="nav-link d-flex align-items-center gap-2" runat="server" href="~/Login.aspx">👤 Login</a>
+                </div>
             </div>
             
-            <div class="main-content">
+            <div class="main-content" id="bodyDelaPagina" runat="server">
 
                 <asp:ContentPlaceHolder ID="MainContent" runat="server"></asp:ContentPlaceHolder>
 

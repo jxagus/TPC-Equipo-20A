@@ -17,7 +17,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("SELECT M.NroMesa, M.IdUsuario, M.MesaUrlImagen, M.Estado,ISNULL(U.NombreUsuario, 'Sin Asignar') AS NombreMesero FROM Mesas M LEFT JOIN Usuarios U ON M.IdUsuario = U.IdUsuario");
+                datos.setearConsulta("SELECT M.NroMesa, M.IdUsuario, M.Estado,ISNULL(U.NombreUsuario, 'Sin Asignar') AS NombreMesero FROM Mesas M LEFT JOIN Usuarios U ON M.IdUsuario = U.IdUsuario");
                 datos.ejecutarLectura();
 
                 while (datos.Lector.Read())
@@ -35,8 +35,6 @@ namespace Negocio
                     }
 
                     aux.NombreMesero = (string)datos.Lector["NombreMesero"];
-
-                    aux.MesaUrlImagen = datos.Lector["MesaUrlImagen"] is DBNull ? "" : (string)datos.Lector["MesaUrlImagen"];
 
                     bool estadobdd = (bool)datos.Lector["Estado"];
                     aux.EstadoMesa = estadobdd ? EstadoMesa.Habilitada : EstadoMesa.Inhabilitada;
@@ -175,7 +173,7 @@ namespace Negocio
             AccesoDatos datos = new AccesoDatos();
             try
             {
-                datos.setearConsulta("INSERT INTO Mesas (IdUsuario, Estado, MesaUrlImagen) VALUES (NULL, 1, '')");
+                datos.setearConsulta("INSERT INTO Mesas (IdUsuario, Estado) VALUES (NULL, 1)");
                 datos.ejecutarAccion();
             }
             catch (Exception ex)
