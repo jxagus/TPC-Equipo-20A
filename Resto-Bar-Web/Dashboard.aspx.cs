@@ -1,8 +1,9 @@
-﻿using System;
+﻿using Dominio;
+using Negocio; 
+using System;
 using System.Collections.Generic;
 using System.Web.UI;
-using Dominio;
-using Negocio; 
+using System.Web.UI.WebControls;
 namespace Resto_Bar_Web
 {
     public partial class Dashboard : System.Web.UI.Page
@@ -12,6 +13,8 @@ namespace Resto_Bar_Web
             if (!IsPostBack)
             {
                 CargarMetricasDashboard();
+                cargarDDL();
+                cargarReporteMetodosdePago(0);
             }
         }
 
@@ -53,6 +56,36 @@ namespace Resto_Bar_Web
                 Session.Add("error", ex.ToString());
                 Response.Redirect("error.aspx", false);
             }
+        }
+
+        protected void ddlPeriodoReporte_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            int periodo = Convert.ToInt32(ddlPeriodoReporte.SelectedValue);
+            cargarReporteMetodosdePago(periodo);
+        }
+
+        protected void cargarDDL()
+        {
+
+            ddlPeriodoReporte.Items.Insert(0, new ListItem("Completo", "0"));
+            ddlPeriodoReporte.Items.Insert(1, new ListItem("Hoy", "1"));
+            ddlPeriodoReporte.Items.Insert(2, new ListItem("Ayer", "2"));
+            ddlPeriodoReporte.Items.Insert(3, new ListItem("Ultima Semana", "3"));
+            ddlPeriodoReporte.Items.Insert(4, new ListItem("Ultimo Mes", "4"));
+            ddlPeriodoReporte.Items.Insert(4, new ListItem("Ultimo Trimestre", "5"));
+        }
+
+        protected void cargarReporteMetodosdePago(int periodo)
+        {
+            DashboardNegocio negocio = new DashboardNegocio();
+
+            rpReportesMetodoPago.DataSource = negocio.ObtenerReporteMetodosDePago(periodo);
+            rpReportesMetodoPago.DataBind();
+            if(negocio.ObtenerReporteMetodosDePago(periodo).Count == 0)
+            {
+                lblVacio.Visible = true;
+            }
+            else { lblVacio.Visible=false; }
         }
     }
 }

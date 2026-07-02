@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using Dominio;
 using Negocio; 
 
@@ -134,6 +135,59 @@ namespace Negocio
                     aux.Porcentaje = maxCantidad > 0 ? (aux.CantidadVendida * 100) / maxCantidad : 0;
 
                     lista.Add(aux);
+                }
+                return lista;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+            finally
+            {
+                datos.cerrarConexion();
+            }
+        }
+
+        
+        
+
+        public List<object> ObtenerReporteMetodosDePago(int periodo)
+        {
+            List<object> lista = new List<object>();
+            AccesoDatos datos = new AccesoDatos();
+            string filtroFecha = "1900-01-01";
+                if(periodo == 1)filtroFecha = DateTime.Today.ToString("yyyy-MM-dd");
+                if (periodo == 2) filtroFecha = DateTime.Today.AddDays(-1).ToString("yyyy-MM-dd");
+                if (periodo == 3) filtroFecha = DateTime.Today.AddDays(-7).ToString("yyyy-MM-dd");
+                if (periodo == 4) filtroFecha = DateTime.Today.AddMonths(-1).ToString("yyyy-MM-dd");
+                if (periodo == 4) filtroFecha = DateTime.Today.AddMonths(-3).ToString("yyyy-MM-dd");
+
+            string consulta = @"
+                SELECT 
+                    MP.NombreMetodo,
+                    SUM(P.PrecioTotal) AS MontoTotal
+                FROM dbo.MetodosDePago MP
+                INNER JOIN dbo.Pedidos P ON MP.IdMetodo = P.IdMetodo
+                    AND (P.FechayHoraPedido >= @fechaFiltro OR @PeriodoOriginal = 0)
+                GROUP BY Mp.NombreMetodo
+                ORDER BY MontoTotal DESC;";
+            try
+            {
+                datos.setearConsulta(consulta);
+                datos.setearParametros("@fechaFiltro", filtroFecha);
+                datos.setearParametros("@PeriodoOriginal", periodo);
+                datos.ejecutarLectura();
+
+
+                while (datos.Lector.Read())
+                {
+                    lista.Add(new
+                    {
+                        NombreMetodo = datos.Lector["NombreMetodo"].ToString(),
+                        MontoTotal = Convert.ToDecimal(datos.Lector["MontoTotal"])
+                    });
+
+
                 }
                 return lista;
             }

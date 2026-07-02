@@ -49,7 +49,7 @@
         </div>
     </div>
 
-    <div class="row g-3">
+    <div class="row g-3 mb-3">
         <div class="col-md-6">
             <div class="card shadow-sm h-100">
                 <div class="card-header bg-dark text-white fw-bold">🔥 Platos Más Solicitados (Top 5)</div>
@@ -96,6 +96,32 @@
                         </h5>
                     </div>
 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-3">
+        <div class="col-md-6">
+            <div class="card shadow-sm h-100">
+                <div class="card-header bg-dark text-white fw-bold d-flex align-items-center justify-content-between">
+                    <span>Metodos de Pago Mas Utilizados</span>
+                    <asp:DropDownList ID="ddlPeriodoReporte" CssClass="form-select form-select-sm w-auto bg-light text-dark fw-bold border-0 py-0 px-6" AutoPostBack="true" OnSelectedIndexChanged="ddlPeriodoReporte_SelectedIndexChanged" runat="server"></asp:DropDownList>
+                </div>
+                <div class="card-body">
+                    
+                    <asp:Repeater ID="rpReportesMetodoPago" runat="server">
+                        <ItemTemplate>
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="fw-semibold text-secondary"><%# Eval("NombreMetodo") %></span>
+                                    <span class="badge bg-primary rounded-pill"> <%# string.Format("{0:C}", Eval("MontoTotal")) %> </span>
+                                </div>
+                            </div>
+                        </ItemTemplate>
+                    </asp:Repeater>
+                        <asp:Label ID="lblVacio" visible="false" CssClass="fw-bold mb-0 mt-1" runat="server" Text="No hay ventas en el periodo seleccionado."></asp:Label>
+               
                 </div>
             </div>
         </div>
