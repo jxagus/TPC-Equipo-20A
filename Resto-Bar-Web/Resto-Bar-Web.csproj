@@ -128,8 +128,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Content\toast.css" />
     <Content Include="CrearPersonal.aspx" />
-    <Content Include="Db\RESTOBAR_DB.sql" />
     <Content Include="Dashboard.aspx" />
+    <Content Include="Db\restobarDB.sql" />
     <Content Include="Error.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
