@@ -54,6 +54,11 @@ El administrador puede:
 - **C# (.NET Framework)**
 - **Web Froms**
 - **SQL Server**
+- **HTML5**
+- **CSS3**
+- **JS**
+- **Bootstrap**
+- **tailwindcss**
 - **Git**
 - **ADO.NET** 
 - **Arquitectura en capas**
