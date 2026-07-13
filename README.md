@@ -1,4 +1,4 @@
-# Articulos.App – Gestión de Artículos
+## – Gestión de BAR
 
 Este proyecto es una aplicación web desarrollada en **C#**, con la función principal de permitir que un negocio gestione su stock, sus comandas y finanzas. Todo esta realizado con una arquitectura limpia en capas, donde todo se almacena en una base de datos **SQL** aplicando seguridad en todos los rincones de la app.
 
@@ -54,6 +54,7 @@ El administrador puede:
 - **C# (.NET Framework)**
 - **Web Froms**
 - **SQL Server**
+- **Git**
 - **ADO.NET** 
 - **Arquitectura en capas**
 - **Validaciones**
